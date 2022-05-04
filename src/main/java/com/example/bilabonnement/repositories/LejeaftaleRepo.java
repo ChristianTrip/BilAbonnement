@@ -8,16 +8,14 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-public class LejeaftaleRepo implements CRUDInterface{
-
+public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
 
 
     @Override
-    public boolean create(Object entity) {
-
-        Lejeaftale lejeaftale = (Lejeaftale) entity;
+    public boolean create(Lejeaftale lejeaftale) {
 
         java.sql.Date mySQLDate = new java.sql.Date(lejeaftale.getOprettelsesDato().getTime());
+
         try{
             String sql = "INSERT INTO lejeaftaler(`kunde_id`, `bil_id`, `abonnement_id`, `tilstandsrapport`, `prisoverslag_id`, `afhentningssted`, `oprettelsesdato`) " +
                     "VALUES ('" + lejeaftale.getKunde().getId() + "', " +
@@ -36,23 +34,21 @@ public class LejeaftaleRepo implements CRUDInterface{
         catch (SQLException e){
             e.printStackTrace();
         }
-
         return false;
-
     }
 
     @Override
-    public Object getSingleEntityById(int id) {
+    public Lejeaftale getSingleEntityById(int id) {
         return null;
     }
 
     @Override
-    public List getAllEntities() {
+    public List<Lejeaftale> getAllEntities() {
         return null;
     }
 
     @Override
-    public boolean update(Object entity) {
+    public boolean update(Lejeaftale lejeaftale) {
         return false;
     }
 
@@ -60,4 +56,6 @@ public class LejeaftaleRepo implements CRUDInterface{
     public boolean deleteById(int id) {
         return false;
     }
+
+
 }

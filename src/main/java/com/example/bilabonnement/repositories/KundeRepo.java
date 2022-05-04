@@ -5,15 +5,15 @@ import com.example.bilabonnement.utility.DatabaseConnectionManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
-public class KundeRepo implements CRUDInterface{
+public class KundeRepo implements CRUDInterface <Kunde>{
 
     @Override
-    public boolean create(Object entity) {
-
-        Kunde kunde = (Kunde) entity;
+    public boolean create(Kunde kunde) {
 
         try{
             String sql = "INSERT INTO kunder(`for_navn`, `efter_navn`, `adresse`, `post_nummer`, `by`, `email`, `mobil`, `cpr`, `reg_nummer`, `konto_nummer`) " +
@@ -39,25 +39,119 @@ public class KundeRepo implements CRUDInterface{
 
         return false;
     }
-    
 
     @Override
-    public Object getSingleEntityById(int id) {
-        return null;
+    public Kunde getSingleEntityById(int id) {
+
+        Kunde kunde = null;
+
+        try {
+            String sql = "SELECT * FROM kunder WHERE kunde_id = '" + id + "';";
+            Connection conn = DatabaseConnectionManager.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()){
+                int kunde_id = rs.getInt(1);
+                String for_navn = rs.getString(2);
+                String efter_navn = rs.getString(3);
+                String adresse = rs.getString(4);
+                int post_nummer = rs.getInt(5);
+                String by = rs.getString(6);
+                String email = rs.getString(7);
+                int mobil = rs.getInt(8);
+                int cpr = rs.getInt(9);
+                int reg_nummer = rs.getInt(10);
+                int konto_nummer = rs.getInt(11);
+
+                kunde = new Kunde(kunde_id, for_navn, efter_navn, adresse, post_nummer, by, email, mobil, cpr, reg_nummer, konto_nummer);
+            }
+
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            System.out.println("Kunne ikke finde kunde med id: " + id);
+        }
+        return kunde;
     }
 
     @Override
-    public List getAllEntities() {
-        return null;
+    public List<Kunde> getAllEntities() {
+        ArrayList<Kunde> kunder = new ArrayList<>();
+
+        try {
+            String sql = "SELECT * FROM kunder;";
+            Connection conn = DatabaseConnectionManager.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()){
+                int kunde_id = rs.getInt(1);
+                String for_navn = rs.getString(2);
+                String efter_navn = rs.getString(3);
+                String adresse = rs.getString(4);
+                int post_nummer = rs.getInt(5);
+                String by = rs.getString(6);
+                String email = rs.getString(7);
+                int mobil = rs.getInt(8);
+                int cpr = rs.getInt(9);
+                int reg_nummer = rs.getInt(10);
+                int konto_nummer = rs.getInt(11);
+
+                Kunde kunde = new Kunde(kunde_id, for_navn, efter_navn, adresse, post_nummer, by, email, mobil, cpr, reg_nummer, konto_nummer);
+                kunder.add(kunde);
+            }
+
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            System.out.println("Kunne ikke finde kunder");
+        }
+        return kunder;
     }
 
     @Override
-    public boolean update(Object entity) {
-        return false;
+    public boolean update(Kunde kunde) {
+        try{
+
+            Connection conn = DatabaseConnectionManager.getConnection();
+            String sql =    "UPDATE kunder " +
+                            "SET " +
+                            "for_navn = '" + kunde.getForNavn() + "', " +
+                            "efter_navn = '" + kunde.getEfterNavn() + "'" +
+                            "WHERE kunde_id = " + kunde.getId() + ";";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.executeUpdate();
+
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            System.out.println("Kunne ikke updatere kunde med id: " + kunde.getId());
+            return false;
+        }
+
+        return true;
     }
 
     @Override
     public boolean deleteById(int id) {
-        return false;
+
+        try{
+
+            Connection conn = DatabaseConnectionManager.getConnection();
+            String sql = "DELETE FROM kunder WHERE kunde_id = " + id + ";";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.executeUpdate();
+
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            System.out.println("Kunne ikke slette kunde med id: " + id);
+            return false;
+        }
+
+        return true;
     }
+
+
 }

@@ -30,21 +30,24 @@ public class DatabaseConnectionManager {
             connection = DriverManager.getConnection(url, username, password);
         }
 
-        /*
-        try{
-            //Environment Variables
-            url = System.getenv("db.url");
-            username = System.getenv("db.username");
-            password = System.getenv("db.password");
-            conn = DriverManager.getConnection(url, username, password);
-        }
-
-         */
-
         catch(SQLException | IOException e){
             e.printStackTrace();
         }
-        System.out.println("There is a connection");
+        System.out.println("Der er oprettet forbindelse til " + connection.toString());
         return connection;
+    }
+
+    public static void closeConnection(){
+
+        try {
+            if(!connection.isClosed()){
+                connection.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Kunne ikke lukke forbindelsen: " + connection.toString());
+        }
+
+        System.out.println("Forbindelsen til " + connection.toString() + " er lukket");
     }
 }
