@@ -3,12 +3,12 @@ package com.example.bilabonnement.services;
 import com.example.bilabonnement.models.Lejeaftale;
 import com.example.bilabonnement.models.Mangel;
 import com.example.bilabonnement.models.Skade;
-import com.example.bilabonnement.models.TilstandRapport;
+import com.example.bilabonnement.models.Tilstandsrapport;
 
 import java.util.ArrayList;
 
 public class SkaderegService {
-    private TilstandRapport rapport = null;
+    private Tilstandsrapport rapport = null;
 
     public ArrayList<Lejeaftale> getLejeaftaler(){
         return new ArrayList<Lejeaftale>();

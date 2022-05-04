@@ -1,10 +1,10 @@
 package com.example.bilabonnement.models;
 
-public class TilstandRapport {
+public class Tilstandsrapport {
     private Mangel mangel;
     private Skade skade;
 
-    public TilstandRapport(Mangel mangel, Skade skade) {
+    public Tilstandsrapport(Mangel mangel, Skade skade) {
         this.mangel = mangel;
         this.skade = skade;
     }
