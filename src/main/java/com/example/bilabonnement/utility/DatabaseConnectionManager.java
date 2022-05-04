@@ -12,22 +12,22 @@ public class DatabaseConnectionManager {
     private static String url;
     private static String username;
     private static String password;
-    private static Connection conn;
+    private static Connection connection;
 
     private DatabaseConnectionManager(){}
 
     public static Connection getConnection(){
-        if(conn != null){
-            return conn;
+        if(connection != null){
+            return connection;
         }
             //Properties file
         try(InputStream propertiesFile = new FileInputStream("src/main/resources/application.properties")){
-            Properties props = new Properties();
-            props.load(propertiesFile);
-            url = props.getProperty("db.url");
-            username = props.getProperty("db.username");
-            password = props.getProperty("db.password");
-            conn = DriverManager.getConnection(url, username, password);
+            Properties properties = new Properties();
+            properties.load(propertiesFile);
+            url = properties.getProperty("db.url");
+            username = properties.getProperty("db.username");
+            password = properties.getProperty("db.password");
+            connection = DriverManager.getConnection(url, username, password);
         }
 
         /*
@@ -45,6 +45,6 @@ public class DatabaseConnectionManager {
             e.printStackTrace();
         }
         System.out.println("There is a connection");
-        return conn;
+        return connection;
     }
 }
