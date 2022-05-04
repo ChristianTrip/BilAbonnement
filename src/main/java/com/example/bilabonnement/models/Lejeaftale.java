@@ -10,7 +10,7 @@ public class Lejeaftale {
 
     private Kunde kunde;
     private Bil bil;
-    private Tilstandrapport tilstandsRapport;
+    private Tilstandsrapport tilstandsrapport;
     private Abonnement abonnement;
     private Prisoverslag prisoverslag;
     private AfhentningsSted afhentningsSted;
@@ -18,10 +18,10 @@ public class Lejeaftale {
     private Date oprettelsesDato;
 
 
-    public Lejeaftale(Kunde kunde, Bil bil, Tilstandrapport tilstandsRapport, Abonnement abonnement, Prisoverslag prisoverslag, AfhentningsSted afhentningsSted, int totalPris, Date oprettelsesDato) {
+    public Lejeaftale(Kunde kunde, Bil bil, Tilstandsrapport tilstandsrapport, Abonnement abonnement, Prisoverslag prisoverslag, AfhentningsSted afhentningsSted, int totalPris, Date oprettelsesDato) {
         this.kunde = kunde;
         this.bil = bil;
-        this.tilstandsRapport = tilstandsRapport;
+        this.tilstandsrapport = tilstandsrapport;
         this.abonnement = abonnement;
         this.prisoverslag = prisoverslag;
         this.afhentningsSted = afhentningsSted;
@@ -38,8 +38,8 @@ public class Lejeaftale {
         return bil;
     }
 
-    public Tilstandrapport getTilstandsRapport() {
-        return tilstandsRapport;
+    public Tilstandsrapport getTilstandsrapport() {
+        return tilstandsrapport;
     }
 
     public Abonnement getAbonnement() {

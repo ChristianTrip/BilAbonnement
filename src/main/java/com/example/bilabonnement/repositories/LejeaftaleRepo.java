@@ -23,7 +23,7 @@ public class LejeaftaleRepo implements CRUDInterface{
                     "VALUES ('" + lejeaftale.getKunde().getId() + "', " +
                     "'" + lejeaftale.getBil().getId() + "', " +
                     "'" + lejeaftale.getAbonnement().getId() + "', " +
-                    "'" + lejeaftale.getTilstandsRapport().getID() + "', " +
+                    "'" + lejeaftale.getTilstandsrapport().getId() + "', " +
                     "'" + lejeaftale.getPrisoverslag().getId() + "', " +
                     "'" + lejeaftale.getAfhentningsSted() + "', " +
                     "'" + mySQLDate + "');";
