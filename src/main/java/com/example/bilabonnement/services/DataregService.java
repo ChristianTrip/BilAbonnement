@@ -5,10 +5,9 @@ import com.example.bilabonnement.models.Lejeaftale;
 import com.example.bilabonnement.models.brugere.Bruger;
 import com.example.bilabonnement.repositories.BrugerRepo;
 import com.example.bilabonnement.repositories.CRUDInterface;
-import com.example.bilabonnement.utility.csvReader;
+import com.example.bilabonnement.utility.CSVReader;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 import static java.lang.Integer.parseInt;
@@ -26,7 +25,7 @@ public class DataregService {
     }
 
     public static ArrayList<Object> læscsv(){
-        csvReader reader = new csvReader();
+        CSVReader reader = new CSVReader();
         Scanner currSc;
         ArrayList<Object> liste = new ArrayList<>();
 

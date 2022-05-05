@@ -15,10 +15,10 @@ public class BrugerRepo implements CRUDInterface<Bruger>{
     @Override
     public boolean create(Bruger bruger) {
         try{
-            String sql = "INSERT INTO brugere(`navn`, `adgangskode`, `bruger_type`) " +
-                    "VALUES ('" + bruger.getNavn() + "', " +
-                    "'" + bruger.getAdgangskode() + "', " +
-                    "'" + bruger.getBrugerType() + "');";
+            String sql = "INSERT INTO brugere(`bruger_type`, `bruger_navn`, `adgangskode`) " +
+                    "VALUES ('" + bruger.getBrugerType()[0] + "', " +
+                    "'" + bruger.getNavn() + "', " +
+                    "'" + bruger.getAdgangskode() + "');";
 
             Connection conn = DatabaseConnectionManager.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql);
@@ -38,20 +38,23 @@ public class BrugerRepo implements CRUDInterface<Bruger>{
 
 
         try {
-            String sql = "SELECT * FROM brugere WHERE bruger_id = '" + id + "';";
+            String sql = "SELECT * FROM brugere WHERE bruger_id = " + id + ";";
             Connection conn = DatabaseConnectionManager.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
 
-            int bruger_id = rs.getInt(1);
-            String navn = rs.getString(2);
-            String adgangskode = rs.getString(3);
-            int bruger_type = rs.getInt(4);
+            while(rs.next()){
 
-            int[] brugeradgang = new int[3];
-            brugeradgang[0] = bruger_type;
+                int bruger_id = rs.getInt(1);
+                int bruger_type = rs.getInt(2);
+                String navn = rs.getString(3);
+                String adgangskode = rs.getString(4);
 
-            return new Bruger(bruger_id, navn, adgangskode, brugeradgang);
+                int[] brugeradgang = new int[3];
+                brugeradgang[0] = bruger_type;
+
+                return new Bruger(bruger_id, navn, adgangskode, brugeradgang);
+            }
 
         }
         catch (SQLException e){
@@ -73,9 +76,9 @@ public class BrugerRepo implements CRUDInterface<Bruger>{
 
             while (rs.next()){
                 int bruger_id = rs.getInt(1);
-                String navn = rs.getString(2);
-                String adgangskode = rs.getString(3);
-                int bruger_type = rs.getInt(4);
+                int bruger_type = rs.getInt(2);
+                String navn = rs.getString(3);
+                String adgangskode = rs.getString(4);
 
                 int[] brugerAdgang = new int[3];
                 brugerAdgang[0] = bruger_type;
@@ -100,9 +103,9 @@ public class BrugerRepo implements CRUDInterface<Bruger>{
             Connection conn = DatabaseConnectionManager.getConnection();
             String sql = "UPDATE brugere " +
                     "SET " +
-                    "navn = '" + bruger.getNavn() + "', " +
-                    "adgangskode = '" + bruger.getAdgangskode() + "'" +
-                    "WHERE kunde_id = " + bruger.getBrugerType() + ";";
+                    "bruger_navn = '" + bruger.getNavn() + "', " +
+                    "adgangskode = '" + bruger.getAdgangskode() + "' " +
+                    "WHERE bruger_id = " + bruger.getId() + ";";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
 
@@ -117,7 +120,22 @@ public class BrugerRepo implements CRUDInterface<Bruger>{
 
     @Override
     public boolean deleteById(int id) {
-        return false;
+        try{
+
+            Connection conn = DatabaseConnectionManager.getConnection();
+            String sql = "DELETE FROM brugere WHERE bruger_id = " + id + ";";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.executeUpdate();
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            System.out.println("Kunne ikke slette kunde med id: " + id);
+            return false;
+        }
+
+        return true;
     }
+
+
 
 }

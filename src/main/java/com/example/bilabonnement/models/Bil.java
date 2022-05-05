@@ -1,7 +1,5 @@
 package com.example.bilabonnement.models;
 
-import java.util.Locale;
-
 public class Bil {
 
     private String stelNummer; //<-
@@ -13,6 +11,8 @@ public class Bil {
     private Brændstof brændstof;
     private int prisPrMdr;
     private boolean tilvalgtFarve;
+
+
 
     public String getStelNummer() {
         return stelNummer.toUpperCase();

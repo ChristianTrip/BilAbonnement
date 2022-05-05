@@ -6,12 +6,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-public class csvReader {
+public class CSVReader {
     private File file;
     private Scanner sc;
 
 
-    public csvReader() {
+    public CSVReader() {
 
     }
 
