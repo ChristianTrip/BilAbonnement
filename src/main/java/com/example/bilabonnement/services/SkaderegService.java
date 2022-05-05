@@ -8,23 +8,24 @@ import com.example.bilabonnement.models.Tilstandsrapport;
 import java.util.ArrayList;
 
 public class SkaderegService {
-    private Tilstandsrapport rapport = null;
+    private Tilstandsrapport rapport = new Tilstandsrapport();
 
     public ArrayList<Lejeaftale> getLejeaftaler(){
         return new ArrayList<Lejeaftale>();
     }
 
-    public Skade opretSkade(){
-        return new Skade();
+    public void opretSkade(){
+        Skade skade = new Skade();
+        rapport.tilfoejSkade(skade);
     }
 
-    public Mangel opretMangel(){
-        return new Mangel();
+    public void opretMangel(){
+        Mangel mangel = new Mangel();
+        rapport.tilfoejMangel(mangel);
     }
 
-    public void opdaterTilstandsRapport(){
-        rapport.setMangel(opretMangel());
-        rapport.setSkade(opretSkade());
+    public void opdaterTilstandsRapport(Lejeaftale lejeaftale){
+        lejeaftale.setTilstandsrapport(rapport);
     }
 
 

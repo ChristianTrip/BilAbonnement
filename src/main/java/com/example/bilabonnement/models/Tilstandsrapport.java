@@ -1,22 +1,34 @@
 package com.example.bilabonnement.models;
 
+import java.util.ArrayList;
+
 public class Tilstandsrapport {
-    private final int id;
-    private Mangel mangel;
-    private Skade skade;
+    private int id;
+    private ArrayList<Mangel> mangler;
+    private ArrayList<Skade> skader;
 
-    public Tilstandsrapport(int id, Mangel mangel, Skade skade) {
+    public Tilstandsrapport(int id, ArrayList<Mangel> mangler, ArrayList<Skade> skader) {
         this.id = id;
-        this.mangel = mangel;
-        this.skade = skade;
+        this.mangler = mangler;
+        this.skader = skader;
     }
 
-    public void setMangel(Mangel mangel) {
-        this.mangel = mangel;
+    public Tilstandsrapport(){}
+
+    public void tilfoejMangel(Mangel mangel){
+        mangler.add(mangel);
     }
 
-    public void setSkade(Skade skade) {
-        this.skade = skade;
+    public void tilfoejSkade(Skade skade){
+        skader.add(skade);
+    }
+
+    public void setMangel(ArrayList<Mangel> mangler) {
+        this.mangler = mangler;
+    }
+
+    public void setSkade(ArrayList<Skade> skader) {
+        this.skader = skader;
     }
 
     public int getId() {

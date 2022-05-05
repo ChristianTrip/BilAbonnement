@@ -61,4 +61,8 @@ public class Lejeaftale {
     public Date getOprettelsesDato() {
         return oprettelsesDato;
     }
+
+    public void setTilstandsrapport(Tilstandsrapport tilstandsrapport) {
+        this.tilstandsrapport = tilstandsrapport;
+    }
 }

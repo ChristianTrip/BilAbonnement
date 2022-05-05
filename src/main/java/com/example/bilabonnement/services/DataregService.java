@@ -18,4 +18,14 @@ public class DataregService {
         //do stuff
     }
 
+    private String læscsv(){
+        // Kunde
+        // Bil
+        // Abonnement
+        // Tilstandsrapport
+        // Prisoverslag
+        // Afhentningssted
+        return "";
+    }
+
 }
