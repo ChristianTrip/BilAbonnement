@@ -8,6 +8,7 @@ import java.util.Date;
 
 public class Lejeaftale {
 
+    private int id;
     private Kunde kunde;
     private Bil bil;
     private Tilstandsrapport tilstandsrapport;
@@ -18,7 +19,8 @@ public class Lejeaftale {
     private Date oprettelsesDato;
 
 
-    public Lejeaftale(Kunde kunde, Bil bil, Tilstandsrapport tilstandsrapport, Abonnement abonnement, Prisoverslag prisoverslag, AfhentningsSted afhentningsSted, int totalPris, Date oprettelsesDato) {
+    public Lejeaftale(int id, Kunde kunde, Bil bil, Tilstandsrapport tilstandsrapport, Abonnement abonnement, Prisoverslag prisoverslag, AfhentningsSted afhentningsSted, int totalPris, Date oprettelsesDato) {
+        this.id = id;
         this.kunde = kunde;
         this.bil = bil;
         this.tilstandsrapport = tilstandsrapport;

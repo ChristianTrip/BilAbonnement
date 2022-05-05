@@ -35,6 +35,7 @@ public class KundeRepo implements CRUDInterface <Kunde>{
         }
         catch (SQLException e){
             e.printStackTrace();
+            System.out.println("Kunne ikke oprette bruger med id " + kunde.getId() + " i databasen");
         }
 
         return false;
@@ -43,36 +44,32 @@ public class KundeRepo implements CRUDInterface <Kunde>{
     @Override
     public Kunde getSingleEntityById(int id) {
 
-        Kunde kunde = null;
-
         try {
             String sql = "SELECT * FROM kunder WHERE kunde_id = '" + id + "';";
             Connection conn = DatabaseConnectionManager.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
 
-            while (rs.next()){
-                int kunde_id = rs.getInt(1);
-                String for_navn = rs.getString(2);
-                String efter_navn = rs.getString(3);
-                String adresse = rs.getString(4);
-                int post_nummer = rs.getInt(5);
-                String by = rs.getString(6);
-                String email = rs.getString(7);
-                int mobil = rs.getInt(8);
-                int cpr = rs.getInt(9);
-                int reg_nummer = rs.getInt(10);
-                int konto_nummer = rs.getInt(11);
+            int kunde_id = rs.getInt(1);
+            String for_navn = rs.getString(2);
+            String efter_navn = rs.getString(3);
+            String adresse = rs.getString(4);
+            int post_nummer = rs.getInt(5);
+            String by = rs.getString(6);
+            String email = rs.getString(7);
+            int mobil = rs.getInt(8);
+            int cpr = rs.getInt(9);
+            int reg_nummer = rs.getInt(10);
+            int konto_nummer = rs.getInt(11);
 
-                kunde = new Kunde(kunde_id, for_navn, efter_navn, adresse, post_nummer, by, email, mobil, cpr, reg_nummer, konto_nummer);
-            }
+            return new Kunde(kunde_id, for_navn, efter_navn, adresse, post_nummer, by, email, mobil, cpr, reg_nummer, konto_nummer);
 
         }
         catch (SQLException e){
             e.printStackTrace();
             System.out.println("Kunne ikke finde kunde med id: " + id);
         }
-        return kunde;
+        return null;
     }
 
     @Override

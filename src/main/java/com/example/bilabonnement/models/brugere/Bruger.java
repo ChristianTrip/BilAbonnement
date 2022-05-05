@@ -18,12 +18,20 @@ public class Bruger {
         this.brugerType = brugerType;
     }
 
-    protected int getId(){
+    public int getId(){
         return this.ID;
     }
 
-    protected int[] getBrugerType(){
+
+    public int[] getBrugerType(){
         return this.brugerType;
     }
 
+    public String getNavn() {
+        return navn;
+    }
+
+    public String getAdgangskode() {
+        return adgangskode;
+    }
 }
