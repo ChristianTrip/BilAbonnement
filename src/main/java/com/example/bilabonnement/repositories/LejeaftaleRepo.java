@@ -19,7 +19,7 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
         try{
             String sql = "INSERT INTO lejeaftaler(`kunde_id`, `bil_id`, `abonnement_id`, `tilstandsrapport`, `prisoverslag_id`, `afhentningssted`, `oprettelsesdato`) " +
                     "VALUES ('" + lejeaftale.getKunde().getId() + "', " +
-                    "'" + lejeaftale.getBil().getId() + "', " +
+                    "'" + lejeaftale.getBil() + "', " +
                     "'" + lejeaftale.getAbonnement().getId() + "', " +
                     "'" + lejeaftale.getTilstandsrapport().getId() + "', " +
                     "'" + lejeaftale.getPrisoverslag().getId() + "', " +

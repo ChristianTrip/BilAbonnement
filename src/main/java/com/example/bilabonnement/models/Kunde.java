@@ -28,6 +28,19 @@ public class Kunde {
         this.kontoNummer = kontoNummer;
     }
 
+    public Kunde(String forNavn, String efterNavn, String adresse, int postNummer, String by, String email, int mobil, int cpr, int regNummer, int kontoNummer) {
+        this.forNavn = forNavn;
+        this.efterNavn = efterNavn;
+        this.adresse = adresse;
+        this.postNummer = postNummer;
+        this.by = by;
+        this.email = email;
+        this.mobil = mobil;
+        this.cpr = cpr;
+        this.regNummer = regNummer;
+        this.kontoNummer = kontoNummer;
+    }
+
     public int getId() {
         return id;
     }

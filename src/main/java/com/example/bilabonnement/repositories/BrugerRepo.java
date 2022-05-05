@@ -1,7 +1,6 @@
 package com.example.bilabonnement.repositories;
 
 import com.example.bilabonnement.models.brugere.Bruger;
-import com.example.bilabonnement.models.brugere.DataregBruger;
 
 import java.util.List;
 
