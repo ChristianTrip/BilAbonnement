@@ -9,12 +9,12 @@ public class Kunde {
     private int postNummer;
     private String by;
     private String email;
-    private int mobil;
+    private String mobil;
     private String cpr;
-    private int regNummer;
-    private int kontoNummer;
+    private String regNummer;
+    private String kontoNummer;
 
-    public Kunde(int id, String forNavn, String efterNavn, String adresse, int postNummer, String by, String email, int mobil, String cpr, int regNummer, int kontoNummer) {
+    public Kunde(int id, String forNavn, String efterNavn, String adresse, int postNummer, String by, String email, String mobil, String cpr, String regNummer, String kontoNummer) {
         this.id = id;
         this.forNavn = forNavn;
         this.efterNavn = efterNavn;
@@ -28,7 +28,7 @@ public class Kunde {
         this.kontoNummer = kontoNummer;
     }
 
-    public Kunde(String forNavn, String efterNavn, String adresse, int postNummer, String by, String email, int mobil, String cpr, int regNummer, int kontoNummer) {
+    public Kunde(String forNavn, String efterNavn, String adresse, int postNummer, String by, String email, String mobil, String cpr, String regNummer, String kontoNummer) {
         this.forNavn = forNavn;
         this.efterNavn = efterNavn;
         this.adresse = adresse;
@@ -97,11 +97,11 @@ public class Kunde {
         this.email = email;
     }
 
-    public int getMobil() {
+    public String getMobil() {
         return mobil;
     }
 
-    public void setMobil(int mobil) {
+    public void setMobil(String mobil) {
         this.mobil = mobil;
     }
 
@@ -113,19 +113,19 @@ public class Kunde {
         this.cpr = cpr;
     }
 
-    public int getRegNummer() {
+    public String getRegNummer() {
         return regNummer;
     }
 
-    public void setRegNummer(int regNummer) {
+    public void setRegNummer(String regNummer) {
         this.regNummer = regNummer;
     }
 
-    public int getKontoNummer() {
+    public String getKontoNummer() {
         return kontoNummer;
     }
 
-    public void setKontoNummer(int kontoNummer) {
+    public void setKontoNummer(String kontoNummer) {
         this.kontoNummer = kontoNummer;
     }
 

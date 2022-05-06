@@ -137,9 +137,5 @@ public class BrugerRepo implements CRUDInterface<Bruger>{
         return true;
     }
 
-    public static void main(String[] args) {
-        BrugerRepo br = new BrugerRepo();
-        System.out.println(br.getSingleEntityById(2));
-    }
 
 }

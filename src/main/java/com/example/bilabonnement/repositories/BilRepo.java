@@ -2,14 +2,12 @@ package com.example.bilabonnement.repositories;
 
 import com.example.bilabonnement.models.Bil;
 import com.example.bilabonnement.models.brugere.Bruger;
-import com.example.bilabonnement.models.brugere.BrugerType;
 import com.example.bilabonnement.utility.DatabaseConnectionManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class BilRepo implements CRUDInterface<Bil> {
@@ -41,7 +39,7 @@ public class BilRepo implements CRUDInterface<Bil> {
     public Bil getSingleEntityById(int id) {
 
         try {
-            String sql = "SELECT * FROM biler WHERE bruger_id = " + id + ";";
+            String sql = "SELECT * FROM biler WHERE bil_id = '" + id + "';";
             Connection conn = DatabaseConnectionManager.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
@@ -52,7 +50,7 @@ public class BilRepo implements CRUDInterface<Bil> {
                 String navn = rs.getString(2);
                 String model = rs.getString(3);
 
-                return new Bruger(stelnummer, navn, model);
+                return new Bil(stelnummer, navn, model);
             }
 
         }
