@@ -26,6 +26,9 @@ public class Bil {
         this.model = model;
     }
 
+    public int getId() {
+        return id;
+    }
     public String getStelNummer() {
         return stelNummer.toUpperCase();
     }
@@ -36,6 +39,18 @@ public class Bil {
 
     public String getModel() {
         return model;
+    }
+
+    public void setStelNummer(String stelNummer) {
+        this.stelNummer = stelNummer;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
     }
 
     @Override
