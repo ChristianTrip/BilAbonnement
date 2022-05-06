@@ -115,17 +115,18 @@ public class KundeRepo implements CRUDInterface <Kunde>{
             Connection conn = DatabaseConnectionManager.getConnection();
             String sql =    "UPDATE kunder " +
                             "SET " +
-                            "for_navn = '" + kunde.getForNavn() + "', " +
-                            "efter_navn = '" + kunde.getEfterNavn() + "'" +
-                            "adresse = '" + kunde.getAdresse() + "'" +
-                            "post_nummer = '" + kunde.getPostNummer() + "'" +
-                            "by = '" + kunde.getBy() + "'" +
-                            "email = '" + kunde.getEmail() + "'" +
-                            "mobil = '" + kunde.getMobil() + "'" +
-                            "cpr = '" + kunde.getCpr() + "'" +
-                            "reg_nummer = '" + kunde.getRegNummer() + "'" +
-                            "konto_nummer = '" + kunde.getKontoNummer() + "'" +
-                            "WHERE kunde_id = " + kunde.getId() + ";";
+                            "for_navn = '" + kunde.getForNavn()         + "', " +
+                            "efter_navn = '" + kunde.getEfterNavn()     + "', " +
+                            "adresse = '" + kunde.getAdresse()          + "', " +
+                            "post_nummer = '" + kunde.getPostNummer()   + "', " +
+                            "by_navn = '" + kunde.getBy()               + "', " +
+                            "email = '" + kunde.getEmail()              + "', " +
+                            "mobil = '" + kunde.getMobil()              + "', " +
+                            "cpr = '" + kunde.getCpr()                  + "', " +
+                            "reg_nummer = '" + kunde.getRegNummer()     + "', " +
+                            "konto_nummer = '" + kunde.getKontoNummer() + "' " +
+                            "WHERE kunde_id = " + kunde.getId()         + ";";
+
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
 
@@ -162,8 +163,9 @@ public class KundeRepo implements CRUDInterface <Kunde>{
 
     public static void main(String[] args) {
         KundeRepo repo = new KundeRepo();
-        Kunde kunde = new Kunde("Hans", "Petersen", "Holmbladsgade 3", 2300, "København S", "hansP@mail.dk", 12345678, "0812882395", 1234, 12345678);
-
-
+        //Kunde kunde = new Kunde("Hans", "Petersen", "Holmbladsgade 3", 2300, "København S", "hansP@mail.dk", 12345678, "0812882395", 1234, 12345678);
+        Kunde hans = repo.getSingleEntityById(4);
+        hans.setBy("Aarhus");
+        repo.update(hans);
     }
 }
