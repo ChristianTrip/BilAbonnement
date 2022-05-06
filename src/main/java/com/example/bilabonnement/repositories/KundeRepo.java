@@ -16,7 +16,7 @@ public class KundeRepo implements CRUDInterface <Kunde>{
     public boolean create(Kunde kunde) {
 
         try{
-            String sql = "INSERT INTO kunder(`for_navn`, `efter_navn`, `adresse`, `post_nummer`, `by`, `email`, `mobil`, `cpr`, `reg_nummer`, `konto_nummer`) " +
+            String sql = "INSERT INTO kunder(`for_navn`, `efter_navn`, `adresse`, `post_nummer`, `by_navn`, `email`, `mobil`, `cpr`, `reg_nummer`, `konto_nummer`) " +
                     "VALUES ('" + kunde.getForNavn() + "', " +
                     "'" + kunde.getEfterNavn() + "', " +
                     "'" + kunde.getAdresse() + "', " +
@@ -58,10 +58,10 @@ public class KundeRepo implements CRUDInterface <Kunde>{
                 int post_nummer = rs.getInt(5);
                 String by = rs.getString(6);
                 String email = rs.getString(7);
-                int mobil = rs.getInt(8);
+                String mobil = rs.getString(8);
                 String cpr = rs.getString(9);
-                int reg_nummer = rs.getInt(10);
-                int konto_nummer = rs.getInt(11);
+                String reg_nummer = rs.getString(10);
+                String konto_nummer = rs.getString(11);
 
                 return new Kunde(kunde_id, for_navn, efter_navn, adresse, post_nummer, by, email, mobil, cpr, reg_nummer, konto_nummer);
             }
@@ -91,10 +91,10 @@ public class KundeRepo implements CRUDInterface <Kunde>{
                 int post_nummer = rs.getInt(5);
                 String by = rs.getString(6);
                 String email = rs.getString(7);
-                int mobil = rs.getInt(8);
+                String mobil = rs.getString(8);
                 String cpr = rs.getString(9);
-                int reg_nummer = rs.getInt(10);
-                int konto_nummer = rs.getInt(11);
+                String reg_nummer = rs.getString(10);
+                String konto_nummer = rs.getString(11);
 
                 Kunde kunde = new Kunde(kunde_id, for_navn, efter_navn, adresse, post_nummer, by, email, mobil, cpr, reg_nummer, konto_nummer);
                 kunder.add(kunde);
@@ -163,9 +163,10 @@ public class KundeRepo implements CRUDInterface <Kunde>{
 
     public static void main(String[] args) {
         KundeRepo repo = new KundeRepo();
-        //Kunde kunde = new Kunde("Hans", "Petersen", "Holmbladsgade 3", 2300, "København S", "hansP@mail.dk", 12345678, "0812882395", 1234, 12345678);
+        Kunde kunde = new Kunde("James", "Bond", "Amagerbrogade 69", 2300, "København S", "bond007@agent.mail.dk", "xxxxxxxx", "0812882395", "1234", "12345678");
+        repo.create(kunde);
         Kunde hans = repo.getSingleEntityById(4);
-        hans.setBy("Aarhus");
+        hans.setBy("København S");
         repo.update(hans);
     }
 }

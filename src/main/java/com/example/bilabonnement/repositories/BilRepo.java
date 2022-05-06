@@ -42,19 +42,18 @@ public class BilRepo implements CRUDInterface<Bil> {
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
 
-            String stelnummer = rs.getString(1);
-            String navn = rs.getString(2);
-            String model = rs.getString(3);
+            int bilId = rs.getInt(1);
+            String stelnummer = rs.getString(2);
+            String navn = rs.getString(3);
+            String model = rs.getString(4);
 
-            int[] brugeradgang = new int[3];
-            brugeradgang[0] = bruger_type;
 
-            return new Bruger(bruger_id, navn, adgangskode, brugeradgang);
+            return new Bil(stelnummer, navn, model);
 
         }
         catch (SQLException e){
             e.printStackTrace();
-            System.out.println("Kunne ikke finde bruger med id: " + id);
+            System.out.println("Kunne ikke finde bil med id: " + id);
         }
         return null;
     }
