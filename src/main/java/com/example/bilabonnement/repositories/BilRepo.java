@@ -118,11 +118,24 @@ public class BilRepo implements CRUDInterface<Bil> {
 
     @Override
     public boolean deleteById(int id) {
-        return false;
+        try{
+
+            Connection conn = DatabaseConnectionManager.getConnection();
+            String sql = "DELETE FROM biler WHERE bil_id = " + id + ";";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.executeUpdate();
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            System.out.println("Kunne ikke slette bil med id: " + id);
+            return false;
+        }
+
+        return true;
     }
 
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         BilRepo bil = new BilRepo();
 
         //Testing
@@ -135,22 +148,22 @@ public class BilRepo implements CRUDInterface<Bil> {
         //System.out.println(bil.getSingleEntityById(1));
 
         //GetAllEntities
-        System.out.println(bil.getAllEntities());
+        //System.out.println(bil.getAllEntities());
 
         //Update
-        /*Bil nyBil = bil.getSingleEntityById(1);
+        *//*Bil nyBil = bil.getSingleEntityById(1);
 
         System.out.println(nyBil);
 
         nyBil.setName("Ford");
         nyBil.setModel("G7");
 
-        bil.update(nyBil);*/
+        bil.update(nyBil);*//*
 
         //deleteById
+        //bil.deleteById(1);
 
 
-
-    }
+    }*/
 
 }
