@@ -6,21 +6,21 @@ public class Bruger {
     private final int id;
     private String navn;
     private String adgangskode;
-    private int[] brugerType = new int[3];
+    private BrugerType brugerType;
     // 0 index = DataregBruger
     // 1 index = ForretningsBruger
     // 2 index = SkaderegBruger
     // værdien 0 = ingen adgang
     // værdien 1 = adgang
 
-    public Bruger(int id, String navn, String adgangskode, int[] brugerType) {
+    public Bruger(int id, String navn, String adgangskode, BrugerType brugerType) {
         this.id = id;
         this.navn = navn;
         this.adgangskode = adgangskode;
         this.brugerType = brugerType;
     }
 
-    public Bruger(String navn, String adgangskode, int[] brugerType) {
+    public Bruger(String navn, String adgangskode, BrugerType brugerType) {
         this.id = -1;
         this.navn = navn;
         this.adgangskode = adgangskode;
@@ -32,7 +32,7 @@ public class Bruger {
     }
 
 
-    public int[] getBrugerType(){
+    public BrugerType getBrugerType(){
         return this.brugerType;
     }
 
@@ -52,7 +52,7 @@ public class Bruger {
         this.adgangskode = adgangskode;
     }
 
-    public void setBrugerType(int[] brugerType) {
+    public void setBrugerType(BrugerType brugerType) {
         this.brugerType = brugerType;
     }
 
@@ -62,7 +62,7 @@ public class Bruger {
                 "\n\tid = " + id +
                 "\n\tnavn = " + navn +
                 "\n\tadgangskode = " + adgangskode +
-                "\n\tbrugerType = " + Arrays.toString(brugerType) +
+                "\n\tbrugerType = " + brugerType +
                 "\n";
     }
 }

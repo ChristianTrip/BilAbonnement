@@ -1,6 +1,7 @@
 package com.example.bilabonnement.repositories;
 
 import com.example.bilabonnement.models.brugere.Bruger;
+import com.example.bilabonnement.models.brugere.BrugerType;
 import com.example.bilabonnement.utility.DatabaseConnectionManager;
 
 import java.sql.Connection;
@@ -16,7 +17,7 @@ public class BrugerRepo implements CRUDInterface<Bruger>{
     public boolean create(Bruger bruger) {
         try{
             String sql = "INSERT INTO brugere(`bruger_type`, `bruger_navn`, `adgangskode`) " +
-                    "VALUES ('" + bruger.getBrugerType()[0] + "', " +
+                    "VALUES ('" + bruger.getBrugerType() + "', " +
                     "'" + bruger.getNavn() + "', " +
                     "'" + bruger.getAdgangskode() + "');";
 
@@ -46,12 +47,12 @@ public class BrugerRepo implements CRUDInterface<Bruger>{
             while(rs.next()){
 
                 int bruger_id = rs.getInt(1);
-                int bruger_type = rs.getInt(2);
+                String bruger_type = rs.getString(2);
                 String navn = rs.getString(3);
                 String adgangskode = rs.getString(4);
 
-                int[] brugeradgang = new int[3];
-                brugeradgang[0] = bruger_type;
+                BrugerType brugeradgang;
+                brugeradgang = BrugerType.valueOf(bruger_type);
 
                 return new Bruger(bruger_id, navn, adgangskode, brugeradgang);
             }
@@ -76,12 +77,12 @@ public class BrugerRepo implements CRUDInterface<Bruger>{
 
             while (rs.next()){
                 int bruger_id = rs.getInt(1);
-                int bruger_type = rs.getInt(2);
+                String bruger_type = rs.getString(2);
                 String navn = rs.getString(3);
                 String adgangskode = rs.getString(4);
 
-                int[] brugerAdgang = new int[3];
-                brugerAdgang[0] = bruger_type;
+                BrugerType brugerAdgang;
+                brugerAdgang = BrugerType.valueOf(bruger_type);
 
                 Bruger bruger = new Bruger(bruger_id, navn, adgangskode, brugerAdgang);
 
@@ -136,6 +137,9 @@ public class BrugerRepo implements CRUDInterface<Bruger>{
         return true;
     }
 
-
+    public static void main(String[] args) {
+        BrugerRepo br = new BrugerRepo();
+        System.out.println(br.getSingleEntityById(2));
+    }
 
 }
