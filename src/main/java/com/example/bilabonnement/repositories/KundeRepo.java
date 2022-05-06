@@ -50,20 +50,21 @@ public class KundeRepo implements CRUDInterface <Kunde>{
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
 
-            int kunde_id = rs.getInt(1);
-            String for_navn = rs.getString(2);
-            String efter_navn = rs.getString(3);
-            String adresse = rs.getString(4);
-            int post_nummer = rs.getInt(5);
-            String by = rs.getString(6);
-            String email = rs.getString(7);
-            int mobil = rs.getInt(8);
-            int cpr = rs.getInt(9);
-            int reg_nummer = rs.getInt(10);
-            int konto_nummer = rs.getInt(11);
+            while(rs.next()) {
+                int kunde_id = rs.getInt(1);
+                String for_navn = rs.getString(2);
+                String efter_navn = rs.getString(3);
+                String adresse = rs.getString(4);
+                int post_nummer = rs.getInt(5);
+                String by = rs.getString(6);
+                String email = rs.getString(7);
+                int mobil = rs.getInt(8);
+                int cpr = rs.getInt(9);
+                int reg_nummer = rs.getInt(10);
+                int konto_nummer = rs.getInt(11);
 
-            return new Kunde(kunde_id, for_navn, efter_navn, adresse, post_nummer, by, email, mobil, cpr, reg_nummer, konto_nummer);
-
+                return new Kunde(kunde_id, for_navn, efter_navn, adresse, post_nummer, by, email, mobil, cpr, reg_nummer, konto_nummer);
+            }
         }
         catch (SQLException e){
             e.printStackTrace();
@@ -149,6 +150,5 @@ public class KundeRepo implements CRUDInterface <Kunde>{
 
         return true;
     }
-
 
 }
