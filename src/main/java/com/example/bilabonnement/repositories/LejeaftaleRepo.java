@@ -51,27 +51,27 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
 
-            int lejeaftale_id = rs.getInt(1);
-            int kunde_id = rs.getInt(2);
-            String bil_stel_nummer = rs.getString(3);
-            int abonnement_id = rs.getInt(4);
-            int tilstandsrapport_id = rs.getInt(5);
-            int prisoverslag_id = rs.getInt(6);
-            int afhentningssted = rs.getInt(7);
-            int totalpris = rs.getInt(8);
-            Date oprettelsesdato = rs.getDate(9);
+            while(rs.next()) {
+                int lejeaftale_id = rs.getInt(1);
+                int kunde_id = rs.getInt(2);
+                String bil_stel_nummer = rs.getString(3);
+                int abonnement_id = rs.getInt(4);
+                int tilstandsrapport_id = rs.getInt(5);
+                int prisoverslag_id = rs.getInt(6);
+                int afhentningssted = rs.getInt(7);
+                int totalpris = rs.getInt(8);
+                Date oprettelsesdato = rs.getDate(9);
 
-            Kunde kunde = new KundeRepo().getSingleEntityById(kunde_id);
-            Bil bil = null;
-            Tilstandsrapport tilstandsrapport = null;
-            Abonnement abonnement = null;
-            Prisoverslag prisoverslag = null;
-            AfhentningsSted afhentningsSted = null;
-            int totalPris = -1;
+                Kunde kunde = new KundeRepo().getSingleEntityById(kunde_id);
+                Bil bil = null;
+                Tilstandsrapport tilstandsrapport = null;
+                Abonnement abonnement = null;
+                Prisoverslag prisoverslag = null;
+                AfhentningsSted afhentningsSted = null;
+                int totalPris = -1;
 
-
-            return new Lejeaftale(lejeaftale_id, kunde, bil, tilstandsrapport, abonnement, prisoverslag, afhentningsSted, totalPris, oprettelsesdato);
-
+                return new Lejeaftale(lejeaftale_id, kunde, bil, tilstandsrapport, abonnement, prisoverslag, afhentningsSted, totalPris, oprettelsesdato);
+            }
         }
         catch (SQLException e){
             e.printStackTrace();

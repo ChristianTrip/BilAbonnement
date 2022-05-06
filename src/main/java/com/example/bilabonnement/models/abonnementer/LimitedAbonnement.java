@@ -2,10 +2,23 @@ package com.example.bilabonnement.models.abonnementer;
 
 public class LimitedAbonnement extends Abonnement{
 
-    private final int lejeperiodeMdr = 5;
 
-    public LimitedAbonnement(int id) {
-        super(id);
-        super.lejeperiodeMdr = this.lejeperiodeMdr;
+
+    public LimitedAbonnement(int id, boolean selvRisiko) {
+        super(id, selvRisiko);
+        super.lejeperiodeMdr = 5;
+    }
+
+    public LimitedAbonnement(boolean selvRisiko){
+        super.lavSelvrisiko = selvRisiko;
+    }
+
+    @Override
+    public String toString() {
+        return "LimitedAbonnement{" +
+                "id=" + id +
+                ", lavSelvrisiko=" + lavSelvrisiko +
+                ", lejeperiodeMdr=" + lejeperiodeMdr +
+                '}';
     }
 }

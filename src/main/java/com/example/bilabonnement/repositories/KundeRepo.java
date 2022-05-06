@@ -50,20 +50,21 @@ public class KundeRepo implements CRUDInterface <Kunde>{
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
 
-            int kunde_id = rs.getInt(1);
-            String for_navn = rs.getString(2);
-            String efter_navn = rs.getString(3);
-            String adresse = rs.getString(4);
-            int post_nummer = rs.getInt(5);
-            String by = rs.getString(6);
-            String email = rs.getString(7);
-            int mobil = rs.getInt(8);
-            int cpr = rs.getInt(9);
-            int reg_nummer = rs.getInt(10);
-            int konto_nummer = rs.getInt(11);
+            while(rs.next()) {
+                int kunde_id = rs.getInt(1);
+                String for_navn = rs.getString(2);
+                String efter_navn = rs.getString(3);
+                String adresse = rs.getString(4);
+                int post_nummer = rs.getInt(5);
+                String by = rs.getString(6);
+                String email = rs.getString(7);
+                int mobil = rs.getInt(8);
+                String cpr = rs.getString(9);
+                int reg_nummer = rs.getInt(10);
+                int konto_nummer = rs.getInt(11);
 
-            return new Kunde(kunde_id, for_navn, efter_navn, adresse, post_nummer, by, email, mobil, cpr, reg_nummer, konto_nummer);
-
+                return new Kunde(kunde_id, for_navn, efter_navn, adresse, post_nummer, by, email, mobil, cpr, reg_nummer, konto_nummer);
+            }
         }
         catch (SQLException e){
             e.printStackTrace();
@@ -91,7 +92,7 @@ public class KundeRepo implements CRUDInterface <Kunde>{
                 String by = rs.getString(6);
                 String email = rs.getString(7);
                 int mobil = rs.getInt(8);
-                int cpr = rs.getInt(9);
+                String cpr = rs.getString(9);
                 int reg_nummer = rs.getInt(10);
                 int konto_nummer = rs.getInt(11);
 
@@ -116,6 +117,14 @@ public class KundeRepo implements CRUDInterface <Kunde>{
                             "SET " +
                             "for_navn = '" + kunde.getForNavn() + "', " +
                             "efter_navn = '" + kunde.getEfterNavn() + "'" +
+                            "adresse = '" + kunde.getAdresse() + "'" +
+                            "post_nummer = '" + kunde.getPostNummer() + "'" +
+                            "by = '" + kunde.getBy() + "'" +
+                            "email = '" + kunde.getEmail() + "'" +
+                            "mobil = '" + kunde.getMobil() + "'" +
+                            "cpr = '" + kunde.getCpr() + "'" +
+                            "reg_nummer = '" + kunde.getRegNummer() + "'" +
+                            "konto_nummer = '" + kunde.getKontoNummer() + "'" +
                             "WHERE kunde_id = " + kunde.getId() + ";";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
@@ -151,4 +160,10 @@ public class KundeRepo implements CRUDInterface <Kunde>{
     }
 
 
+    public static void main(String[] args) {
+        KundeRepo repo = new KundeRepo();
+        Kunde kunde = new Kunde("Hans", "Petersen", "Holmbladsgade 3", 2300, "København S", "hansP@mail.dk", 12345678, "0812882395", 1234, 12345678);
+
+
+    }
 }

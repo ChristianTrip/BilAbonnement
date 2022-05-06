@@ -1,7 +1,5 @@
 package com.example.bilabonnement.models;
 
-import java.util.Locale;
-
 public class Bil {
 
     private String stelNummer; //<-
@@ -30,5 +28,14 @@ public class Bil {
 
     public String getModel() {
         return model;
+    }
+
+    @Override
+    public String toString() {
+        return "Bil{" +
+                "stelNummer='" + stelNummer + '\'' +
+                ", name='" + name + '\'' +
+                ", model='" + model + '\'' +
+                '}';
     }
 }
