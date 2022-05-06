@@ -1,7 +1,13 @@
 package com.example.bilabonnement.repositories;
 
 import com.example.bilabonnement.models.Bil;
+import com.example.bilabonnement.models.brugere.Bruger;
+import com.example.bilabonnement.utility.DatabaseConnectionManager;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 public class BilRepo implements CRUDInterface<Bil> {
@@ -9,11 +15,47 @@ public class BilRepo implements CRUDInterface<Bil> {
 
     @Override
     public boolean create(Bil bil) {
+        try{
+            String sql = "INSERT INTO biler(`bil_stelnummer`, `bil_name`, `bil_model`) " +
+                    "VALUES ('" + bil.getStelNummer() + "', " +
+                    "'" + bil.getName() + "', " +
+                    "'" + bil.getModel() + "');";
+
+            Connection conn = DatabaseConnectionManager.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.executeUpdate();
+            return true;
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            System.out.println("Kunne ikke oprette bil med stelnummer " + bil.getStelNummer() + " i databasen");
+        }
+
         return false;
     }
 
     @Override
     public Bil getSingleEntityById(int id) {
+        try {
+            String sql = "SELECT * FROM biler WHERE bil_id = '" + id + "';";
+            Connection conn = DatabaseConnectionManager.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+
+            String stelnummer = rs.getString(1);
+            String navn = rs.getString(2);
+            String model = rs.getString(3);
+
+            int[] brugeradgang = new int[3];
+            brugeradgang[0] = bruger_type;
+
+            return new Bruger(bruger_id, navn, adgangskode, brugeradgang);
+
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            System.out.println("Kunne ikke finde bruger med id: " + id);
+        }
         return null;
     }
 
