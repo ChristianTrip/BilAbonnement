@@ -12,10 +12,22 @@ public class Bil {
     private int prisPrMdr;
     private boolean tilvalgtFarve;
 
-
+    public Bil(String stelNummer, String name, String model) {
+        this.stelNummer = stelNummer;
+        this.name = name;
+        this.model = model;
+    }
 
     public String getStelNummer() {
         return stelNummer.toUpperCase();
     }
 
+    @Override
+    public String toString() {
+        return "Bil{" +
+                "stelNummer='" + stelNummer + '\'' +
+                ", name='" + name + '\'' +
+                ", model='" + model + '\'' +
+                '}';
+    }
 }
