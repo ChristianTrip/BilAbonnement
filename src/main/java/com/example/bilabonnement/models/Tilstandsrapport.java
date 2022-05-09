@@ -3,6 +3,7 @@ package com.example.bilabonnement.models;
 import java.util.ArrayList;
 
 public class Tilstandsrapport {
+
     private int id;
     private ArrayList<Mangel> mangler;
     private ArrayList<Skade> skader;
@@ -13,7 +14,10 @@ public class Tilstandsrapport {
         this.skader = skader;
     }
 
-    public Tilstandsrapport(){}
+
+    public Tilstandsrapport(){
+
+    }
 
     public void tilfoejMangel(Mangel mangel){
         mangler.add(mangel);
