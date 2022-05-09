@@ -1,5 +1,6 @@
 package com.example.bilabonnement.services;
 
+import com.example.bilabonnement.models.AfhentningsSted;
 import com.example.bilabonnement.models.Bil;
 import com.example.bilabonnement.models.Kunde;
 import com.example.bilabonnement.models.Lejeaftale;
@@ -27,7 +28,7 @@ public class DataregService {
     }
 
     public void opretLejeaftale(Lejeaftale lAftale){
-        //do stuff
+        //do stuff - opret Lejeaftale ud fra objecter fra læscsv()
     }
 
     public static ArrayList<Object> læscsv(){
@@ -145,13 +146,34 @@ public class DataregService {
             e.printStackTrace();
         }
         // Afhentningssted
+        try{
+            reader.setSc("src/main/resources/csv/afhentningssted.csv");
+            currSc = reader.getSc();
+            currSc.nextLine();
+
+            while(currSc.hasNext()){
+                String currLine = currSc.nextLine();
+                String[] split = currLine.split(",");
+
+                String adresse = split[0];
+                int postnummer = parseInt(split[1]);
+                String by = split[2];
+                int levering = parseInt(split[3]);
+
+                AfhentningsSted afhentningsSted = new AfhentningsSted(adresse,postnummer,by,levering);
+
+                liste.add(afhentningsSted);
+
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
 
 
         return liste;
     }
 
-    public static void main(String[] args) {
-        System.out.println(DataregService.læscsv());
-    }
+
 
 }

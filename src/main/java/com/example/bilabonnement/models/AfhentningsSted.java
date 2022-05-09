@@ -8,10 +8,20 @@ public class AfhentningsSted {
     private final int levering;
 
 
-    AfhentningsSted(String adresse, int postNummer, String by, int levering) {
+    public AfhentningsSted(String adresse, int postNummer, String by, int levering) {
         this.adresse = adresse;
         this.postNummer = postNummer;
         this.by = by;
         this.levering = levering;
+    }
+
+    @Override
+    public String toString() {
+        return "AfhentningsSted{" +
+                "adresse='" + adresse + '\'' +
+                ", postNummer=" + postNummer +
+                ", by='" + by + '\'' +
+                ", levering=" + levering +
+                '}';
     }
 }
