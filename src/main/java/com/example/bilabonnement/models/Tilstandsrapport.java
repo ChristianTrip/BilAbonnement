@@ -5,17 +5,24 @@ import java.util.ArrayList;
 public class Tilstandsrapport {
 
     private int id;
+    private int lejeaftaleId;
     private int totalPris;
     private ArrayList<Mangel> mangler;
     private ArrayList<Skade> skader;
 
-    public Tilstandsrapport(int id, ArrayList<Mangel> mangler, ArrayList<Skade> skader) {
+    public Tilstandsrapport(int id, int lejeaftaleId, ArrayList<Mangel> mangler, ArrayList<Skade> skader) {
         this.id = id;
+        this.lejeaftaleId = lejeaftaleId;
         this.mangler = mangler;
         this.skader = skader;
         this.totalPris = udregnTotalPris();
     }
 
+    public Tilstandsrapport(int lejeaftaleId) {
+        this.lejeaftaleId = lejeaftaleId;
+        this.mangler = new ArrayList<>();
+        this.skader = new ArrayList<>();
+    }
 
     public Tilstandsrapport(ArrayList<Mangel> mangler, ArrayList<Skade> skader){
         this.mangler = mangler;
@@ -54,5 +61,17 @@ public class Tilstandsrapport {
 
     public int getId() {
         return id;
+    }
+
+    public int getLejeaftaleId() {
+        return lejeaftaleId;
+    }
+
+    public ArrayList<Mangel> getMangler() {
+        return mangler;
+    }
+
+    public ArrayList<Skade> getSkader() {
+        return skader;
     }
 }
