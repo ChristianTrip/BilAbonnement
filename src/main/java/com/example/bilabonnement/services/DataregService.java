@@ -52,10 +52,10 @@ public class DataregService {
                 int postNummer = parseInt(split[3]);
                 String by = split[4];
                 String email = split[5];
-                int mobil = parseInt(split[6]);
-                int cpr = parseInt(split[7]);
-                int regNummer = parseInt(split[8]);
-                int kontoNummer = parseInt(split[9]);
+                String mobil = (split[6]);
+                String cpr = (split[7]);
+                String regNummer = (split[8]);
+                String kontoNummer = (split[9]);
 
                 Kunde kunde = new Kunde(fornavn,efternavn,adresse,postNummer,by,email,mobil,cpr,regNummer,kontoNummer);
                 liste.add(kunde);
