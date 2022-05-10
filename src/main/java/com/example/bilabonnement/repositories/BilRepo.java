@@ -18,8 +18,9 @@ public class BilRepo implements CRUDInterface<Bil> {
     @Override
     public boolean create(Bil bil) {
         try{
-            String sql = "INSERT INTO biler(`bil_stelnummer`, `bil_name`, `bil_model`) " +
+            String sql = "INSERT INTO biler(`lejeaftale_id`, `bil_stelnummer`, `bil_name`, `bil_model`) " +
                     "VALUES (" +
+                    "'" + bil.getLejeaftaleId() + "', " +
                     "'" + bil.getStelNummer() + "', " +
                     "'" + bil.getName() + "', " +
                     "'" + bil.getModel() + "');";

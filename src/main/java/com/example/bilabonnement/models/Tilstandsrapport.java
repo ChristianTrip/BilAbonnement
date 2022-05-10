@@ -18,8 +18,7 @@ public class Tilstandsrapport {
         this.totalPris = udregnTotalPris();
     }
 
-    public Tilstandsrapport(int lejeaftaleId) {
-        this.lejeaftaleId = lejeaftaleId;
+    public Tilstandsrapport() {
         this.mangler = new ArrayList<>();
         this.skader = new ArrayList<>();
     }
@@ -41,6 +40,10 @@ public class Tilstandsrapport {
         }
 
         return prisToReturn;
+    }
+
+    public void setLejeaftaleId(int lejeaftaleId) {
+        this.lejeaftaleId = lejeaftaleId;
     }
 
     public void tilfoejMangel(Mangel mangel){

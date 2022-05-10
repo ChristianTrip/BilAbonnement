@@ -2,6 +2,7 @@ package com.example.bilabonnement.repositories;
 
 import com.example.bilabonnement.models.*;
 import com.example.bilabonnement.models.abonnementer.Abonnement;
+import com.example.bilabonnement.models.abonnementer.LimitedAbonnement;
 import com.example.bilabonnement.models.prisoverslag.Prisoverslag;
 import com.example.bilabonnement.utility.DatabaseConnectionManager;
 
@@ -14,30 +15,72 @@ import java.util.List;
 
 public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
 
+    private BilRepo bilRepo = new BilRepo();
+    private KundeRepo kundeRepo = new KundeRepo();
+    private TilstandsRapportRepo tilstandsRapportRepo = new TilstandsRapportRepo();
+    private AbonnementRepo abonnementRepo = new AbonnementRepo();
+    private AfhentningsstedRepo afhentningsstedRepo = new AfhentningsstedRepo();
+    private PrisoverslagRepo prisoverslagRepo = new PrisoverslagRepo();
+
 
     @Override
     public boolean create(Lejeaftale lejeaftale) {
 
         java.sql.Date mySQLDate = new java.sql.Date(lejeaftale.getOprettelsesDato().getTime());
+        int lejeaftaleId = -1;
+        Connection conn = DatabaseConnectionManager.getConnection();
+
 
         try{
-            String sql = "INSERT INTO lejeaftaler(`kunde_id`, `bil_stel_nummer`, `abonnement_id`, `tilstandsrapport`, `prisoverslag_id`, `afhentningssted`, `oprettelsesdato`) " +
-                    "VALUES ('" + lejeaftale.getKunde().getId() + "', " +
-                    "'" + lejeaftale.getBil().getStelNummer() + "', " +
-                    "'" + lejeaftale.getAbonnement().getId() + "', " +
-                    "'" + lejeaftale.getTilstandsrapport().getId() + "', " +
-                    "'" + lejeaftale.getPrisoverslag().getId() + "', " +
-                    "'" + lejeaftale.getAfhentningsSted() + "', " +
-                    "'" + mySQLDate + "');";
+            String sql = "INSERT INTO lejeaftaler(`oprettelsesdato`) " +
+                    "VALUES ('" + mySQLDate + "');";
 
-            Connection conn = DatabaseConnectionManager.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
+
+            sql = "SELECT LAST_INSERT_ID();";
+            stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+
+            while(rs.next()){
+                lejeaftaleId = rs.getInt(1);
+            }
+
+            Kunde kunde = lejeaftale.getKunde();
+            kunde.setLejeaftaleId(lejeaftaleId);
+            kundeRepo.create(kunde);
+
+            Bil bil = lejeaftale.getBil();
+            bil.setLejeaftaleId(lejeaftaleId);
+            bilRepo.create(bil);
+
+            Tilstandsrapport tilstandsrapport = lejeaftale.getTilstandsrapport();
+            tilstandsrapport.setLejeaftaleId(lejeaftaleId);
+            tilstandsRapportRepo.create(tilstandsrapport);
+
+            Abonnement abonnement = lejeaftale.getAbonnement();
+            abonnement.setLejeaftaleId(lejeaftaleId);
+            abonnementRepo.create(abonnement);
+
+            AfhentningsSted afhentningsSted = lejeaftale.getAfhentningsSted();
+            afhentningsSted.setLejeaftaleId(lejeaftaleId);
+            afhentningsstedRepo.create(afhentningsSted);
+
+            Prisoverslag prisoverslag = lejeaftale.getPrisoverslag();
+            prisoverslag.setLejeaftaleId(lejeaftaleId);
+            prisoverslagRepo.create(prisoverslag);
+
             return true;
+
         }
         catch (SQLException e){
             e.printStackTrace();
+
         }
+
+
+
+
         return false;
     }
 
@@ -53,18 +96,11 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
 
             while(rs.next()) {
                 int lejeaftale_id = rs.getInt(1);
-                int kunde_id = rs.getInt(2);
-                String bil_stel_nummer = rs.getString(3);
-                int abonnement_id = rs.getInt(4);
-                int tilstandsrapport_id = rs.getInt(5);
-                int prisoverslag_id = rs.getInt(6);
-                int afhentningssted = rs.getInt(7);
-                int totalpris = rs.getInt(8);
-                Date oprettelsesdato = rs.getDate(9);
+                Date oprettelsesdato = rs.getDate(2);
 
-                Kunde kunde = new KundeRepo().getSingleEntityById(kunde_id);
-                Bil bil = null;
-                Tilstandsrapport tilstandsrapport = null;
+                Kunde kunde = new KundeRepo().getSingleEntityById(id);
+                Bil bil = new BilRepo().getSingleEntityById(id);
+                Tilstandsrapport tilstandsrapport = new TilstandsRapportRepo().getSingleEntityById(id);
                 Abonnement abonnement = null;
                 Prisoverslag prisoverslag = null;
                 AfhentningsSted afhentningsSted = null;
@@ -93,6 +129,20 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
     @Override
     public boolean deleteById(int id) {
         return false;
+    }
+
+
+    public static void main(String[] args) {
+        LejeaftaleRepo repo = new LejeaftaleRepo();
+        Kunde kunde = new Kunde("John", "Andersen", "Holmbladsgade 30", 2300, "Kbh S", "Johnandersen@mail.dk", "12345678", "0911883485", "1234", "1234567890");
+        Bil bil = new Bil("ZW00003344KL", "Fiat", "grand");
+        Tilstandsrapport tilstandsrapport = new Tilstandsrapport();
+        Abonnement abonnement = new LimitedAbonnement(true);
+        Prisoverslag prisoverslag = new Prisoverslag(4000, 3);
+        AfhentningsSted afhentningsSted = new AfhentningsSted("Lergravsvej 3", "2300", "København S", 300);
+        Lejeaftale lejeaftale = new Lejeaftale(kunde, bil, tilstandsrapport, abonnement, prisoverslag, afhentningsSted);
+        repo.create(lejeaftale);
+
     }
 
 

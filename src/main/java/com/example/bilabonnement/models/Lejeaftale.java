@@ -31,6 +31,21 @@ public class Lejeaftale {
         this.oprettelsesDato = oprettelsesDato;
     }
 
+    public Lejeaftale(Kunde kunde, Bil bil, Tilstandsrapport tilstandsrapport, Abonnement abonnement, Prisoverslag prisoverslag, AfhentningsSted afhentningsSted) {
+        this.kunde = kunde;
+        this.bil = bil;
+        this.tilstandsrapport = tilstandsrapport;
+        this.abonnement = abonnement;
+        this.prisoverslag = prisoverslag;
+        this.afhentningsSted = afhentningsSted;
+        this.oprettelsesDato = new Date();
+    }
+
+
+
+    public int getId() {
+        return id;
+    }
 
     public Kunde getKunde() {
         return kunde;
@@ -38,6 +53,11 @@ public class Lejeaftale {
 
     public Bil getBil() {
         return bil;
+    }
+
+    public void setKunde(Kunde kunde) {
+        kunde.setLejeaftaleId(this.id);
+        this.kunde = kunde;
     }
 
     public Tilstandsrapport getTilstandsrapport() {

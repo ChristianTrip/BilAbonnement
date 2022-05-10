@@ -156,7 +156,7 @@ public class DataregService {
                 String[] split = currLine.split(",");
 
                 String adresse = split[0];
-                int postnummer = parseInt(split[1]);
+                String postnummer = (split[1]);
                 String by = split[2];
                 int levering = parseInt(split[3]);
 

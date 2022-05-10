@@ -16,8 +16,9 @@ public class KundeRepo implements CRUDInterface <Kunde>{
     public boolean create(Kunde kunde) {
 
         try{
-            String sql = "INSERT INTO kunder(`for_navn`, `efter_navn`, `adresse`, `post_nummer`, `by_navn`, `email`, `mobil`, `cpr`, `reg_nummer`, `konto_nummer`) " +
-                    "VALUES ('" + kunde.getForNavn() + "', " +
+            String sql = "INSERT INTO kunder(`lejeaftale_id`, `for_navn`, `efter_navn`, `adresse`, `post_nummer`, `by_navn`, `email`, `mobil`, `cpr`, `reg_nummer`, `konto_nummer`) " +
+                    "VALUES ('" + kunde.getLejeaftaleId() + "', " +
+                    "'" + kunde.getForNavn() + "', " +
                     "'" + kunde.getEfterNavn() + "', " +
                     "'" + kunde.getAdresse() + "', " +
                     "'" + kunde.getPostNummer() + "', " +
@@ -45,7 +46,7 @@ public class KundeRepo implements CRUDInterface <Kunde>{
     public Kunde getSingleEntityById(int id) {
 
         try {
-            String sql = "SELECT * FROM kunder WHERE kunde_id = '" + id + "';";
+            String sql = "SELECT * FROM kunder WHERE lejeaftale_id = '" + id + "';";
             Connection conn = DatabaseConnectionManager.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();

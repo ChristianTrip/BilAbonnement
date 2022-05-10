@@ -11,6 +11,7 @@ public class LimitedAbonnement extends Abonnement{
 
     public LimitedAbonnement(boolean selvRisiko){
         super.lavSelvrisiko = selvRisiko;
+        super.lejeperiodeMdr = 5;
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.example.bilabonnement.models;
 public class Bil {
 
     private int id;
+    private int lejeaftaleId;
     private String stelNummer; //<-
     private String name; //<-
     private String model; //<-
@@ -26,9 +27,18 @@ public class Bil {
         this.model = model;
     }
 
+    public void setLejeaftaleId(int lejeaftaleId) {
+        this.lejeaftaleId = lejeaftaleId;
+    }
+
+    public int getLejeaftaleId() {
+        return lejeaftaleId;
+    }
+
     public int getId() {
         return id;
     }
+
     public String getStelNummer() {
         return stelNummer.toUpperCase();
     }

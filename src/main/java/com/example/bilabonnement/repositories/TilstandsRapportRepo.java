@@ -75,7 +75,7 @@ public class TilstandsRapportRepo implements CRUDInterface<Tilstandsrapport>{
                 int tilstandsrapport_id = rs.getInt(1);
                 int lejeaftale_id = rs.getInt(2);
 
-                tilstandsrapporter.add(new Tilstandsrapport(tilstandsrapport_id, getMangler(tilstandsrapport_id), getSkader(tilstandsrapport_id)));
+                //tilstandsrapporter.add(new Tilstandsrapport(tilstandsrapport_id, getMangler(tilstandsrapport_id), getSkader(tilstandsrapport_id)));
             }
             return tilstandsrapporter;
         }

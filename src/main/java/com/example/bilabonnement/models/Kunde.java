@@ -3,6 +3,7 @@ package com.example.bilabonnement.models;
 public class Kunde {
 
     private int id;
+    private int lejeaftaleId;
     private String forNavn;
     private String efterNavn;
     private String adresse;
@@ -39,6 +40,14 @@ public class Kunde {
         this.cpr = cpr;
         this.regNummer = regNummer;
         this.kontoNummer = kontoNummer;
+    }
+
+    public void setLejeaftaleId(int lejeaftaleId) {
+        this.lejeaftaleId = lejeaftaleId;
+    }
+
+    public int getLejeaftaleId() {
+        return lejeaftaleId;
     }
 
     public int getId() {
