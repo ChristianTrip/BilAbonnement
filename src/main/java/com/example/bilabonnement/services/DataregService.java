@@ -1,9 +1,6 @@
 package com.example.bilabonnement.services;
 
-import com.example.bilabonnement.models.AfhentningsSted;
-import com.example.bilabonnement.models.Bil;
-import com.example.bilabonnement.models.Kunde;
-import com.example.bilabonnement.models.Lejeaftale;
+import com.example.bilabonnement.models.*;
 import com.example.bilabonnement.models.abonnementer.Abonnement;
 import com.example.bilabonnement.models.abonnementer.LimitedAbonnement;
 import com.example.bilabonnement.models.abonnementer.UnlimitedAbonnement;
@@ -11,30 +8,59 @@ import com.example.bilabonnement.models.brugere.Bruger;
 import com.example.bilabonnement.models.prisoverslag.Prisoverslag;
 import com.example.bilabonnement.repositories.BrugerRepo;
 import com.example.bilabonnement.repositories.CRUDInterface;
+import com.example.bilabonnement.repositories.LejeaftaleRepo;
 import com.example.bilabonnement.utility.CSVReader;
+import com.example.bilabonnement.utility.CSVWriter;
 import org.springframework.http.server.DelegatingServerHttpResponse;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 
 import static java.lang.Integer.parseInt;
 
 public class DataregService {
-    private CRUDInterface<Bruger> bRepo = new BrugerRepo();
+    private CRUDInterface<Lejeaftale> lRepo = new LejeaftaleRepo();
+    private ArrayList<Lejeaftale> liste = new ArrayList<>();
 
-    public ArrayList<Lejeaftale> seLejeaftaler(){
-        læscsv();
-        return null;
+    public ArrayList<Lejeaftale> seAlleLejeaftaler(){
+        return liste;
     }
 
-    public void opretLejeaftale(Lejeaftale lAftale){
+    public void opretLejeaftale(){
         //do stuff - opret Lejeaftale ud fra objecter fra læscsv()
+        ArrayList<Lejeaftale> objListe = læscsv();
+
+        for (Object o : objListe) {
+            if(!testValidate(o))
+                return;
+
+        }
+
+
+    }
+    // man skal kunne vælge hvilken lejeaftale man gerne vil godkende
+    // når man har godkendt den valgte lejeaftale skal den fjernes fra csv-filerne
+
+
+    public Lejeaftale vælgLejeaftale(int index){
+        return liste.get(index);
     }
 
-    public static ArrayList<Object> læscsv(){
+    public void skrivcsv(){
+
+    }
+
+    public ArrayList<Lejeaftale> læscsv(){
         CSVReader reader = new CSVReader();
         Scanner currSc;
-        ArrayList<Object> liste = new ArrayList<>();
+        ArrayList<Kunde> kundeListe = new ArrayList<>();
+        ArrayList<Bil> bilListe = new ArrayList<>();
+        ArrayList<Abonnement> abonnementListe = new ArrayList<>();
+        ArrayList<Prisoverslag> pOverslagListe = new ArrayList<>();
+        ArrayList<AfhentningsSted> afhentningsStedsListe = new ArrayList<>();
+
 
         // Kunde
         try{
@@ -57,8 +83,7 @@ public class DataregService {
                 String regNummer = (split[8]);
                 String kontoNummer = (split[9]);
 
-                Kunde kunde = new Kunde(fornavn,efternavn,adresse,postNummer,by,email,mobil,cpr,regNummer,kontoNummer);
-                liste.add(kunde);
+                kundeListe.add(new Kunde(fornavn,efternavn,adresse,postNummer,by,email,mobil,cpr,regNummer,kontoNummer));
 
             }
 
@@ -67,7 +92,6 @@ public class DataregService {
         }
 
         // Bil
-
         try{
             reader.setSc("src/main/resources/csv/bil.csv");
             currSc = reader.getSc();
@@ -82,8 +106,8 @@ public class DataregService {
                 String model = split[2];
 
 
-                Bil bil = new Bil(stelnummer,navn,model);
-                liste.add(bil);
+                bilListe.add(new Bil(stelnummer,navn,model));
+
 
             }
 
@@ -107,16 +131,13 @@ public class DataregService {
                 String abonnementType = split[3];
                 boolean isSelvrisiko = selvrisiko == 1;
                 boolean isAflevering = afleveringsfors == 1;
-                Abonnement abonnement = null;
 
 
                 //lav nyt abonnement og add det
                 if(abonnementType.equals("limited"))
-                    abonnement = new LimitedAbonnement(isSelvrisiko);
+                    abonnementListe.add(new LimitedAbonnement(isSelvrisiko));
                 else if(abonnementType.equals("unlimited"))
-                    abonnement = new UnlimitedAbonnement(lejeperiode, isSelvrisiko, isAflevering);
-
-                liste.add(abonnement);
+                    abonnementListe.add(new UnlimitedAbonnement(lejeperiode, isSelvrisiko, isAflevering));
 
             }
 
@@ -137,8 +158,8 @@ public class DataregService {
                 int abonnementsLængde = parseInt(split[1]);
 
 
-                Prisoverslag pOverslag = new Prisoverslag(totalPris,abonnementsLængde);
-                liste.add(pOverslag);
+                pOverslagListe.add(new Prisoverslag(totalPris,abonnementsLængde));
+
 
             }
 
@@ -160,9 +181,7 @@ public class DataregService {
                 String by = split[2];
                 int levering = parseInt(split[3]);
 
-                AfhentningsSted afhentningsSted = new AfhentningsSted(adresse,postnummer,by,levering);
-
-                liste.add(afhentningsSted);
+                afhentningsStedsListe.add(new AfhentningsSted(adresse,postnummer,by,levering));
 
             }
 
@@ -170,10 +189,60 @@ public class DataregService {
             e.printStackTrace();
         }
 
+        // Lejeaftale creation
+        for (int i = 0; i < bilListe.size(); i++) {
+            liste.add(new Lejeaftale(kundeListe.get(i), bilListe.get(i), null,abonnementListe.get(i), pOverslagListe.get(i), afhentningsStedsListe.get(i)));
+        }
 
         return liste;
     }
 
+    //lav metode der validerer objecter inden LegeaftaleRepo().create() bliver kaldt;
 
 
+    public boolean testValidate(Object o){
+        try {
+            for (Field f : o.getClass().getDeclaredFields()) {
+                f.setAccessible(true);
+                if (f.get(o) == null) {
+                    System.out.println(o.getClass() + " contains a null field");
+                    return false;
+                }
+            }
+        }catch(IllegalAccessException | IllegalArgumentException e){
+            System.out.println(e);
+        }
+        return true;
+    }
+
+
+
+    public void run(){
+        //System.out.println(læscsv());
+        //Bil bil = new Bil("ZW0000069KL","null","null");
+        //AfhentningsSted as = new AfhentningsSted("yes","4500",null,0);
+        //System.out.println(testValidate(as));
+
+        //System.out.println(læscsv());
+
+        CSVWriter wr = new CSVWriter();
+        CSVReader cr = new CSVReader();
+        cr.setSc("src/main/resources/csv/kunde.csv");
+
+        //System.out.println(cr.læsAlt());
+        wr.fjernLinje(1);
+
+
+
+        /*
+        for (Lejeaftale o : læscsv()) {
+            System.out.println(o.getAbonnement());
+        }
+
+        */
+    }
+
+    public static void main(String[] args) {
+        new DataregService().run();
+    }
 }

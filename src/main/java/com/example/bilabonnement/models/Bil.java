@@ -1,5 +1,7 @@
 package com.example.bilabonnement.models;
 
+import org.thymeleaf.util.Validate;
+
 public class Bil {
 
     private int id;
@@ -7,12 +9,14 @@ public class Bil {
     private String stelNummer; //<-
     private String name; //<-
     private String model; //<-
+    /*
     private int kilometerPrLiter;
     private String nummerPlade;
     private Boolean manuelGear;
     private Brændstof brændstof;
     private int prisPrMdr;
     private boolean tilvalgtFarve;
+     */
 
     public Bil(int id, String stelNummer, String name, String model) {
         this.id = id;
@@ -22,6 +26,15 @@ public class Bil {
     }
 
     public Bil(String stelNummer, String name, String model) {
+        /*
+        if(stelNummer == null)
+            throw new IllegalArgumentException("stelnummer er null");
+        if(name == null)
+            throw new IllegalArgumentException("name er null");
+        if(model == null)
+            throw new IllegalArgumentException("model er null");
+         */
+
         this.stelNummer = stelNummer;
         this.name = name;
         this.model = model;
