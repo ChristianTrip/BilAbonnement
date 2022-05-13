@@ -1,6 +1,5 @@
 package com.example.bilabonnement.models;
 
-
 import com.example.bilabonnement.models.abonnementer.Abonnement;
 import com.example.bilabonnement.models.prisoverslag.Prisoverslag;
 
@@ -11,7 +10,7 @@ public class Lejeaftale {
     private int id;
     private Kunde kunde;
     private Bil bil;
-    private Tilstandsrapport tilstandsrapport;
+    private Tilstandsrapport tilstandsrapport = new Tilstandsrapport();
     private Abonnement abonnement;
     private Prisoverslag prisoverslag;
     private AfhentningsSted afhentningsSted;
@@ -19,7 +18,7 @@ public class Lejeaftale {
     private Date oprettelsesDato;
 
 
-    public Lejeaftale(int id, Kunde kunde, Bil bil, Tilstandsrapport tilstandsrapport, Abonnement abonnement, Prisoverslag prisoverslag, AfhentningsSted afhentningsSted, int totalPris, Date oprettelsesDato) {
+    public Lejeaftale(int id, Kunde kunde, Bil bil, Tilstandsrapport tilstandsrapport, Abonnement abonnement, Prisoverslag prisoverslag, AfhentningsSted afhentningsSted, Date oprettelsesDato) {
         this.id = id;
         this.kunde = kunde;
         this.bil = bil;
@@ -27,7 +26,6 @@ public class Lejeaftale {
         this.abonnement = abonnement;
         this.prisoverslag = prisoverslag;
         this.afhentningsSted = afhentningsSted;
-        this.totalPris = totalPris;
         this.oprettelsesDato = oprettelsesDato;
     }
 
@@ -53,11 +51,6 @@ public class Lejeaftale {
 
     public Bil getBil() {
         return bil;
-    }
-
-    public void setKunde(Kunde kunde) {
-        kunde.setLejeaftaleId(this.id);
-        this.kunde = kunde;
     }
 
     public Tilstandsrapport getTilstandsrapport() {
@@ -86,5 +79,21 @@ public class Lejeaftale {
 
     public void setTilstandsrapport(Tilstandsrapport tilstandsrapport) {
         this.tilstandsrapport = tilstandsrapport;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Lejeaftale{" +
+                "\nid = " + id +
+                "\nkunde = " + kunde +
+                "\nbil = " + bil +
+                "\ntilstandsrapport = " + tilstandsrapport +
+                "\nabonnement = " + abonnement +
+                "\nprisoverslag = " + prisoverslag +
+                "\nafhentningsSted = " + afhentningsSted +
+                "\ntotalPris = " + totalPris +
+                "\noprettelsesDato = " + oprettelsesDato + "\n" +
+                '}';
     }
 }
