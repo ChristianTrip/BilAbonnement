@@ -1,6 +1,5 @@
 package com.example.bilabonnement.controllers;
 
-import com.example.bilabonnement.services.DataregService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +28,7 @@ public class IndexController {
         return "redirect:/loggedIn";
     }
 
-    @GetMapping("loggedIn")
+    @GetMapping("/loggedIn")
     public String loggedIn(){
 
         /*
