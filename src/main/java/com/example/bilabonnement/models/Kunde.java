@@ -2,12 +2,12 @@ package com.example.bilabonnement.models;
 
 public class Kunde {
 
-    private int id;
+
     private int lejeaftaleId;
     private String forNavn;
     private String efterNavn;
     private String adresse;
-    private int postNummer;
+    private String postNummer;
     private String by;
     private String email;
     private String mobil;
@@ -15,8 +15,7 @@ public class Kunde {
     private String regNummer;
     private String kontoNummer;
 
-    public Kunde(int id, String forNavn, String efterNavn, String adresse, int postNummer, String by, String email, String mobil, String cpr, String regNummer, String kontoNummer) {
-        this.id = id;
+    public Kunde(String forNavn, String efterNavn, String adresse, String postNummer, String by, String email, String mobil, String cpr, String regNummer, String kontoNummer) {
         this.forNavn = forNavn;
         this.efterNavn = efterNavn;
         this.adresse = adresse;
@@ -29,18 +28,6 @@ public class Kunde {
         this.kontoNummer = kontoNummer;
     }
 
-    public Kunde(String forNavn, String efterNavn, String adresse, int postNummer, String by, String email, String mobil, String cpr, String regNummer, String kontoNummer) {
-        this.forNavn = forNavn;
-        this.efterNavn = efterNavn;
-        this.adresse = adresse;
-        this.postNummer = postNummer;
-        this.by = by;
-        this.email = email;
-        this.mobil = mobil;
-        this.cpr = cpr;
-        this.regNummer = regNummer;
-        this.kontoNummer = kontoNummer;
-    }
 
     public void setLejeaftaleId(int lejeaftaleId) {
         this.lejeaftaleId = lejeaftaleId;
@@ -50,13 +37,6 @@ public class Kunde {
         return lejeaftaleId;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getForNavn() {
         return forNavn;
@@ -82,11 +62,11 @@ public class Kunde {
         this.adresse = adresse;
     }
 
-    public int getPostNummer() {
+    public String getPostNummer() {
         return postNummer;
     }
 
-    public void setPostNummer(int postNummer) {
+    public void setPostNummer(String postNummer) {
         this.postNummer = postNummer;
     }
 
@@ -141,7 +121,6 @@ public class Kunde {
     @Override
     public String toString() {
         return "Kunde{" +
-                "id=" + id +
                 ", forNavn='" + forNavn + '\'' +
                 ", efterNavn='" + efterNavn + '\'' +
                 ", adresse='" + adresse + '\'' +

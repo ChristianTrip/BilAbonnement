@@ -75,7 +75,7 @@ public class DataregService {
                 String fornavn = split[0];
                 String efternavn = split[1];
                 String adresse = split[2];
-                int postNummer = parseInt(split[3]);
+                String postNummer = split[3];
                 String by = split[4];
                 String email = split[5];
                 String mobil = (split[6]);

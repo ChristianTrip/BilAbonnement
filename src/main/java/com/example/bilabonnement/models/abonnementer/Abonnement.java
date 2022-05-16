@@ -5,6 +5,7 @@ public abstract class Abonnement {
     protected int id;
     public int lejeaftaleId;
     protected boolean lavSelvrisiko;
+    protected boolean afleveringsForsikring;
     protected int lejeperiodeMdr;
 
     public Abonnement(int id, boolean lavSelvrisiko) {
@@ -32,5 +33,9 @@ public abstract class Abonnement {
 
     public int getId() {
         return id;
+    }
+
+    public boolean isAfleveringsForsikring() {
+        return afleveringsForsikring;
     }
 }

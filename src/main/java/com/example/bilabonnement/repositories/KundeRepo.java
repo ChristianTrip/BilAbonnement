@@ -36,40 +36,39 @@ public class KundeRepo implements CRUDInterface <Kunde>{
         }
         catch (SQLException e){
             e.printStackTrace();
-            System.out.println("Kunne ikke oprette bruger med id " + kunde.getId() + " i databasen");
+            System.out.println("Kunne ikke oprette bruger med cpr nummer " + kunde.getCpr() + " i databasen");
         }
 
         return false;
     }
 
     @Override
-    public Kunde getSingleEntityById(int id) {
+    public Kunde getSingleEntityById(int cpr) {
 
         try {
-            String sql = "SELECT * FROM kunder WHERE lejeaftale_id = '" + id + "';";
+            String sql = "SELECT * FROM kunder WHERE cpr = '" + cpr + "';";
             Connection conn = DatabaseConnectionManager.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
 
             while(rs.next()) {
-                int kunde_id = rs.getInt(1);
-                String for_navn = rs.getString(2);
-                String efter_navn = rs.getString(3);
-                String adresse = rs.getString(4);
-                int post_nummer = rs.getInt(5);
-                String by = rs.getString(6);
-                String email = rs.getString(7);
-                String mobil = rs.getString(8);
-                String cpr = rs.getString(9);
-                String reg_nummer = rs.getString(10);
-                String konto_nummer = rs.getString(11);
+                String for_navn = rs.getString(1);
+                String efter_navn = rs.getString(2);
+                String adresse = rs.getString(3);
+                String post_nummer = rs.getString(4);
+                String by = rs.getString(5);
+                String email = rs.getString(6);
+                String mobil = rs.getString(7);
+                String cpr_nummer = rs.getString(8);
+                String reg_nummer = rs.getString(9);
+                String konto_nummer = rs.getString(10);
 
-                return new Kunde(kunde_id, for_navn, efter_navn, adresse, post_nummer, by, email, mobil, cpr, reg_nummer, konto_nummer);
+                return new Kunde(for_navn, efter_navn, adresse, post_nummer, by, email, mobil, cpr_nummer, reg_nummer, konto_nummer);
             }
         }
         catch (SQLException e){
             e.printStackTrace();
-            System.out.println("Kunne ikke finde kunde med id: " + id);
+            System.out.println("Kunne ikke finde kunde med cpr nummer: " + cpr);
         }
         return null;
     }
@@ -84,20 +83,19 @@ public class KundeRepo implements CRUDInterface <Kunde>{
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
 
-            while (rs.next()){
-                int kunde_id = rs.getInt(1);
-                String for_navn = rs.getString(2);
-                String efter_navn = rs.getString(3);
-                String adresse = rs.getString(4);
-                int post_nummer = rs.getInt(5);
-                String by = rs.getString(6);
-                String email = rs.getString(7);
-                String mobil = rs.getString(8);
-                String cpr = rs.getString(9);
-                String reg_nummer = rs.getString(10);
-                String konto_nummer = rs.getString(11);
+            while(rs.next()) {
+                String for_navn = rs.getString(1);
+                String efter_navn = rs.getString(2);
+                String adresse = rs.getString(3);
+                String post_nummer = rs.getString(4);
+                String by = rs.getString(5);
+                String email = rs.getString(6);
+                String mobil = rs.getString(7);
+                String cpr = rs.getString(8);
+                String reg_nummer = rs.getString(9);
+                String konto_nummer = rs.getString(10);
 
-                Kunde kunde = new Kunde(kunde_id, for_navn, efter_navn, adresse, post_nummer, by, email, mobil, cpr, reg_nummer, konto_nummer);
+                Kunde kunde = new Kunde(for_navn, efter_navn, adresse, post_nummer, by, email, mobil, cpr, reg_nummer, konto_nummer);
                 kunder.add(kunde);
             }
 
@@ -112,7 +110,6 @@ public class KundeRepo implements CRUDInterface <Kunde>{
     @Override
     public boolean update(Kunde kunde) {
         try{
-
             Connection conn = DatabaseConnectionManager.getConnection();
             String sql =    "UPDATE kunder " +
                             "SET " +
@@ -126,7 +123,7 @@ public class KundeRepo implements CRUDInterface <Kunde>{
                             "cpr = '" + kunde.getCpr()                  + "', " +
                             "reg_nummer = '" + kunde.getRegNummer()     + "', " +
                             "konto_nummer = '" + kunde.getKontoNummer() + "' " +
-                            "WHERE kunde_id = " + kunde.getId()         + ";";
+                            "WHERE cpr = " + kunde.getCpr() + ";";
 
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
@@ -134,7 +131,7 @@ public class KundeRepo implements CRUDInterface <Kunde>{
         }
         catch (SQLException e){
             e.printStackTrace();
-            System.out.println("Kunne ikke updatere kunde med id: " + kunde.getId());
+            System.out.println("Kunne ikke updatere kunde med cpr nummer: " + kunde.getCpr());
             return false;
         }
 
@@ -142,19 +139,19 @@ public class KundeRepo implements CRUDInterface <Kunde>{
     }
 
     @Override
-    public boolean deleteById(int id) {
+    public boolean deleteById(int cpr) {
 
         try{
 
             Connection conn = DatabaseConnectionManager.getConnection();
-            String sql = "DELETE FROM kunder WHERE kunde_id = " + id + ";";
+            String sql = "DELETE FROM kunder WHERE cpr = " + cpr + ";";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
 
         }
         catch (SQLException e){
             e.printStackTrace();
-            System.out.println("Kunne ikke slette kunde med id: " + id);
+            System.out.println("Kunne ikke slette kunde med cpr nummer: " + cpr);
             return false;
         }
 
@@ -164,7 +161,7 @@ public class KundeRepo implements CRUDInterface <Kunde>{
 
     public static void main(String[] args) {
         KundeRepo repo = new KundeRepo();
-        Kunde kunde = new Kunde("James", "Bond", "Amagerbrogade 69", 2300, "København S", "bond007@agent.mail.dk", "xxxxxxxx", "0812882395", "1234", "12345678");
+        Kunde kunde = new Kunde("James", "Bond", "Amagerbrogade 69", "2300", "København S", "bond007@agent.mail.dk", "xxxxxxxx", "0812882395", "1234", "12345678");
         repo.create(kunde);
         Kunde hans = repo.getSingleEntityById(4);
         hans.setBy("København S");

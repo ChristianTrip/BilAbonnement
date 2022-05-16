@@ -1,17 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords" content="bil, leje, abonnement:)">
     <meta name="description" content="...">
     <title>Bilabonnement</title>
-    <link rel="stylesheet" href="style.css"  type="text/css">
+    <link rel="stylesheet" th:href="@{style.css}" href="style.css">
 </head>
 <body>
-    <h1>BIL ABONNEMENT</h1>
-    <h2>OG</h2>
-    <h3>BIL ABONNEMENT</h3>
+    <div class="container">
+        <h1>BIL ABONNEMENT</h1>
+        <form class="login" method="post" action="/login">
+            <input name="brugernavn" type="text" placeholder="brugernavn">
+            <input name="adgangskode" type="password" placeholder="adgangskode">
+            <button type="submit">login</button>
+        </form>
+
+    </div>
 
 </body>
 </html>
