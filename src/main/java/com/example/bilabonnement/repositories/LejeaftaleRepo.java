@@ -122,16 +122,26 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
 
         try {
             String sql = "SELECT * FROM lejeaftaler;";
+            conn = DatabaseConnectionManager.getConnection();
             stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
 
             while(rs.next()) {
                 int lejeaftale_id = rs.getInt(1);
+                System.out.println(lejeaftale_id);
+                Date oprettelsesdato = rs.getDate(2);
+                String kundeCPR = rs.getString(3);
+                String bilStelNummer = rs.getString(4);
 
-                Lejeaftale lejeaftale = getSingleEntityById(lejeaftale_id);
-                lejeaftaler.add(lejeaftale);
+                Kunde kunde = getKunde(kundeCPR);
+                Bil bil = getBil(bilStelNummer);
+                Tilstandsrapport tilstandsrapport = null;
+                Abonnement abonnement = getAbonnement(lejeaftale_id);
+                Prisoverslag prisoverslag = getPrisoverslag(lejeaftale_id);
+                AfhentningsSted afhentningsSted = getAfhentningssted(lejeaftale_id);
+
+                lejeaftaler.add(new Lejeaftale(lejeaftale_id, kunde, bil, tilstandsrapport, abonnement, prisoverslag, afhentningsSted, oprettelsesdato));
             }
-
         }
         catch (SQLException e){
             e.printStackTrace();
@@ -297,7 +307,7 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
             String sql = "SELECT * FROM biler WHERE bil_stelnummer = '" + stelnummer + "';";
 
             stmt = conn.prepareStatement(sql);
-            rs = stmt.executeQuery();
+            ResultSet rs = stmt.executeQuery();
 
             while(rs.next()){
 
@@ -322,9 +332,9 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
         try {
             String sql = "SELECT * FROM kunder WHERE cpr = '" + cpr + "';";
 
-            conn = DatabaseConnectionManager.getConnection();
+
             stmt = conn.prepareStatement(sql);
-            rs = stmt.executeQuery();
+            ResultSet rs = stmt.executeQuery();
 
             while(rs.next()) {
                 String for_navn = rs.getString(1);
@@ -354,7 +364,7 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
             String sql = "SELECT * FROM abonnementer WHERE lejeaftale_id = '" + lejeaftaleId + "';";
 
             stmt = conn.prepareStatement(sql);
-            rs = stmt.executeQuery();
+            ResultSet rs = stmt.executeQuery();
 
             while(rs.next()) {
                 int abonnement_id = rs.getInt(1);
@@ -388,7 +398,7 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
             String sql = "SELECT * FROM afhentningssteder WHERE lejeaftale_id = '" + lejeaftaleId + "';";
 
             stmt = conn.prepareStatement(sql);
-            rs = stmt.executeQuery();
+            ResultSet rs = stmt.executeQuery();
 
             while(rs.next()) {
                 int afhentningssted_id = rs.getInt(1);
@@ -414,7 +424,7 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
             String sql = "SELECT * FROM prisoverslag WHERE lejeaftale_id = '" + lejeaftaleId + "';";
 
             stmt = conn.prepareStatement(sql);
-            rs = stmt.executeQuery();
+            ResultSet rs = stmt.executeQuery();
 
             while(rs.next()) {
                 int prisoverslag_id = rs.getInt(1);
@@ -448,7 +458,7 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
 
 
 
-        repo.create(lejeaftale);
+
 
         System.out.println(repo.getAllEntities());
 
