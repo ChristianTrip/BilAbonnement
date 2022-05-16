@@ -10,6 +10,14 @@ public class AfhentningsSted {
     private final int levering;
 
 
+    public AfhentningsSted(int id, String adresse, String postNummer, String by, int levering) {
+        this.id = id;
+        this.adresse = adresse;
+        this.postNummer = postNummer;
+        this.by = by;
+        this.levering = levering;
+    }
+
     public AfhentningsSted(String adresse, String postNummer, String by, int levering) {
         this.adresse = adresse;
         this.postNummer = postNummer;

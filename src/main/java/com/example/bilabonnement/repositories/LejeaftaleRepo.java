@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,14 +26,9 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
      */
 
 
-    private BilRepo bilRepo = new BilRepo();
-    private KundeRepo kundeRepo = new KundeRepo();
-    private TilstandsRapportRepo tilstandsRapportRepo = new TilstandsRapportRepo();
-    private AbonnementRepo abonnementRepo = new AbonnementRepo();
-    private AfhentningsstedRepo afhentningsstedRepo = new AfhentningsstedRepo();
-    private PrisoverslagRepo prisoverslagRepo = new PrisoverslagRepo();
-
     private Connection conn;
+    private PreparedStatement stmt;
+    private ResultSet rs;
 
 
     @Override
@@ -62,10 +58,6 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
             Bil bil = lejeaftale.getBil();
             bil.setLejeaftaleId(lejeaftaleId);
             insertBil(bil);
-
-            Tilstandsrapport tilstandsrapport = lejeaftale.getTilstandsrapport();
-            tilstandsrapport.setLejeaftaleId(lejeaftaleId);
-            tilstandsRapportRepo.create(tilstandsrapport);
 
             Abonnement abonnement = lejeaftale.getAbonnement();
             abonnement.setLejeaftaleId(lejeaftaleId);
@@ -97,20 +89,21 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
             String sql = "SELECT * FROM lejeaftaler WHERE lejeaftale_id = '" + id + "';";
 
             conn = DatabaseConnectionManager.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery();
+            stmt = conn.prepareStatement(sql);
+            rs = stmt.executeQuery();
 
             while(rs.next()) {
                 int lejeaftale_id = rs.getInt(1);
                 Date oprettelsesdato = rs.getDate(2);
                 String kundeCPR = rs.getString(3);
+                String bilStelNummer = rs.getString(4);
 
                 Kunde kunde = getKunde(kundeCPR);
-                Bil bil = getBil(id);
+                Bil bil = getBil(bilStelNummer);
                 Tilstandsrapport tilstandsrapport = null;
                 Abonnement abonnement = getAbonnement(id);
-                Prisoverslag prisoverslag = null;
-                AfhentningsSted afhentningsSted = null;
+                Prisoverslag prisoverslag = getPrisoverslag(id);
+                AfhentningsSted afhentningsSted = getAfhentningssted(id);
 
 
                 return new Lejeaftale(lejeaftale_id, kunde, bil, tilstandsrapport, abonnement, prisoverslag, afhentningsSted, oprettelsesdato);
@@ -125,7 +118,27 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
 
     @Override
     public List<Lejeaftale> getAllEntities() {
-        return null;
+        ArrayList<Lejeaftale> lejeaftaler = new ArrayList<>();
+
+        try {
+            String sql = "SELECT * FROM lejeaftaler;";
+            stmt = conn.prepareStatement(sql);
+            rs = stmt.executeQuery();
+
+            while(rs.next()) {
+                int lejeaftale_id = rs.getInt(1);
+
+
+                Lejeaftale lejeaftale = getSingleEntityById(lejeaftale_id);
+                lejeaftaler.add(lejeaftale);
+            }
+
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            System.out.println("Kunne ikke finde kunder");
+        }
+        return lejeaftaler;
     }
 
     @Override
@@ -165,14 +178,14 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
     private void insertBil(Bil bil){
 
         try{
-            String sql = "INSERT INTO biler(`lejeaftale_id`, `bil_stelnummer`, `bil_name`, `bil_model`) " +
+            String sql = "INSERT IGNORE biler(`lejeaftale_id`, `bil_stelnummer`, `bil_name`, `bil_model`) " +
                     "VALUES (" +
                     "'" + bil.getLejeaftaleId() + "', " +
                     "'" + bil.getStelNummer() + "', " +
                     "'" + bil.getName() + "', " +
                     "'" + bil.getModel() + "');";
 
-            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
 
         }
@@ -198,7 +211,7 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
                     "'" + kunde.getKontoNummer() + "');";
 
 
-            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
         }
         catch (SQLException e){
@@ -209,20 +222,22 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
 
     private void insertAbonnement(Abonnement abonnement){
 
-        int lavSelrisiko = 0;
-        if (abonnement.isLavSelvrisiko()){
-            lavSelrisiko = 1;
+        boolean isLimited = true;
+        if (abonnement.getClass().equals(UnlimitedAbonnement.class)){
+            isLimited = false;
         }
 
         try{
-            String sql = "INSERT INTO abonnementer(`lejeaftale_id`, `lav_selvrisiko`, `lejeperiode_mdr`) " +
+            String sql = "INSERT INTO abonnementer(`lejeaftale_id`, `lav_selvrisiko`, `afleveringsforsikring`, `lejeperiode_mdr`, `is_limited`) " +
                     "VALUES (" +
                     "'" + abonnement.getLejeaftaleId() + "', " +
-                    "'" + lavSelrisiko + "', " +
-                    "'" + abonnement.getLejeperiodeMdr() + "');";
+                    ""  + abonnement.isLavSelvrisiko() + ", " +
+                    ""  + abonnement.isAfleveringsForsikring() + ", " +
+                    "'" + abonnement.getLejeperiodeMdr() + "', " +
+                    " " + isLimited + ");";
 
 
-            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
 
         }
@@ -277,13 +292,13 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
 
     // metoder der henter elementerne der hører til en lejeaftale
 
-    private Bil getBil(int id) {
+    private Bil getBil(String stelnummer) {
 
         try {
-            String sql = "SELECT * FROM biler WHERE lejeaftale_id = '" + id + "';";
+            String sql = "SELECT * FROM biler WHERE bil_stelnummer = '" + stelnummer + "';";
 
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery();
+            stmt = conn.prepareStatement(sql);
+            rs = stmt.executeQuery();
 
             while(rs.next()){
 
@@ -298,7 +313,7 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
         }
         catch (SQLException e){
             e.printStackTrace();
-            System.out.println("Kunne ikke finde bil med id: " + id);
+            System.out.println("Kunne ikke finde bil med stelnummer: " + stelnummer);
         }
         return null;
     }
@@ -309,8 +324,8 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
             String sql = "SELECT * FROM kunder WHERE cpr = '" + cpr + "';";
 
             conn = DatabaseConnectionManager.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery();
+            stmt = conn.prepareStatement(sql);
+            rs = stmt.executeQuery();
 
             while(rs.next()) {
                 String for_navn = rs.getString(1);
@@ -334,13 +349,13 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
         return null;
     }
 
-    private Abonnement getAbonnement(int id) {
+    private Abonnement getAbonnement(int lejeaftaleId) {
 
         try {
-            String sql = "SELECT * FROM abonnementer WHERE lejeaftale_id = '" + id + "';";
-            Connection conn = DatabaseConnectionManager.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery();
+            String sql = "SELECT * FROM abonnementer WHERE lejeaftale_id = '" + lejeaftaleId + "';";
+
+            stmt = conn.prepareStatement(sql);
+            rs = stmt.executeQuery();
 
             while(rs.next()) {
                 int abonnement_id = rs.getInt(1);
@@ -363,7 +378,57 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
         }
         catch (SQLException e){
             e.printStackTrace();
-            System.out.println("Kunne ikke finde abonnement med id: " + id);
+            System.out.println("Kunne ikke finde abonnement med id: " + lejeaftaleId);
+        }
+        return null;
+    }
+
+    private AfhentningsSted getAfhentningssted(int lejeaftaleId) {
+
+        try {
+            String sql = "SELECT * FROM afhentningssteder WHERE lejeaftale_id = '" + lejeaftaleId + "';";
+
+            stmt = conn.prepareStatement(sql);
+            rs = stmt.executeQuery();
+
+            while(rs.next()) {
+                int afhentningssted_id = rs.getInt(1);
+                int lejeaftale_id = rs.getInt(2);
+                String adresse = rs.getString(3);
+                String post_nummer = rs.getString(4);
+                String by_navn = rs.getString(5);
+                int levering = rs.getInt(6);
+
+                return new AfhentningsSted(afhentningssted_id, adresse, post_nummer, by_navn, levering);
+            }
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            System.out.println("Kunne ikke finde afhentningssted tilhørende lejeaftale id: " + lejeaftaleId);
+        }
+        return null;
+    }
+
+    private Prisoverslag getPrisoverslag(int lejeaftaleId) {
+
+        try {
+            String sql = "SELECT * FROM prisoverslag WHERE lejeaftale_id = '" + lejeaftaleId + "';";
+
+            stmt = conn.prepareStatement(sql);
+            rs = stmt.executeQuery();
+
+            while(rs.next()) {
+                int prisoverslag_id = rs.getInt(1);
+                int lejeaftale_id = rs.getInt(2);
+                int total_pris = rs.getInt(3);
+                int abonnements_længde = rs.getInt(4);
+
+                return new Prisoverslag(prisoverslag_id, lejeaftale_id, total_pris, abonnements_længde);
+            }
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            System.out.println("Kunne ikke finde prisoverslag tilhørende lejeaftale id: " + lejeaftaleId);
         }
         return null;
     }
@@ -379,14 +444,14 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
         Abonnement abonnement = new LimitedAbonnement(true);
         Prisoverslag prisoverslag = new Prisoverslag(4000, 3);
         AfhentningsSted afhentningsSted = new AfhentningsSted("Lergravsvej 3", "2300", "København S", 300);
-        //repo.create(lejeaftale);
+        Lejeaftale lejeaftale = new Lejeaftale(kunde, bil, tilstandsrapport, abonnement, prisoverslag, afhentningsSted);
 
-        Kunde lars_allan = repo.getKunde("1204887375");
-        Lejeaftale lejeaftale = new Lejeaftale(lars_allan, bil, tilstandsrapport, abonnement, prisoverslag, afhentningsSted);
+
+
 
         repo.create(lejeaftale);
 
-        System.out.println(repo.getSingleEntityById(1));
+        System.out.println(repo.getAllEntities());
 
     }
 
