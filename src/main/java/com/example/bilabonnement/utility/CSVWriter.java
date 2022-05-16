@@ -4,46 +4,110 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 public class CSVWriter {
 
     public void fjernLinje(int linje){
         CSVReader reader = new CSVReader();
+        String filSti;
         ArrayList<String> alleStrings;
-        int count = 0;
 
-        //Kunde
+        //KUNDE
         //Læs alt ned på en arraylist
-        reader.setSc("src/main/resources/csv/kunde.csv");
+        filSti = "src/main/resources/csv/kunde.csv";
+        reader.setSc(filSti);
         alleStrings = reader.læsAlt();
-        System.out.println(alleStrings);
-        //fjern række fra arraylisten. Er der ik en bedre måde at gøre det på?
-        for (int i = 0; i < alleStrings.size()+1; i++) {
-            if(i % 10 == 0 && i != 0){
-                count++;
-                if(count == linje){
-                    for (int j = 0; j < 10; j++) {
-                        System.out.println(j +""+i+"");
-                        alleStrings.remove(i);
-                    }
-                }
-                System.out.println(count);
-            }
-        }
-
-        //Det skal lige se lidt pænere ud når det bliver sat ind i filen igen :) og det samme skal self gøres for alle andre filer ;)))))
+        //Fjern linje fra arraylist
+        alleStrings.remove(linje);
+        //Skriv arraylisten ind i csv igen
         try{
-            //FileWriter fr = new FileWriter("src/main/resources/csv/kunde.csv");
-            BufferedWriter fr = new BufferedWriter(new FileWriter("src/main/resources/csv/kunde.csv"));
-            String collect = alleStrings.stream().collect(Collectors.joining(","));
+            BufferedWriter fr = new BufferedWriter(new FileWriter(filSti));
 
-            fr.write(collect);
+            for (String s : alleStrings) {
+                fr.write(s);
+                fr.newLine();
+            }
+
             fr.close();
         }catch(IOException e){
             e.printStackTrace();
         }
 
+        //BIL
+        filSti = "src/main/resources/csv/bil.csv";
+        reader.setSc(filSti);
+        alleStrings = reader.læsAlt();
+        alleStrings.remove(linje);
+
+        try{
+            BufferedWriter fr = new BufferedWriter(new FileWriter(filSti));
+
+            for (String s : alleStrings) {
+                fr.write(s);
+                fr.newLine();
+            }
+
+            fr.close();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+
+        //ABONNEMENT
+        filSti = "src/main/resources/csv/abonnement.csv";
+        reader.setSc(filSti);
+        alleStrings = reader.læsAlt();
+        alleStrings.remove(linje);
+
+        try{
+            BufferedWriter fr = new BufferedWriter(new FileWriter(filSti));
+
+            for (String s : alleStrings) {
+                fr.write(s);
+                fr.newLine();
+            }
+
+            fr.close();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+
+        //PRISOVERSLAG
+        filSti = "src/main/resources/csv/prisoverslag.csv";
+        reader.setSc(filSti);
+        alleStrings = reader.læsAlt();
+        alleStrings.remove(linje);
+
+        try{
+            BufferedWriter fr = new BufferedWriter(new FileWriter(filSti));
+
+            for (String s : alleStrings) {
+                fr.write(s);
+                fr.newLine();
+            }
+
+            fr.close();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+
+        //AFHENTNINGSSTED
+        filSti = "src/main/resources/csv/afhentningssted.csv";
+        reader.setSc(filSti);
+        alleStrings = reader.læsAlt();
+        alleStrings.remove(linje);
+
+        try{
+            BufferedWriter fr = new BufferedWriter(new FileWriter(filSti));
+
+            for (String s : alleStrings) {
+                fr.write(s);
+                fr.newLine();
+            }
+
+            fr.close();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
 
 
     }

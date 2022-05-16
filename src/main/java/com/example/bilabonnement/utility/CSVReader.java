@@ -29,7 +29,7 @@ public class CSVReader {
         while(sc.hasNext()) {
 
             String currLine = sc.nextLine();
-            liste.addAll(Arrays.asList(currLine.split(",")));
+            liste.add(currLine);
 
         }
         return liste;
