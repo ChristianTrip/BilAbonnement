@@ -25,7 +25,7 @@ public class IndexController {
 
         //model.addAttribute("navn", );
 
-        return "redirect:/admin";
+        return "redirect:/loggedIn";
     }
 
     @GetMapping("/loggedIn")
@@ -38,6 +38,6 @@ public class IndexController {
 
          */
 
-        return "/admin";
+        return "redirect:/admin";
     }
 }

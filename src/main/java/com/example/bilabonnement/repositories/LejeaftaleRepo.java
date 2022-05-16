@@ -128,7 +128,6 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
             while(rs.next()) {
                 int lejeaftale_id = rs.getInt(1);
 
-
                 Lejeaftale lejeaftale = getSingleEntityById(lejeaftale_id);
                 lejeaftaler.add(lejeaftale);
             }
