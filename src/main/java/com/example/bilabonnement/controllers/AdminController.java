@@ -5,6 +5,9 @@ import com.example.bilabonnement.services.DataregService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import static java.lang.Integer.parseInt;
 
 @Controller
 public class AdminController {
@@ -34,8 +37,16 @@ public class AdminController {
     public String seAlleLejeaftaler(Model model){
 
         System.out.println(lejeaftaleRepo.getAllEntities());
-        model.addAttribute("lejeaftaler", lejeaftaleRepo.getAllEntities());
+        model.addAttribute("lejeaftaler", dataregService.læscsv());
 
         return "alleLejeaftaler";
+    }
+
+    @GetMapping("/seAlleLejeaftaler/{aftaleNo}")
+    public String lejeaftale(@PathVariable("aftaleNo") String nummer, Model m){
+        m.addAttribute("valgteAftale", nummer);
+        m.addAttribute("lejeaftale", lejeaftaleRepo.getSingleEntityById(parseInt(nummer)));
+
+        return "lejeaftale";
     }
 }

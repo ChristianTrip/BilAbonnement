@@ -20,10 +20,13 @@
 
                 </tr>
                 <tr th:each="lejeaftale : ${lejeaftaler}">
-                    <td th:text="${lejeaftale.getId()}"></td>
-                    <td th:text="${lejeaftale.getOprettelsesDato()}"></td>
-                    <td th:text="${lejeaftale.getKunde().getCpr()}"></td>
-                    <td th:text="${lejeaftale.getBil().getStelNummer()}"></td>
+                    <form method="GET" th:action="@{/seAlleLejeaftaler/{aftaleNo}(aftaleNo = ${lejeaftale.getId()})}">
+                        <td th:text="${lejeaftale.getId()}"></td>
+                        <td th:text="${lejeaftale.getOprettelsesDato()}"></td>
+                        <td th:text="${lejeaftale.getKunde().getCpr()}"></td>
+                        <td th:text="${lejeaftale.getBil().getStelNummer()}"></td>
+                        <td><button type="submit">GO</button></td>
+                    </form>
                 </tr>
             </table>
         </form>

@@ -223,14 +223,11 @@ public class DataregService {
         //AfhentningsSted as = new AfhentningsSted("yes","4500",null,0);
         //System.out.println(testValidate(as));
 
-        //System.out.println(læscsv());
+        System.out.println(læscsv());
 
-        CSVWriter wr = new CSVWriter();
-        CSVReader cr = new CSVReader();
-        cr.setSc("src/main/resources/csv/kunde.csv");
+
 
         //System.out.println(cr.læsAlt());
-        wr.fjernLinje(1);
 
 
 
