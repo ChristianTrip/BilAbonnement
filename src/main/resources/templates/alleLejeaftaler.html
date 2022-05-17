@@ -13,15 +13,13 @@
 
             <table>
                 <tr>
-                    <th>Lejeaftale id</th>
                     <th>oprettelsesdato</th>
                     <th>Kunde cpr</th>
                     <th>Bil stelnummer</th>
 
                 </tr>
-                <tr th:each="lejeaftale : ${lejeaftaler}">
-                    <form method="GET" th:action="@{/seAlleLejeaftaler/{aftaleNo}(aftaleNo = ${lejeaftale.getId()})}">
-                        <td th:text="${lejeaftale.getId()}"></td>
+                <tr th:each="lejeaftale,iter : ${lejeaftaler}">
+                    <form method="POST" th:action="@{/seAlleLejeaftaler/{aftaleNo}(aftaleNo = ${iter.index})}">
                         <td th:text="${lejeaftale.getOprettelsesDato()}"></td>
                         <td th:text="${lejeaftale.getKunde().getCpr()}"></td>
                         <td th:text="${lejeaftale.getBil().getStelNummer()}"></td>

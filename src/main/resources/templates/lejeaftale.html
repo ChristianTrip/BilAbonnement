@@ -9,23 +9,24 @@
 <body>
 <h2>Lejeaftale</h2>
 
-<section class="section2">
+<section class="section3">
     <table>
         <tr>
-            <th>Lejeaftale id</th>
-            <th>oprettelsesdato</th>
-            <th>Kunde cpr</th>
-            <th>Bil stelnummer</th>
+            <th>Kunde</th>
+            <th>Bil</th>
+            <th>Abonnement</th>
+            <th>Prisoverslag</th>
+            <th>Afhentningssted</th>
 
         </tr>
-        <tr th:each="lejeaftale : ${lejeaftaler}">
-            <td th:text="${lejeaftale.getId()}"></td>
-            <td th:text="${lejeaftale.getOprettelsesDato()}"></td>
-            <td th:text="${lejeaftale.getKunde().getCpr()}"></td>
-            <td th:text="${lejeaftale.getBil().getStelNummer()}"></td>
+        <tr th:each="obj : ${lejeaftale}">
+            <td th:text="${obj.getKunde()}"></td>
+            <td th:text="${obj.getBil()}"></td>
+            <td th:text="${obj.getAbonnement()}"></td>
+            <td th:text="${obj.getPrisoverslag()}"></td>
+            <td th:text="${obj.getAfhentningsSted()}"></td>
         </tr>
     </table>
-    </form>
 </section>
 </body>
 </html>
