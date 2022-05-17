@@ -48,16 +48,11 @@ public class AdminController {
 
     @PostMapping("/seAlleLejeaftaler/{aftaleNo}")
     public String lejeaftale(@PathVariable("aftaleNo") String nummer, Model m){
-        System.out.println(nummer + "<--");
 
-
-        //m.addAttribute("valgteAftale", nummer);
-        //m.addAttribute("lejeaftale", dataregService.vælgLejeaftale(parseInt(nummer)));
-
-        return "redirect:/testLeje?nr=" + nummer;
+        return "redirect:/visLejeaftale?nr=" + nummer;
     }
 
-    @GetMapping("testLeje")
+    @GetMapping("/visLejeaftale")
     public String testLeje(@RequestParam int nr, Model m){
         System.out.println(dataregService.vælgLejeaftale(nr));
         m.addAttribute("lejeaftale", dataregService.vælgLejeaftale(nr));
@@ -65,4 +60,9 @@ public class AdminController {
         return "lejeaftale";
     }
 
+    @PostMapping("/tilfoejDB")
+    public String tilfoejTilDatabase(){
+        //tilføj til database og fjerne fra csv
+        return "redirect:/seAlleLejeaftaler";
+    }
 }
