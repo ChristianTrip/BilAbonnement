@@ -18,13 +18,16 @@
                     <th>Bil stelnummer</th>
 
                 </tr>
+
                 <tr th:each="lejeaftale,iter : ${lejeaftaler}">
-                    <form method="POST" th:action="@{/ikkeGodkendteLejeaftaler/{aftaleNo}(aftaleNo = ${iter.index})}">
+                    <form method="POST" th:if="${isGodkendt == false}" th:action="@{/ikkeGodkendteLejeaftaler/{aftaleNo}(aftaleNo = ${iter.index})}"
+                          th:unless="${isGodkendt == true}" th:action="@{/godkendteLejeaftaler/{aftaleNo}(aftaleNo = ${iter.index})}">
                         <td th:text="${lejeaftale.getOprettelsesDato()}"></td>
                         <td th:text="${lejeaftale.getKunde().getCpr()}"></td>
                         <td th:text="${lejeaftale.getBil().getStelNummer()}"></td>
                         <td><button type="submit">GO</button></td>
                     </form>
+
                 </tr>
             </table>
         </form>
