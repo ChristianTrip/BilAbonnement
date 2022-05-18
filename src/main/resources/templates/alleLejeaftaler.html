@@ -18,26 +18,25 @@
                     <th>Bil stelnummer</th>
 
                 </tr>
-
-                <tr th:each="lejeaftale,iter : ${lejeaftaler}">
-                    <div th:if="isGodkendt == false">
+                <div>
+                <tr th:if="isGodkendt != true" th:each="lejeaftale,iter : ${igLejeaftaler}">
                     <form method="POST" th:action="@{/ikkeGodkendteLejeaftaler/{aftaleNo}(aftaleNo = ${iter.index})}">
                         <td th:text="${lejeaftale.getOprettelsesDato()}"></td>
                         <td th:text="${lejeaftale.getKunde().getCpr()}"></td>
                         <td th:text="${lejeaftale.getBil().getStelNummer()}"></td>
                         <td><button type="submit">GO</button></td>
                     </form>
-                </div>
-                <div th:unless="isGodkendt == false">
+                </tr>
+
+                    <tr th:unless="isGodkendt == false" th:each="lejeaftale,iter : ${lejeaftaler}">
                     <form method="POST" th:action="@{/godkendteLejeaftaler/{aftaleNo}(aftaleNo = ${iter.index})}">
                         <td th:text="${lejeaftale.getOprettelsesDato()}"></td>
                         <td th:text="${lejeaftale.getKunde().getCpr()}"></td>
                         <td th:text="${lejeaftale.getBil().getStelNummer()}"></td>
                         <td><button type="submit">GO</button></td>
                     </form>
-                </div>
-
                 </tr>
+                </div>
             </table>
         </form>
     </section>

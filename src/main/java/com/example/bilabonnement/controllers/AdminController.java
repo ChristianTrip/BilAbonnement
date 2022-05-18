@@ -36,7 +36,7 @@ public class AdminController {
 
     @GetMapping("/alleLejeaftaler")
     public String alleLejeaftaler(Model model){
-        model.addAttribute("isGodkendt", true);
+        model.addAttribute("isGodkendt", false);
         return "alleLejeaftaler";
     }
 
@@ -44,7 +44,7 @@ public class AdminController {
     public String seAlleLejeaftaler(Model model){
 
         model.addAttribute("isGodkendt", false);
-        model.addAttribute("lejeaftaler", dataregService.læscsv());
+        model.addAttribute("igLejeaftaler", dataregService.læscsv());
 
         return "alleLejeaftaler";
     }
