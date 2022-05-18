@@ -86,12 +86,12 @@ public class AdminController {
     }
 
     @PostMapping("/godkendteLejeaftaler/{aftaleNo}")
-    public String godkendteLejeaftaler(@PathVariable("aftaleNo") String nummer, Model m){
+    public String godkendteLejeaftaler(@PathVariable("aftaleNo") String nummer){
 
-        return "redirect:/visLejeaftale?nr=" + nummer;
+        return "redirect:/seLejeaftale?nr=" + nummer;
     }
 
-    @GetMapping("/visLejeaftale")
+    @GetMapping("/seLejeaftale")
     public String godkendteLejeaftaler(@RequestParam int nr, Model m, HttpServletRequest request){
         HttpSession session = request.getSession();
         m.addAttribute("lejeaftale", dataregService.vælgLejeaftale(nr));
