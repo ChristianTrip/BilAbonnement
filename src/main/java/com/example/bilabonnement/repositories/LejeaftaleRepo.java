@@ -36,8 +36,6 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
 
         java.sql.Date mySQLDate = new java.sql.Date(lejeaftale.getOprettelsesDato().getTime());
 
-        conn = DatabaseConnectionManager.getConnection();
-
         try{
             String sql = "INSERT INTO lejeaftaler(`oprettelsesdato`, `kunde_cpr`, `bil_stel_nummer`) " +
                     "VALUES ('" + mySQLDate + "', " +
@@ -45,10 +43,9 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
                             "'" + lejeaftale.getBil().getStelNummer() + "');";
 
 
-
-            PreparedStatement stmt = conn.prepareStatement(sql);
+            conn = DatabaseConnectionManager.getConnection();
+            stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
-
 
             int lejeaftaleId = getLastIndex();
 
@@ -71,14 +68,16 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
             prisoverslag.setLejeaftaleId(lejeaftaleId);
             insertPrisoverslag(prisoverslag);
 
+            Tilstandsrapport tilstandsrapport = new Tilstandsrapport();
+            tilstandsrapport.setLejeaftaleId(lejeaftaleId);
+            insertTilstandsrapport(tilstandsrapport);
+
             return true;
 
         }
         catch (SQLException e){
             e.printStackTrace();
-
         }
-
         return false;
     }
 
@@ -100,7 +99,7 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
 
                 Kunde kunde = getKunde(kundeCPR);
                 Bil bil = getBil(bilStelNummer);
-                Tilstandsrapport tilstandsrapport = null;
+                Tilstandsrapport tilstandsrapport = getTilstandsrapport(lejeaftale_id);
                 Abonnement abonnement = getAbonnement(id);
                 Prisoverslag prisoverslag = getPrisoverslag(id);
                 AfhentningsSted afhentningsSted = getAfhentningssted(id);
@@ -124,24 +123,15 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
             String sql = "SELECT * FROM lejeaftaler;";
             conn = DatabaseConnectionManager.getConnection();
             stmt = conn.prepareStatement(sql);
-            rs = stmt.executeQuery();
+            ResultSet rs = stmt.executeQuery();
 
-            while(rs.next()) {
-                int lejeaftale_id = rs.getInt(1);
-                System.out.println(lejeaftale_id);
-                Date oprettelsesdato = rs.getDate(2);
-                String kundeCPR = rs.getString(3);
-                String bilStelNummer = rs.getString(4);
 
-                Kunde kunde = getKunde(kundeCPR);
-                Bil bil = getBil(bilStelNummer);
-                Tilstandsrapport tilstandsrapport = null;
-                Abonnement abonnement = getAbonnement(lejeaftale_id);
-                Prisoverslag prisoverslag = getPrisoverslag(lejeaftale_id);
-                AfhentningsSted afhentningsSted = getAfhentningssted(lejeaftale_id);
+            while (rs.next()){
+                int lejeaftaleId = rs.getInt(1);
 
-                lejeaftaler.add(new Lejeaftale(lejeaftale_id, kunde, bil, tilstandsrapport, abonnement, prisoverslag, afhentningsSted, oprettelsesdato));
+                lejeaftaler.add(getSingleEntityById(lejeaftaleId));
             }
+
         }
         catch (SQLException e){
             e.printStackTrace();
@@ -298,6 +288,20 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
         }
     }
 
+    private void insertTilstandsrapport(Tilstandsrapport tilstandsrapport) {
+
+        try{
+            String sql = "INSERT INTO tilstandsrapporter(`lejeaftale_id`) " +
+                    "VALUES ('" + tilstandsrapport.getLejeaftaleId() + "');";
+
+            stmt = conn.prepareStatement(sql);
+            stmt.executeUpdate();
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            System.out.println("Kunne ikke oprette tilstandsrapport tilhørende lejeaftale id: " + tilstandsrapport.getLejeaftaleId() + " i databasen");
+        }
+    }
 
     // metoder der henter elementerne der hører til en lejeaftale
 
@@ -307,7 +311,7 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
             String sql = "SELECT * FROM biler WHERE bil_stelnummer = '" + stelnummer + "';";
 
             stmt = conn.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery();
+            rs = stmt.executeQuery();
 
             while(rs.next()){
 
@@ -334,7 +338,7 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
 
 
             stmt = conn.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery();
+            rs = stmt.executeQuery();
 
             while(rs.next()) {
                 String for_navn = rs.getString(1);
@@ -364,7 +368,7 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
             String sql = "SELECT * FROM abonnementer WHERE lejeaftale_id = '" + lejeaftaleId + "';";
 
             stmt = conn.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery();
+            rs = stmt.executeQuery();
 
             while(rs.next()) {
                 int abonnement_id = rs.getInt(1);
@@ -398,7 +402,7 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
             String sql = "SELECT * FROM afhentningssteder WHERE lejeaftale_id = '" + lejeaftaleId + "';";
 
             stmt = conn.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery();
+            rs = stmt.executeQuery();
 
             while(rs.next()) {
                 int afhentningssted_id = rs.getInt(1);
@@ -424,7 +428,7 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
             String sql = "SELECT * FROM prisoverslag WHERE lejeaftale_id = '" + lejeaftaleId + "';";
 
             stmt = conn.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery();
+            rs = stmt.executeQuery();
 
             while(rs.next()) {
                 int prisoverslag_id = rs.getInt(1);
@@ -443,17 +447,41 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
     }
 
 
+    private Tilstandsrapport getTilstandsrapport(int lejeaftaleId) {
+        try {
+            String sql = "SELECT * FROM tilstandsrapporter WHERE lejeaftale_id = '" + lejeaftaleId + "';";
+
+            conn = DatabaseConnectionManager.getConnection();
+            stmt = conn.prepareStatement(sql);
+            rs = stmt.executeQuery();
+
+            while(rs.next()) {
+                int tilstandsrapport_id = rs.getInt(1);
+                int lejeaftale_id = rs.getInt(2);
+
+
+                return new Tilstandsrapport(tilstandsrapport_id, lejeaftale_id);
+            }
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            System.out.println("Kunne ikke finde tilstandsrapport tilhørende lejeaftale id: " + lejeaftaleId);
+        }
+        return null;
+    }
+
+
 
     public static void main(String[] args) {
         LejeaftaleRepo repo = new LejeaftaleRepo();
 
         Kunde kunde = new Kunde("John", "Andersen", "Holmbladsgade 30", "2300", "Kbh S", "Johnandersen@mail.dk", "12345678", "0910883485", "1234", "1234567890");
         Bil bil = new Bil("ZW00003344KL", "Fiat", "grand");
-        Tilstandsrapport tilstandsrapport = new Tilstandsrapport();
+        //Tilstandsrapport tilstandsrapport = new Tilstandsrapport();
         Abonnement abonnement = new LimitedAbonnement(true);
         Prisoverslag prisoverslag = new Prisoverslag(4000, 3);
         AfhentningsSted afhentningsSted = new AfhentningsSted("Lergravsvej 3", "2300", "København S", 300);
-        Lejeaftale lejeaftale = new Lejeaftale(kunde, bil, tilstandsrapport, abonnement, prisoverslag, afhentningsSted);
+        //Lejeaftale lejeaftale = new Lejeaftale(kunde, bil, tilstandsrapport, abonnement, prisoverslag, afhentningsSted);
 
 
 

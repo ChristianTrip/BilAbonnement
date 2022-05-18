@@ -18,6 +18,10 @@ public class TilstandsRapportRepo implements CRUDInterface<Tilstandsrapport>{
     private MangelRepo mangelRepo = new MangelRepo();
     private SkadeRepo skadeRepo = new SkadeRepo();
 
+    private Connection conn;
+    private PreparedStatement stmt;
+    private ResultSet rs;
+
     @Override
     public boolean create(Tilstandsrapport tilstandsrapport) {
 
@@ -25,14 +29,14 @@ public class TilstandsRapportRepo implements CRUDInterface<Tilstandsrapport>{
             String sql = "INSERT INTO tilstandsrapporter(`lejeaftale_id`) " +
                     "VALUES ('" + tilstandsrapport.getLejeaftaleId() + "');";
 
-            Connection conn = DatabaseConnectionManager.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql);
+            conn = DatabaseConnectionManager.getConnection();
+            stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
             return true;
         }
         catch (SQLException e){
             e.printStackTrace();
-            System.out.println("Kunne ikke oprette bruger med id " + tilstandsrapport.getId() + " i databasen");
+            System.out.println("Kunne ikke oprette tilstandsrapport i databasen");
         }
 
         return false;
@@ -43,8 +47,9 @@ public class TilstandsRapportRepo implements CRUDInterface<Tilstandsrapport>{
     public Tilstandsrapport getSingleEntityById(int id) {
         try {
             String sql = "SELECT * FROM tilstandsrapporter WHERE tilstandsrapport_id = '" + id + "';";
-            Connection conn = DatabaseConnectionManager.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql);
+
+            conn = DatabaseConnectionManager.getConnection();
+            stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
 
             while(rs.next()) {
@@ -52,7 +57,7 @@ public class TilstandsRapportRepo implements CRUDInterface<Tilstandsrapport>{
                 int lejeaftale_id = rs.getInt(2);
 
 
-                return new Tilstandsrapport(tilstandsrapport_id, lejeaftale_id, getMangler(tilstandsrapport_id), getSkader(tilstandsrapport_id));
+                return new Tilstandsrapport(tilstandsrapport_id, lejeaftale_id);
             }
         }
         catch (SQLException e){
@@ -67,15 +72,14 @@ public class TilstandsRapportRepo implements CRUDInterface<Tilstandsrapport>{
         ArrayList<Tilstandsrapport> tilstandsrapporter = new ArrayList<>();
         try {
             String sql = "SELECT * FROM tilstandsrapporter;";
-            Connection conn = DatabaseConnectionManager.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql);
+            conn = DatabaseConnectionManager.getConnection();
+            stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
 
             while(rs.next()) {
                 int tilstandsrapport_id = rs.getInt(1);
-                int lejeaftale_id = rs.getInt(2);
 
-                //tilstandsrapporter.add(new Tilstandsrapport(tilstandsrapport_id, getMangler(tilstandsrapport_id), getSkader(tilstandsrapport_id)));
+                tilstandsrapporter.add(getSingleEntityById(tilstandsrapport_id));
             }
             return tilstandsrapporter;
         }
@@ -89,10 +93,11 @@ public class TilstandsRapportRepo implements CRUDInterface<Tilstandsrapport>{
     @Override
     public boolean update(Tilstandsrapport tilstandsrapport) {
 
-        try{
+        int id = tilstandsrapport.getId();
 
-           deleteAllMangler(tilstandsrapport.getId());
-           deleteAllSkader(tilstandsrapport.getId());
+        try{
+           deleteAllMangler(id);
+           deleteAllSkader(id);
 
             for (Mangel mangel : tilstandsrapport.getMangler()) {
                 mangelRepo.create(mangel);
@@ -164,6 +169,20 @@ public class TilstandsRapportRepo implements CRUDInterface<Tilstandsrapport>{
         return skader;
     }
 
+    public static void main(String[] args) {
+        TilstandsRapportRepo repo = new TilstandsRapportRepo();
+
+        ArrayList<Skade> skader = new ArrayList<>();
+        ArrayList<Mangel> mangler = new ArrayList<>();
+        skader.add(new Skade("flækket rude", "Bagruden er flæket i højre side, kræver udskiftning", 1000));
+        mangler.add(new Mangel("Fodunderlag", "underlaget ved højre passagersæde mangler", 500));
+        Tilstandsrapport tilstandsrapport = new LejeaftaleRepo().getSingleEntityById(1).getTilstandsrapport();
+        tilstandsrapport.setSkade(skader);
+        tilstandsrapport.setMangel(mangler);
+
+
+        System.out.println(repo.getAllEntities());
+    }
 }
 
 

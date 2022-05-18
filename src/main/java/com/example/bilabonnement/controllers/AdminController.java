@@ -1,5 +1,6 @@
 package com.example.bilabonnement.controllers;
 
+import com.example.bilabonnement.models.Lejeaftale;
 import com.example.bilabonnement.repositories.LejeaftaleRepo;
 import com.example.bilabonnement.services.DataregService;
 import org.springframework.stereotype.Controller;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 
 import static java.lang.Integer.parseInt;
@@ -36,8 +39,7 @@ public class AdminController {
         return "alleLejeaftaler";
     }
 
-
-    @GetMapping("/seAlleLejeaftaler")
+    @GetMapping("/ikkeGodkendteLejeaftaler")
     public String seAlleLejeaftaler(Model model){
 
 
@@ -46,23 +48,57 @@ public class AdminController {
         return "alleLejeaftaler";
     }
 
-    @PostMapping("/seAlleLejeaftaler/{aftaleNo}")
+    @PostMapping("/ikkeGodkendteLejeaftaler/{aftaleNo}")
     public String lejeaftale(@PathVariable("aftaleNo") String nummer, Model m){
 
         return "redirect:/visLejeaftale?nr=" + nummer;
     }
 
     @GetMapping("/visLejeaftale")
-    public String testLeje(@RequestParam int nr, Model m){
-        System.out.println(dataregService.vælgLejeaftale(nr));
+    public String testLeje(@RequestParam int nr, Model m, HttpServletRequest request){
+        HttpSession session = request.getSession();
         m.addAttribute("lejeaftale", dataregService.vælgLejeaftale(nr));
+
+        session.setAttribute("indexNummer", nr);
 
         return "lejeaftale";
     }
 
     @PostMapping("/tilfoejDB")
-    public String tilfoejTilDatabase(){
-        //tilføj til database og fjerne fra csv
-        return "redirect:/seAlleLejeaftaler";
+    public String tilfoejTilDatabase(Model model, HttpSession session){
+
+        int index = (int) session.getAttribute("indexNummer");
+        dataregService.addLejeaftaleToDB(index);
+
+        return "redirect:/ikkeGodkendteLejeaftaler";
     }
+
+
+
+
+    @GetMapping("/godkendteLejeaftaler")
+    public String godkendteLejeaftaler(Model model){
+
+
+        model.addAttribute("lejeaftaler", new LejeaftaleRepo().getAllEntities());
+
+        return "alleLejeaftaler";
+    }
+
+    @PostMapping("/godkendteLejeaftaler/{aftaleNo}")
+    public String godkendteLejeaftaler(@PathVariable("aftaleNo") String nummer, Model m){
+
+        return "redirect:/visLejeaftale?nr=" + nummer;
+    }
+
+    @GetMapping("/visLejeaftale")
+    public String godkendteLejeaftaler(@RequestParam int nr, Model m, HttpServletRequest request){
+        HttpSession session = request.getSession();
+        m.addAttribute("lejeaftale", dataregService.vælgLejeaftale(nr));
+
+        session.setAttribute("indexNummer", nr);
+
+        return "lejeaftale";
+    }
+
 }

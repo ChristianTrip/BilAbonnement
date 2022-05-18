@@ -4,24 +4,21 @@ import com.example.bilabonnement.models.*;
 import com.example.bilabonnement.models.abonnementer.Abonnement;
 import com.example.bilabonnement.models.abonnementer.LimitedAbonnement;
 import com.example.bilabonnement.models.abonnementer.UnlimitedAbonnement;
-import com.example.bilabonnement.models.brugere.Bruger;
 import com.example.bilabonnement.models.prisoverslag.Prisoverslag;
-import com.example.bilabonnement.repositories.BrugerRepo;
-import com.example.bilabonnement.repositories.CRUDInterface;
 import com.example.bilabonnement.repositories.LejeaftaleRepo;
 import com.example.bilabonnement.utility.CSVReader;
 import com.example.bilabonnement.utility.CSVWriter;
-import org.springframework.http.server.DelegatingServerHttpResponse;
+
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Scanner;
 
 import static java.lang.Integer.parseInt;
 
 public class DataregService {
-    private CRUDInterface<Lejeaftale> lRepo = new LejeaftaleRepo();
+
+    private LejeaftaleRepo lejeaftaleRepo = new LejeaftaleRepo();
     private ArrayList<Lejeaftale> liste = new ArrayList<>();
 
     public ArrayList<Lejeaftale> seAlleLejeaftaler(){
@@ -52,7 +49,16 @@ public class DataregService {
 
     }
 
+    public boolean addLejeaftaleToDB(int index){
+        if(lejeaftaleRepo.create(liste.get(index))){
+            new CSVWriter().fjernLinje(index + 1);
+            return true;
+        }
+        return false;
+    }
+
     public ArrayList<Lejeaftale> læscsv(){
+        liste.clear();
         CSVReader reader = new CSVReader();
         Scanner currSc;
         ArrayList<Kunde> kundeListe = new ArrayList<>();
@@ -60,7 +66,6 @@ public class DataregService {
         ArrayList<Abonnement> abonnementListe = new ArrayList<>();
         ArrayList<Prisoverslag> pOverslagListe = new ArrayList<>();
         ArrayList<AfhentningsSted> afhentningsStedsListe = new ArrayList<>();
-
 
         // Kunde
         try{
@@ -84,11 +89,10 @@ public class DataregService {
                 String kontoNummer = (split[9]);
 
                 kundeListe.add(new Kunde(fornavn,efternavn,adresse,postNummer,by,email,mobil,cpr,regNummer,kontoNummer));
-
             }
-
-        }catch(Exception e){
-                e.printStackTrace();
+        }
+        catch(Exception e){
+            e.printStackTrace();
         }
 
         // Bil
@@ -105,13 +109,10 @@ public class DataregService {
                 String navn = split[1];
                 String model = split[2];
 
-
                 bilListe.add(new Bil(stelnummer,navn,model));
-
-
             }
-
-        }catch(Exception e){
+        }
+        catch(Exception e){
             e.printStackTrace();
         }
 
@@ -132,18 +133,17 @@ public class DataregService {
                 boolean isSelvrisiko = selvrisiko == 1;
                 boolean isAflevering = afleveringsfors == 1;
 
-
                 //lav nyt abonnement og add det
                 if(abonnementType.equals("limited"))
                     abonnementListe.add(new LimitedAbonnement(isSelvrisiko));
                 else if(abonnementType.equals("unlimited"))
                     abonnementListe.add(new UnlimitedAbonnement(lejeperiode, isSelvrisiko, isAflevering));
-
             }
-
-        }catch(Exception e){
+        }
+        catch(Exception e){
             e.printStackTrace();
         }
+
         // Prisoverslag
         try{
             reader.setSc("src/main/resources/csv/prisoverslag.csv");
@@ -157,15 +157,13 @@ public class DataregService {
                 int totalPris = parseInt(split[0]);
                 int abonnementsLængde = parseInt(split[1]);
 
-
                 pOverslagListe.add(new Prisoverslag(totalPris,abonnementsLængde));
-
-
             }
-
-        }catch(Exception e){
+        }
+        catch(Exception e){
             e.printStackTrace();
         }
+
         // Afhentningssted
         try{
             reader.setSc("src/main/resources/csv/afhentningssted.csv");
@@ -182,18 +180,16 @@ public class DataregService {
                 int levering = parseInt(split[3]);
 
                 afhentningsStedsListe.add(new AfhentningsSted(adresse,postnummer,by,levering));
-
             }
-
-        }catch(Exception e){
+        }
+        catch(Exception e){
             e.printStackTrace();
         }
 
         // Lejeaftale creation
         for (int i = 0; i < bilListe.size(); i++) {
-            liste.add(new Lejeaftale(kundeListe.get(i), bilListe.get(i), null,abonnementListe.get(i), pOverslagListe.get(i), afhentningsStedsListe.get(i)));
+            liste.add(new Lejeaftale(kundeListe.get(i), bilListe.get(i), null, abonnementListe.get(i), pOverslagListe.get(i), afhentningsStedsListe.get(i)));
         }
-
         return liste;
     }
 
@@ -209,8 +205,9 @@ public class DataregService {
                     return false;
                 }
             }
-        }catch(IllegalAccessException | IllegalArgumentException e){
-            System.out.println(e);
+        }
+        catch(IllegalAccessException | IllegalArgumentException e){
+            e.printStackTrace();
         }
         return true;
     }

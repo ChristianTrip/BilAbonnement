@@ -23,6 +23,13 @@ public class Tilstandsrapport {
         this.skader = new ArrayList<>();
     }
 
+    public Tilstandsrapport(int id, int lejeaftaleId) {
+        this.id = id;
+        this.lejeaftaleId = lejeaftaleId;
+        this.mangler = new ArrayList<>();
+        this.skader = new ArrayList<>();
+    }
+
     public Tilstandsrapport(ArrayList<Mangel> mangler, ArrayList<Skade> skader){
         this.mangler = mangler;
         this.skader = skader;
@@ -76,5 +83,16 @@ public class Tilstandsrapport {
 
     public ArrayList<Skade> getSkader() {
         return skader;
+    }
+
+    @Override
+    public String toString() {
+        return "Tilstandsrapport{" +
+                "\nid = " + id +
+                "\nlejeaftaleId = " + lejeaftaleId +
+                "\ntotalPris = " + totalPris +
+                "\nmangler = " + mangler +
+                "\nskader = " + skader + "\n" +
+                "\n";
     }
 }

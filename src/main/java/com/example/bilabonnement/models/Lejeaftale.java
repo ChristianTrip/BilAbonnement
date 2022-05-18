@@ -10,7 +10,7 @@ public class Lejeaftale {
     private int id;
     private Kunde kunde;
     private Bil bil;
-    private Tilstandsrapport tilstandsrapport = new Tilstandsrapport();
+    private Tilstandsrapport tilstandsrapport; //= new Tilstandsrapport();
     private Abonnement abonnement;
     private Prisoverslag prisoverslag;
     private AfhentningsSted afhentningsSted;
