@@ -19,7 +19,7 @@
 
                 </tr>
                 <tr th:each="lejeaftale,iter : ${lejeaftaler}">
-                    <form method="POST" th:action="@{/seAlleLejeaftaler/{aftaleNo}(aftaleNo = ${iter.index})}">
+                    <form method="POST" th:action="@{/ikkeGodkendteLejeaftaler/{aftaleNo}(aftaleNo = ${iter.index})}">
                         <td th:text="${lejeaftale.getOprettelsesDato()}"></td>
                         <td th:text="${lejeaftale.getKunde().getCpr()}"></td>
                         <td th:text="${lejeaftale.getBil().getStelNummer()}"></td>

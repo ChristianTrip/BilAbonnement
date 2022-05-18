@@ -69,6 +69,7 @@ public class AdminController {
 
         int index = (int) session.getAttribute("indexNummer");
         dataregService.addLejeaftaleToDB(index);
+        session.invalidate();
 
         return "redirect:/ikkeGodkendteLejeaftaler";
     }
@@ -94,7 +95,7 @@ public class AdminController {
     @GetMapping("/seLejeaftale")
     public String godkendteLejeaftaler(@RequestParam int nr, Model m, HttpServletRequest request){
         HttpSession session = request.getSession();
-        m.addAttribute("lejeaftale", dataregService.vælgLejeaftale(nr));
+        m.addAttribute("lejeaftale", new LejeaftaleRepo().getSingleEntityById(nr + 1));
 
         session.setAttribute("indexNummer", nr);
 
