@@ -1,12 +1,10 @@
 package com.example.bilabonnement.models;
 
-import org.thymeleaf.util.Validate;
-
 public class Bil {
 
     private int id;
     private int lejeaftaleId;
-    private String stelNummer; //<-
+    private String stelnummer; //<-
     private String name; //<-
     private String model; //<-
     /*
@@ -18,14 +16,14 @@ public class Bil {
     private boolean tilvalgtFarve;
      */
 
-    public Bil(int id, String stelNummer, String name, String model) {
+    public Bil(int id, String stelnummer, String name, String model) {
         this.id = id;
-        this.stelNummer = stelNummer;
+        this.stelnummer = stelnummer;
         this.name = name;
         this.model = model;
     }
 
-    public Bil(String stelNummer, String name, String model) {
+    public Bil(String stelnummer, String name, String model) {
         /*
         if(stelNummer == null)
             throw new IllegalArgumentException("stelnummer er null");
@@ -35,7 +33,7 @@ public class Bil {
             throw new IllegalArgumentException("model er null");
          */
 
-        this.stelNummer = stelNummer;
+        this.stelnummer = stelnummer;
         this.name = name;
         this.model = model;
     }
@@ -52,8 +50,8 @@ public class Bil {
         return id;
     }
 
-    public String getStelNummer() {
-        return stelNummer.toUpperCase();
+    public String getStelnummer() {
+        return stelnummer.toUpperCase();
     }
 
     public String getName() {
@@ -64,8 +62,8 @@ public class Bil {
         return model;
     }
 
-    public void setStelNummer(String stelNummer) {
-        this.stelNummer = stelNummer;
+    public void setStelnummer(String stelnummer) {
+        this.stelnummer = stelnummer;
     }
 
     public void setName(String name) {
@@ -80,7 +78,7 @@ public class Bil {
     public String toString() {
         return "Bil{" +
                 "id=" + id +
-                ", stelNummer='" + stelNummer + '\'' +
+                ", stelNummer='" + stelnummer + '\'' +
                 ", name='" + name + '\'' +
                 ", model='" + model + '\'' +
                 '}';

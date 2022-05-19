@@ -9,24 +9,245 @@
 <body>
 <h2>Lejeaftale</h2>
 
-<section class="section3">
-    <table>
+<!--Har ændret section3 til LejeaftaleInfo, dog bliver den P.T. ikke brugt til noget-->
+<section class="lejeaftaleInfo">
+    <div class="tables">
+        <table class="tableFormatting" border="1px">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Kunde</th>
+                </tr>
+            </thead>
+
+            <tbody th:each="kunde : ${lejeaftale.getKunde()}">
+                <tr>
+                    <td>Fornavn</td>
+                    <td th:text="${kunde.getFornavn()}"></td>
+                </tr>
+                <tr>
+                    <td>Efternavn</td>
+                    <td th:text="${kunde.getEfternavn()}"></td>
+                </tr>
+                <tr>
+                    <td>Adresse</td>
+                    <td th:text="${kunde.getAdresse()}"></td>
+                </tr>
+                <tr>
+                    <td>Postnummer</td>
+                    <td th:text="${kunde.getPostnummer()}"></td>
+                </tr>
+                <tr>
+                    <td>By</td>
+                    <td th:text="${kunde.getBy()}"></td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td th:text="${kunde.getEmail()}"></td>
+                </tr>
+                <tr>
+                    <td>Mobil</td>
+                    <td th:text="${kunde.getMobil()}"></td>
+                </tr>
+                <tr>
+                    <td>CPR</td>
+                    <td th:text="${kunde.getCpr()}"></td>
+                </tr>
+                <tr>
+                    <td>Reg.Nummer</td>
+                    <td th:text="${kunde.getRegNummer()}"></td>
+                </tr>
+                <tr>
+                    <td>kontonummer</td>
+                    <td th:text="${kunde.getKontoNummer()}"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="tableFormatting" border="1px">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Bil</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr th:each="bil : ${lejeaftale.getBil()}">
+                    <td>Bilnavn</td>
+                    <td th:text="${bil.getName()}"></td>
+                </tr>
+                <tr th:each="bil : ${lejeaftale.getBil()}">
+                    <td>Model</td>
+                    <td th:text="${bil.getModel()}"></td>
+                </tr>
+                <tr th:each="bil : ${lejeaftale.getBil()}">
+                    <td>Stelnummer</td>
+                    <td th:text="${bil.getStelnummer()}"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="tableFormatting" border="1px">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Abonnement</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr th:each="abonnement : ${lejeaftale.getAbonnement()}">
+                    <td>Lejeperiode/måned</td>
+                    <td th:text="${abonnement.getLejeperiodeMdr()}"></td>
+                </tr>
+                <tr th:each="abonnement : ${lejeaftale.getAbonnement()}">
+                    <td>Lav selvrisiko</td>
+                    <td th:text="${abonnement.isLavSelvrisiko()}"></td>
+                </tr>
+                <tr th:each="abonnement : ${lejeaftale.getAbonnement()}">
+                    <td>Afleveringsforsikring</td>
+                    <td th:text="${abonnement.isAfleveringsforsikring()}"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="tableFormatting" border="1px">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Prisoverslag</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr th:each="prisoverslag : ${lejeaftale.getPrisoverslag()}">
+                    <td>Lejeperiode/måned</td>
+                    <td th:text="${prisoverslag.getAbonnementsLaengde()}"></td>
+                </tr>
+                <tr th:each="prisoverslag : ${lejeaftale.getPrisoverslag()}">
+                    <td>Lav selvrisiko</td>
+                    <td th:text="${prisoverslag.getTotalpris()}"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="tableFormatting" border="1px">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Afhentningssted</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr th:each="afhentningssted : ${lejeaftale.getAfhentningsSted()}">
+                    <td>Adresse</td>
+                    <td th:text="${afhentningssted.getAdresse()}"></td>
+                </tr>
+                <tr th:each="afhentningssted : ${lejeaftale.getAfhentningsSted()}">
+                    <td>Postnummer</td>
+                    <td th:text="${afhentningssted.getPostnummer()}"></td>
+                </tr>
+                <tr th:each="afhentningssted : ${lejeaftale.getAfhentningsSted()}">
+                    <td>By</td>
+                    <td th:text="${afhentningssted.getBy()}"></td>
+                </tr>
+                <tr th:each="afhentningssted : ${lejeaftale.getAfhentningsSted()}">
+                    <td>Leveringspris</td>
+                    <td th:text="${afhentningssted.getLeveringspris()}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+
+
+
+
+
+
+
+    <!--<table border="1">
+
         <tr>
             <th>Kunde</th>
             <th>Bil</th>
             <th>Abonnement</th>
             <th>Prisoverslag</th>
             <th>Afhentningssted</th>
+        </tr>-->
 
+        <!--<tr th:each="obj : ${lejeaftale}">
+            <table>
+                <td class="displayKunde">
+                    <tr th:each="kunde : ${lejeaftale.getKunde()}">
+                        <td th:text="${kunde.getFornavn()}"></td>
+                        <td th:text="${kunde.getEfternavn()}"></td>
+                        <td th:text="${kunde.getAdresse()}"></td>
+                        <td th:text="${kunde.getPostnummer()}"></td>
+                        <td th:text="${kunde.getBy()}"></td>
+                        <td th:text="${kunde.getEmail()}"></td>
+                        <td th:text="${kunde.getMobil()}"></td>
+                        <td th:text="${kunde.getCpr()}"></td>
+                        <td th:text="${kunde.getRegNummer()}"></td>
+                        <td th:text="${kunde.getKontoNummer()}"></td>
+                    </tr>
+                </td>
+
+
+
+                <td class="displayBil">
+                    <tr th:each="bil : ${lejeaftale.getBil()}">
+                        <td th:text="${bil.getName()}"></td>
+                        <td th:text="${bil.getModel()}"></td>
+                        <td th:text="${bil.getStelNummer()}"></td>
+                    </tr>
+                </td>
+
+
+
+                <td class="displayAbonnement">
+                    <tr th:each="abonnement : ${lejeaftale.getAbonnement()}">
+                        <td th:text="${abonnement.getLejeperiodeMdr()}"></td>
+                        <td th:text="${abonnement.isLavSelvrisiko()}"></td>
+                        <td th:text="${abonnement.isAfleveringsforsikring()}"></td>
+                    </tr>
+                </td>
+
+
+
+                <td class="displayPrisoverslag">
+                    <tr th:each="prisoverslag : ${lejeaftale.getPrisoverslag()}">
+                        <td th:text="${prisoverslag.getAbonnementsLaengde()}"></td>
+                        <td th:text="${prisoverslag.getTotalpris()}"></td>
+                    </tr>
+                </td>
+
+
+
+                <td class="displayAfhentningssted">
+                    <tr th:each="afhentningssted : ${lejeaftale.getAfhentningsSted()}">
+                        <td th:text="${afhentningssted.getAdresse()}"></td>
+                        <td th:text="${afhentningssted.getPostnummer()}"></td>
+                        <td th:text="${afhentningssted.getBy()}"></td>
+                        <td th:text="${afhentningssted.getLeveringspris()}"></td>
+                    </tr>
+                </td>
+            </table>
         </tr>
-        <tr th:each="obj : ${lejeaftale}">
+    </table>-->
+
+        <!--Before fiddling-->
+        <!--<tr th:each="obj : ${lejeaftale}">
             <td th:text="${obj.getKunde()}"></td>
             <td th:text="${obj.getBil()}"></td>
             <td th:text="${obj.getAbonnement()}"></td>
             <td th:text="${obj.getPrisoverslag()}"></td>
             <td th:text="${obj.getAfhentningsSted()}"></td>
-        </tr>
-    </table>
+        </tr>-->
+
     <form method="POST" action="/tilfoejDB">
         <button type="submit">Godkend</button>
     </form>

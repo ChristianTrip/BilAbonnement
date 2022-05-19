@@ -17,8 +17,8 @@ public class PrisoverslagRepo implements CRUDInterface<Prisoverslag> {
             String sql = "INSERT INTO prisoverslag(`lejeaftale_id`, `total_pris`, `abonnements_længde`) " +
                     "VALUES (" +
                     "'" + prisoverslag.getLejeaftaleId() + "', " +
-                    "'" + prisoverslag.getTotalPris() + "', " +
-                    "'" + prisoverslag.getAbonnementsLængde() + "');";
+                    "'" + prisoverslag.getTotalpris() + "', " +
+                    "'" + prisoverslag.getAbonnementsLaengde() + "');";
 
             Connection conn = DatabaseConnectionManager.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql);

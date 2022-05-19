@@ -6,7 +6,23 @@ body{
     background-color: #BFBD93;
 }
 
-.section3{
+/*Skal højst sandsynligt ikke bruges*/
+/*.section3{
     color: darkolivegreen;
     background-color: #BFBD93;
+}*/
+
+.tables {
+    text-align: left;
+    display: inline-block;
+    /*undersøg flex*/
+}
+
+.tables table {
+    border: 1px;
+}
+
+.tableFormatting {
+    display: inline-block;
+    vertical-align: top;
 }

@@ -4,19 +4,19 @@ public class Prisoverslag {
 
     private int id;
     private int lejeaftaleId;
-    private int abonnementsLængde;
-    private int totalPris;
+    private int abonnementslængde;
+    private int totalpris;
 
     public Prisoverslag(int id, int lejeaftaleId, int totalpris, int abonnementslaengde) {
         this.id = id;
         this.lejeaftaleId = lejeaftaleId;
-        this.totalPris = totalpris;
-        this.abonnementsLængde = abonnementslaengde;
+        this.totalpris = totalpris;
+        this.abonnementslængde = abonnementslaengde;
     }
 
     public Prisoverslag(int totalpris, int abonnementslaengde){
-        this.totalPris = totalpris;
-        this.abonnementsLængde = abonnementslaengde;
+        this.totalpris = totalpris;
+        this.abonnementslængde = abonnementslaengde;
     }
 
     public int getId() {
@@ -31,20 +31,20 @@ public class Prisoverslag {
         this.lejeaftaleId = lejeaftaleId;
     }
 
-    public int getAbonnementsLængde() {
-        return abonnementsLængde;
+    public int getAbonnementsLaengde() {
+        return abonnementslængde;
     }
 
-    public int getTotalPris() {
-        return totalPris;
+    public int getTotalpris() {
+        return totalpris;
     }
 
     @Override
     public String toString() {
         return "Prisoverslag{" +
                 "id=" + id +
-                ", abonnementsLængde=" + abonnementsLængde +
-                ", totalPris=" + totalPris +
+                ", abonnementsLængde=" + abonnementslængde +
+                ", totalPris=" + totalpris +
                 '}';
     }
 }

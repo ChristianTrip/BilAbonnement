@@ -22,7 +22,7 @@
                     <form method="POST" th:action="@{/ikkeGodkendteLejeaftaler/{aftaleNo}(aftaleNo = ${iter.index})}">
                         <td th:text="${lejeaftale.getOprettelsesDato()}"></td>
                         <td th:text="${lejeaftale.getKunde().getCpr()}"></td>
-                        <td th:text="${lejeaftale.getBil().getStelNummer()}"></td>
+                        <td th:text="${lejeaftale.getBil().getStelnummer()}"></td>
                         <td><button type="submit">GO</button></td>
                     </form>
                 </tr>

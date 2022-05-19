@@ -5,24 +5,24 @@ public class AfhentningsSted {
     private int id;
     private int lejeaftaleId;
     private final String adresse;
-    private final String postNummer;
+    private final String postnummer;
     private final String by;
-    private final int levering;
+    private final int leveringspris;
 
 
-    public AfhentningsSted(int id, String adresse, String postNummer, String by, int levering) {
+    public AfhentningsSted(int id, String adresse, String postnummer, String by, int leveringspris) {
         this.id = id;
         this.adresse = adresse;
-        this.postNummer = postNummer;
+        this.postnummer = postnummer;
         this.by = by;
-        this.levering = levering;
+        this.leveringspris = leveringspris;
     }
 
-    public AfhentningsSted(String adresse, String postNummer, String by, int levering) {
+    public AfhentningsSted(String adresse, String postnummer, String by, int leveringspris) {
         this.adresse = adresse;
-        this.postNummer = postNummer;
+        this.postnummer = postnummer;
         this.by = by;
-        this.levering = levering;
+        this.leveringspris = leveringspris;
     }
 
     public int getId() {
@@ -41,25 +41,25 @@ public class AfhentningsSted {
         return adresse;
     }
 
-    public String getPostNummer() {
-        return postNummer;
+    public String getPostnummer() {
+        return postnummer;
     }
 
     public String getBy() {
         return by;
     }
 
-    public int getLevering() {
-        return levering;
+    public int getLeveringspris() {
+        return leveringspris;
     }
 
     @Override
     public String toString() {
         return "AfhentningsSted{" +
                 "adresse='" + adresse + '\'' +
-                ", postNummer=" + postNummer +
+                ", postNummer=" + postnummer +
                 ", by='" + by + '\'' +
-                ", levering=" + levering +
+                ", levering=" + leveringspris +
                 '}';
     }
 }

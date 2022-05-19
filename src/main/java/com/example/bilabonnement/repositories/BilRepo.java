@@ -1,8 +1,6 @@
 package com.example.bilabonnement.repositories;
 
 import com.example.bilabonnement.models.Bil;
-import com.example.bilabonnement.models.brugere.Bruger;
-import com.example.bilabonnement.models.brugere.BrugerType;
 import com.example.bilabonnement.utility.DatabaseConnectionManager;
 
 import java.sql.Connection;
@@ -21,7 +19,7 @@ public class BilRepo implements CRUDInterface<Bil> {
             String sql = "INSERT INTO biler(`lejeaftale_id`, `bil_stelnummer`, `bil_name`, `bil_model`) " +
                     "VALUES (" +
                     "'" + bil.getLejeaftaleId() + "', " +
-                    "'" + bil.getStelNummer() + "', " +
+                    "'" + bil.getStelnummer() + "', " +
                     "'" + bil.getName() + "', " +
                     "'" + bil.getModel() + "');";
 
@@ -32,7 +30,7 @@ public class BilRepo implements CRUDInterface<Bil> {
         }
         catch (SQLException e){
             e.printStackTrace();
-            System.out.println("Kunne ikke oprette bil med stelnummer " + bil.getStelNummer() + " i databasen");
+            System.out.println("Kunne ikke oprette bil med stelnummer " + bil.getStelnummer() + " i databasen");
         }
 
         return false;
@@ -101,7 +99,7 @@ public class BilRepo implements CRUDInterface<Bil> {
             Connection conn = DatabaseConnectionManager.getConnection();
             String sql = "UPDATE biler " +
                     "SET " +
-                    "bil_stelnummer = '" + bil.getStelNummer() + "', " +
+                    "bil_stelnummer = '" + bil.getStelnummer() + "', " +
                     "bil_name = '" + bil.getName() + "', " +
                     "bil_model = '" + bil.getModel() + "' " +
                     "WHERE bil_id = " + bil.getId() + ";";

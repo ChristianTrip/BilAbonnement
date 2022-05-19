@@ -4,10 +4,10 @@ public class Kunde {
 
 
     private int lejeaftaleId;
-    private String forNavn;
-    private String efterNavn;
+    private String fornavn;
+    private String efternavn;
     private String adresse;
-    private String postNummer;
+    private String postnummer;
     private String by;
     private String email;
     private String mobil;
@@ -15,11 +15,11 @@ public class Kunde {
     private String regNummer;
     private String kontoNummer;
 
-    public Kunde(String forNavn, String efterNavn, String adresse, String postNummer, String by, String email, String mobil, String cpr, String regNummer, String kontoNummer) {
-        this.forNavn = forNavn;
-        this.efterNavn = efterNavn;
+    public Kunde(String fornavn, String efternavn, String adresse, String postnummer, String by, String email, String mobil, String cpr, String regNummer, String kontoNummer) {
+        this.fornavn = fornavn;
+        this.efternavn = efternavn;
         this.adresse = adresse;
-        this.postNummer = postNummer;
+        this.postnummer = postnummer;
         this.by = by;
         this.email = email;
         this.mobil = mobil;
@@ -38,20 +38,20 @@ public class Kunde {
     }
 
 
-    public String getForNavn() {
-        return forNavn;
+    public String getFornavn() {
+        return fornavn;
     }
 
-    public void setForNavn(String forNavn) {
-        this.forNavn = forNavn;
+    public void setFornavn(String fornavn) {
+        this.fornavn = fornavn;
     }
 
-    public String getEfterNavn() {
-        return efterNavn;
+    public String getEfternavn() {
+        return efternavn;
     }
 
-    public void setEfterNavn(String efterNavn) {
-        this.efterNavn = efterNavn;
+    public void setEfternavn(String efternavn) {
+        this.efternavn = efternavn;
     }
 
     public String getAdresse() {
@@ -62,12 +62,12 @@ public class Kunde {
         this.adresse = adresse;
     }
 
-    public String getPostNummer() {
-        return postNummer;
+    public String getPostnummer() {
+        return postnummer;
     }
 
-    public void setPostNummer(String postNummer) {
-        this.postNummer = postNummer;
+    public void setPostnummer(String postnummer) {
+        this.postnummer = postnummer;
     }
 
     public String getBy() {
@@ -121,10 +121,10 @@ public class Kunde {
     @Override
     public String toString() {
         return "Kunde{" +
-                ", forNavn='" + forNavn + '\'' +
-                ", efterNavn='" + efterNavn + '\'' +
+                ", forNavn='" + fornavn + '\'' +
+                ", efterNavn='" + efternavn + '\'' +
                 ", adresse='" + adresse + '\'' +
-                ", postNummer=" + postNummer +
+                ", postNummer=" + postnummer +
                 ", by='" + by + '\'' +
                 ", email='" + email + '\'' +
                 ", mobil=" + mobil +

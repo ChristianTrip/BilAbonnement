@@ -18,9 +18,9 @@ public class AfhentningsstedRepo implements CRUDInterface<AfhentningsSted> {
                     "VALUES (" +
                     "'" + afhentningsSted.getLejeaftaleId() + "', " +
                     "'" + afhentningsSted.getAdresse() + "', " +
-                    "'" + afhentningsSted.getPostNummer() + "', " +
+                    "'" + afhentningsSted.getPostnummer() + "', " +
                     "'" + afhentningsSted.getBy() + "', " +
-                    "'" + afhentningsSted.getLevering() + "');";
+                    "'" + afhentningsSted.getLeveringspris() + "');";
 
             Connection conn = DatabaseConnectionManager.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql);

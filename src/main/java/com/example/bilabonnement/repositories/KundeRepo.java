@@ -18,10 +18,10 @@ public class KundeRepo implements CRUDInterface <Kunde>{
         try{
             String sql = "INSERT INTO kunder(`lejeaftale_id`, `for_navn`, `efter_navn`, `adresse`, `post_nummer`, `by_navn`, `email`, `mobil`, `cpr`, `reg_nummer`, `konto_nummer`) " +
                     "VALUES ('" + kunde.getLejeaftaleId() + "', " +
-                    "'" + kunde.getForNavn() + "', " +
-                    "'" + kunde.getEfterNavn() + "', " +
+                    "'" + kunde.getFornavn() + "', " +
+                    "'" + kunde.getEfternavn() + "', " +
                     "'" + kunde.getAdresse() + "', " +
-                    "'" + kunde.getPostNummer() + "', " +
+                    "'" + kunde.getPostnummer() + "', " +
                     "'" + kunde.getBy() + "', " +
                     "'" + kunde.getEmail() + "', " +
                     "'" + kunde.getMobil() + "', " +
@@ -113,10 +113,10 @@ public class KundeRepo implements CRUDInterface <Kunde>{
             Connection conn = DatabaseConnectionManager.getConnection();
             String sql =    "UPDATE kunder " +
                             "SET " +
-                            "for_navn = '" + kunde.getForNavn()         + "', " +
-                            "efter_navn = '" + kunde.getEfterNavn()     + "', " +
+                            "for_navn = '" + kunde.getFornavn()         + "', " +
+                            "efter_navn = '" + kunde.getEfternavn()     + "', " +
                             "adresse = '" + kunde.getAdresse()          + "', " +
-                            "post_nummer = '" + kunde.getPostNummer()   + "', " +
+                            "post_nummer = '" + kunde.getPostnummer()   + "', " +
                             "by_navn = '" + kunde.getBy()               + "', " +
                             "email = '" + kunde.getEmail()              + "', " +
                             "mobil = '" + kunde.getMobil()              + "', " +

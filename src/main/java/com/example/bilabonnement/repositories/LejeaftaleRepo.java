@@ -40,7 +40,7 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
             String sql = "INSERT INTO lejeaftaler(`oprettelsesdato`, `kunde_cpr`, `bil_stel_nummer`) " +
                     "VALUES ('" + mySQLDate + "', " +
                             "'" + lejeaftale.getKunde().getCpr() + "', " +
-                            "'" + lejeaftale.getBil().getStelNummer() + "');";
+                            "'" + lejeaftale.getBil().getStelnummer() + "');";
 
 
             conn = DatabaseConnectionManager.getConnection();
@@ -180,7 +180,7 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
             String sql = "INSERT IGNORE biler(`lejeaftale_id`, `bil_stelnummer`, `bil_name`, `bil_model`) " +
                     "VALUES (" +
                     "'" + bil.getLejeaftaleId() + "', " +
-                    "'" + bil.getStelNummer() + "', " +
+                    "'" + bil.getStelnummer() + "', " +
                     "'" + bil.getName() + "', " +
                     "'" + bil.getModel() + "');";
 
@@ -190,7 +190,7 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
         }
         catch (SQLException e){
             e.printStackTrace();
-            System.out.println("Kunne ikke oprette bil med stelnummer " + bil.getStelNummer() + " i databasen");
+            System.out.println("Kunne ikke oprette bil med stelnummer " + bil.getStelnummer() + " i databasen");
         }
     }
 
@@ -198,10 +198,10 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
 
         try{
             String sql = "INSERT IGNORE INTO kunder(`for_navn`, `efter_navn`, `adresse`, `post_nummer`, `by_navn`, `email`, `mobil`, `cpr`, `reg_nummer`, `konto_nummer`) " +
-                    "VALUES ('" + kunde.getForNavn() + "', " +
-                    "'" + kunde.getEfterNavn() + "', " +
+                    "VALUES ('" + kunde.getFornavn() + "', " +
+                    "'" + kunde.getEfternavn() + "', " +
                     "'" + kunde.getAdresse() + "', " +
-                    "'" + kunde.getPostNummer() + "', " +
+                    "'" + kunde.getPostnummer() + "', " +
                     "'" + kunde.getBy() + "', " +
                     "'" + kunde.getEmail() + "', " +
                     "'" + kunde.getMobil() + "', " +
@@ -231,7 +231,7 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
                     "VALUES (" +
                     "'" + abonnement.getLejeaftaleId() + "', " +
                     ""  + abonnement.isLavSelvrisiko() + ", " +
-                    ""  + abonnement.isAfleveringsForsikring() + ", " +
+                    ""  + abonnement.isAfleveringsforsikring() + ", " +
                     "'" + abonnement.getLejeperiodeMdr() + "', " +
                     " " + isLimited + ");";
 
@@ -254,9 +254,9 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
                     "VALUES (" +
                     "'" + afhentningsSted.getLejeaftaleId() + "', " +
                     "'" + afhentningsSted.getAdresse() + "', " +
-                    "'" + afhentningsSted.getPostNummer() + "', " +
+                    "'" + afhentningsSted.getPostnummer() + "', " +
                     "'" + afhentningsSted.getBy() + "', " +
-                    "'" + afhentningsSted.getLevering() + "');";
+                    "'" + afhentningsSted.getLeveringspris() + "');";
 
 
             PreparedStatement stmt = conn.prepareStatement(sql);
@@ -274,8 +274,8 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
             String sql = "INSERT INTO prisoverslag(`lejeaftale_id`, `total_pris`, `abonnements_længde`) " +
                     "VALUES (" +
                     "'" + prisoverslag.getLejeaftaleId() + "', " +
-                    "'" + prisoverslag.getTotalPris() + "', " +
-                    "'" + prisoverslag.getAbonnementsLængde() + "');";
+                    "'" + prisoverslag.getTotalpris() + "', " +
+                    "'" + prisoverslag.getAbonnementsLaengde() + "');";
 
 
             PreparedStatement stmt = conn.prepareStatement(sql);
