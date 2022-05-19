@@ -126,8 +126,8 @@
                     <td th:text="${prisoverslag.getAbonnementsLaengde()}"></td>
                 </tr>
                 <tr>
-                    <td>Lav selvrisiko</td>
-                    <td th:text="${prisoverslag.getTotalPris()}"></td>
+                    <td>Totalpris</td>
+                    <td th:text="${prisoverslag.getTotalpris()}"></td>
                 </tr>
             </tbody>
         </table>
@@ -140,20 +140,20 @@
                 </tr>
             </thead>
 
-            <tbody>
-                <tr th:each="afhentningssted : ${lejeaftale.getAfhentningsSted()}">
+            <tbody th:each="afhentningssted : ${lejeaftale.getAfhentningsSted()}">
+                <tr>
                     <td>Adresse</td>
                     <td th:text="${afhentningssted.getAdresse()}"></td>
                 </tr>
-                <tr th:each="afhentningssted : ${lejeaftale.getAfhentningsSted()}">
+                <tr>
                     <td>Postnummer</td>
                     <td th:text="${afhentningssted.getPostnummer()}"></td>
                 </tr>
-                <tr th:each="afhentningssted : ${lejeaftale.getAfhentningsSted()}">
+                <tr>
                     <td>By</td>
                     <td th:text="${afhentningssted.getBy()}"></td>
                 </tr>
-                <tr th:each="afhentningssted : ${lejeaftale.getAfhentningsSted()}">
+                <tr>
                     <td>Leveringspris</td>
                     <td th:text="${afhentningssted.getLeveringspris()}"></td>
                 </tr>
@@ -248,16 +248,17 @@
             <td th:text="${obj.getAfhentningsSted()}"></td>
         </tr>-->
 
-
-    <form th:if="${!isGodkendt}" method="GET" action="/ikkeGodkendteLejeaftaler">
-        <button type="submit">Tilbage</button>
-    </form>
-    <form th:unless="${!isGodkendt}" method="GET" action="/godkendteLejeaftaler">
-        <button type="submit">Tilbage</button>
-    </form>
-    <form th:if="${!isGodkendt}" method="POST" action="/tilfoejDB">
-        <button type="submit">Godkend</button>
-    </form>
+    <div>
+        <form class="buttonFormatting" th:if="${!isGodkendt}" method="GET" action="/ikkeGodkendteLejeaftaler">
+            <button type="submit">Tilbage</button>
+        </form>
+        <form class="buttonFormatting" th:unless="${!isGodkendt}" method="GET" action="/godkendteLejeaftaler">
+            <button type="submit">Tilbage</button>
+        </form>
+        <form class="buttonFormatting" th:if="${!isGodkendt}" method="POST" action="/tilfoejDB">
+            <button type="submit">Godkend</button>
+        </form>
+    </div>
 </section>
 </body>
 </html>

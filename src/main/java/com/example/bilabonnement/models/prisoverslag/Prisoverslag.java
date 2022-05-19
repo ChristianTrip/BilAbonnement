@@ -4,24 +4,33 @@ public class Prisoverslag {
 
     private int id;
     private int lejeaftaleId;
-    private int abonnementslængde;
-    private int totalpris;
     private int abonnementsLængde;
     private int kmPrMdr;
     private int totalPris;
 
-    public Prisoverslag(int id, int lejeaftaleId, int abonnementslaengde, int kmPrMdr) {
+    // vi går ud fra at vi får en totalpris fra csv filen, sådan at vi ikke skal udregne den.
+    // så den skal sættes i constructoren
+
+    public Prisoverslag(int id, int lejeaftaleId, int abonnementslaengde, int kmPrMdr, int totalPris) {
         this.id = id;
         this.lejeaftaleId = lejeaftaleId;
         this.abonnementsLængde = abonnementslaengde;
         this.kmPrMdr = kmPrMdr;
-        this.totalPris = 0;
+        this.totalPris = totalPris;
     }
 
-    public Prisoverslag(int abonnementslaengde, int kmPrMdr){
+    public Prisoverslag(int abonnementslaengde, int kmPrMdr, int totalPris){
         this.abonnementsLængde = abonnementslaengde;
         this.kmPrMdr = kmPrMdr;
-        this.totalPris = 0;
+        this.totalPris = totalPris;
+    }
+
+    public void setAbonnementsLængde(int abonnementsLængde) {
+        this.abonnementsLængde = abonnementsLængde;
+    }
+
+    private void udregnTotalpris(){
+
     }
 
     public int getId() {
@@ -37,14 +46,14 @@ public class Prisoverslag {
     }
 
     public int getAbonnementsLaengde() {
-        return abonnementslængde;
+        return abonnementsLængde;
     }
 
     public int getKmPrMdr() {
         return kmPrMdr;
     }
 
-    public int getTotalPris() {
+    public int getTotalpris() {
         return totalPris;
     }
 
@@ -52,8 +61,8 @@ public class Prisoverslag {
     public String toString() {
         return "Prisoverslag{" +
                 "id=" + id +
-                ", abonnementsLængde=" + abonnementslængde +
-                ", totalPris=" + totalpris +
+                ", abonnementsLængde=" + abonnementsLængde +
+                ", totalPris=" + totalPris +
                 '}';
     }
 }

@@ -14,7 +14,6 @@ public class Lejeaftale {
     private Abonnement abonnement;
     private Prisoverslag prisoverslag;
     private AfhentningsSted afhentningsSted;
-    private int totalPris;
     private Date oprettelsesDato;
 
 
@@ -25,6 +24,7 @@ public class Lejeaftale {
         this.tilstandsrapport = tilstandsrapport;
         this.abonnement = abonnement;
         this.prisoverslag = prisoverslag;
+        this.prisoverslag.setAbonnementsLængde(abonnement.getLejeperiodeMdr());
         this.afhentningsSted = afhentningsSted;
         this.oprettelsesDato = oprettelsesDato;
     }
@@ -35,17 +35,13 @@ public class Lejeaftale {
         this.tilstandsrapport = tilstandsrapport;
         this.abonnement = abonnement;
         this.prisoverslag = prisoverslag;
+        this.prisoverslag.setAbonnementsLængde(abonnement.getLejeperiodeMdr());
         this.afhentningsSted = afhentningsSted;
         this.oprettelsesDato = new Date();
     }
 
 
-    private int udregnTotalPris(){
 
-
-
-        return 0;
-    }
 
     public int getId() {
         return id;
@@ -75,9 +71,6 @@ public class Lejeaftale {
         return afhentningsSted;
     }
 
-    public int getTotalPris() {
-        return totalPris;
-    }
 
     public Date getOprettelsesDato() {
         return oprettelsesDato;
@@ -98,7 +91,6 @@ public class Lejeaftale {
                 "\nabonnement = " + abonnement +
                 "\nprisoverslag = " + prisoverslag +
                 "\nafhentningsSted = " + afhentningsSted +
-                "\ntotalPris = " + totalPris +
                 "\noprettelsesDato = " + oprettelsesDato + "\n" +
                 '}';
     }

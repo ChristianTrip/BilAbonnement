@@ -118,16 +118,18 @@ public class DataregService {
 
                 int lejeperiode = parseInt(split[0]);
                 int selvrisiko = parseInt(split[1]);
-                int afleveringsfors = parseInt(split[2]);
-                String abonnementType = split[3];
+                int farve = parseInt(split[2]);
+                int afleveringsfors = parseInt(split[3]);
+                String abonnementType = split[4];
+                boolean isFarve = farve == 1;
                 boolean isSelvrisiko = selvrisiko == 1;
                 boolean isAflevering = afleveringsfors == 1;
 
                 //lav nyt abonnement og add det
                 if(abonnementType.equals("limited"))
-                    abonnementListe.add(new LimitedAbonnement(isSelvrisiko));
+                    abonnementListe.add(new LimitedAbonnement(isSelvrisiko, isFarve));
                 else if(abonnementType.equals("unlimited"))
-                    abonnementListe.add(new UnlimitedAbonnement(lejeperiode, isSelvrisiko, isAflevering));
+                    abonnementListe.add(new UnlimitedAbonnement(lejeperiode, isSelvrisiko, isAflevering, isFarve));
             }
         }
         catch(Exception e){
@@ -146,8 +148,9 @@ public class DataregService {
 
                 int totalPris = parseInt(split[0]);
                 int abonnementsLængde = parseInt(split[1]);
+                int kmPrmdr = parseInt((split[2]));
 
-                pOverslagListe.add(new Prisoverslag(totalPris,abonnementsLængde));
+                pOverslagListe.add(new Prisoverslag(totalPris,abonnementsLængde, kmPrmdr));
             }
         }
         catch(Exception e){

@@ -6,11 +6,13 @@ public abstract class Abonnement {
     public int lejeaftaleId;
     protected boolean lavSelvrisiko;
     protected boolean afleveringsforsikring;
+    protected boolean valgtFarve;
     protected int lejeperiodeMdr;
 
-    public Abonnement(int id, boolean lavSelvrisiko) {
+    public Abonnement(int id, boolean lavSelvrisiko, boolean valgtFarve) {
         this.id = id;
         this.lavSelvrisiko = lavSelvrisiko;
+        this.valgtFarve = valgtFarve;
     }
 
     public Abonnement(){}
