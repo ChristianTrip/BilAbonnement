@@ -15,19 +15,19 @@ body{
 .tables {
     text-align: left;
     display: inline-block;
-    /*undersøg flex*/
-}
-
-.tables table {
-    border: 1px;
 }
 
 .tableFormatting {
     display: inline-block;
     vertical-align: top;
+    /*border: 1px solid black;*/
 }
 
 .buttonFormatting {
     display: inline-block;
     text-align: center;
+}
+
+thead tbody {
+    border: 1px solid black;
 }
