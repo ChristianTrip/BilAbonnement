@@ -21,22 +21,15 @@ public class DataregService {
     private LejeaftaleRepo lejeaftaleRepo = new LejeaftaleRepo();
     private ArrayList<Lejeaftale> liste = new ArrayList<>();
 
-    public ArrayList<Lejeaftale> seAlleLejeaftaler(){
-        return liste;
+    public ArrayList<Lejeaftale> seAlleGodkendte(){
+        return (ArrayList<Lejeaftale>) lejeaftaleRepo.getAllEntities();
     }
 
-    public void opretLejeaftale(){
-        //do stuff - opret Lejeaftale ud fra objecter fra læscsv()
-        ArrayList<Lejeaftale> objListe = læscsv();
-
-        for (Object o : objListe) {
-            if(!testValidate(o))
-                return;
-
-        }
-
-
+    public Lejeaftale vælgGodkendt(int id){
+        return lejeaftaleRepo.getSingleEntityById(id);
     }
+
+
     // man skal kunne vælge hvilken lejeaftale man gerne vil godkende
     // når man har godkendt den valgte lejeaftale skal den fjernes fra csv-filerne
 
@@ -45,9 +38,6 @@ public class DataregService {
         return liste.get(index);
     }
 
-    public void skrivcsv(){
-
-    }
 
     public boolean addLejeaftaleToDB(int index){
         if(lejeaftaleRepo.create(liste.get(index))){

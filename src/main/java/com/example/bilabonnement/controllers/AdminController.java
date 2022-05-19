@@ -1,7 +1,5 @@
 package com.example.bilabonnement.controllers;
 
-import com.example.bilabonnement.models.Lejeaftale;
-import com.example.bilabonnement.repositories.LejeaftaleRepo;
 import com.example.bilabonnement.services.DataregService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,9 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Arrays;
 
-import static java.lang.Integer.parseInt;
 
 @Controller
 public class AdminController {
@@ -27,7 +23,6 @@ public class AdminController {
      */
 
     private DataregService dataregService = new DataregService();
-    private LejeaftaleRepo lejeaftaleRepo = new LejeaftaleRepo();
 
     @GetMapping("/admin")
     public String home(){
@@ -83,7 +78,7 @@ public class AdminController {
 
 
         model.addAttribute("isGodkendt", true);
-        model.addAttribute("lejeaftaler", new LejeaftaleRepo().getAllEntities());
+        model.addAttribute("lejeaftaler", dataregService.seAlleGodkendte());
         return "alleLejeaftaler";
     }
 
@@ -96,7 +91,7 @@ public class AdminController {
     @GetMapping("/seLejeaftale")
     public String godkendteLejeaftaler(@RequestParam int nr, Model m, HttpServletRequest request){
         HttpSession session = request.getSession();
-        m.addAttribute("lejeaftale", new LejeaftaleRepo().getSingleEntityById(nr + 1));
+        m.addAttribute("lejeaftale", dataregService.vælgGodkendt(nr + 1));
 
         session.setAttribute("indexNummer", nr);
 

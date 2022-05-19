@@ -19,7 +19,7 @@
 
                 </tr>
                 <div>
-                <tr th:if="isGodkendt != true" th:each="lejeaftale,iter : ${igLejeaftaler}">
+                <tr th:if="${!isGodkendt}" th:each="lejeaftale,iter : ${igLejeaftaler}">
                     <form method="POST" th:action="@{/ikkeGodkendteLejeaftaler/{aftaleNo}(aftaleNo = ${iter.index})}">
                         <td th:text="${lejeaftale.getOprettelsesDato()}"></td>
                         <td th:text="${lejeaftale.getKunde().getCpr()}"></td>
@@ -28,7 +28,7 @@
                     </form>
                 </tr>
 
-                    <tr th:unless="isGodkendt == false" th:each="lejeaftale,iter : ${lejeaftaler}">
+                    <tr th:unless="${!isGodkendt}" th:each="lejeaftale,iter : ${lejeaftaler}">
                     <form method="POST" th:action="@{/godkendteLejeaftaler/{aftaleNo}(aftaleNo = ${iter.index})}">
                         <td th:text="${lejeaftale.getOprettelsesDato()}"></td>
                         <td th:text="${lejeaftale.getKunde().getCpr()}"></td>
