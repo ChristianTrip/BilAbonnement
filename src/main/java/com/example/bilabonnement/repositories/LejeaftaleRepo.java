@@ -36,6 +36,7 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
 
         java.sql.Date mySQLDate = new java.sql.Date(lejeaftale.getOprettelsesDato().getTime());
 
+        boolean allIsWell = false;
         try{
             String sql = "INSERT INTO lejeaftaler(`oprettelsesdato`, `kunde_cpr`, `bil_stel_nummer`) " +
                     "VALUES ('" + mySQLDate + "', " +
@@ -50,35 +51,35 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
             int lejeaftaleId = getLastIndex();
 
             Kunde kunde = lejeaftale.getKunde();
-            insertKunde(kunde);
+            allIsWell = insertKunde(kunde);
 
             Bil bil = lejeaftale.getBil();
             bil.setLejeaftaleId(lejeaftaleId);
-            insertBil(bil);
+            allIsWell = insertBil(bil);
 
             Abonnement abonnement = lejeaftale.getAbonnement();
             abonnement.setLejeaftaleId(lejeaftaleId);
-            insertAbonnement(abonnement);
+            allIsWell = insertAbonnement(abonnement);
 
             AfhentningsSted afhentningsSted = lejeaftale.getAfhentningsSted();
             afhentningsSted.setLejeaftaleId(lejeaftaleId);
-            insertAfhentningssted(afhentningsSted);
+            allIsWell = insertAfhentningssted(afhentningsSted);
 
             Prisoverslag prisoverslag = lejeaftale.getPrisoverslag();
             prisoverslag.setLejeaftaleId(lejeaftaleId);
-            insertPrisoverslag(prisoverslag);
+            allIsWell = insertPrisoverslag(prisoverslag);
 
             Tilstandsrapport tilstandsrapport = new Tilstandsrapport();
             tilstandsrapport.setLejeaftaleId(lejeaftaleId);
-            insertTilstandsrapport(tilstandsrapport);
-
-            return true;
+            allIsWell = insertTilstandsrapport(tilstandsrapport);
 
         }
         catch (SQLException e){
             e.printStackTrace();
         }
-        return false;
+
+
+        return allIsWell;
     }
 
     @Override
@@ -174,7 +175,7 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
 
     // metoder der indsætter elementerne der hører til en lejeaftale
 
-    private void insertBil(Bil bil){
+    private boolean insertBil(Bil bil){
 
         try{
             String sql = "INSERT IGNORE biler(`lejeaftale_id`, `bil_stelnummer`, `bil_name`, `bil_model`) " +
@@ -186,15 +187,16 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
 
             stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
-
+            return true;
         }
         catch (SQLException e){
             e.printStackTrace();
             System.out.println("Kunne ikke oprette bil med stelnummer " + bil.getStelnummer() + " i databasen");
         }
+        return false;
     }
 
-    private void insertKunde(Kunde kunde){
+    private boolean insertKunde(Kunde kunde){
 
         try{
             String sql = "INSERT IGNORE INTO kunder(`for_navn`, `efter_navn`, `adresse`, `post_nummer`, `by_navn`, `email`, `mobil`, `cpr`, `reg_nummer`, `konto_nummer`) " +
@@ -212,14 +214,16 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
 
             stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
+            return true;
         }
         catch (SQLException e){
             e.printStackTrace();
             System.out.println("Kunne ikke oprette kunde med cpr nummer " + kunde.getCpr() + " i databasen");
         }
+        return false;
     }
 
-    private void insertAbonnement(Abonnement abonnement){
+    private boolean insertAbonnement(Abonnement abonnement){
 
         boolean isLimited = true;
         if (abonnement.getClass().equals(UnlimitedAbonnement.class)){
@@ -227,28 +231,28 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
         }
 
         try{
-            String sql = "INSERT INTO abonnementer(`lejeaftale_id`, `lav_selvrisiko`, `afleveringsforsikring`, `lejeperiode_mdr`, `valgt_farve` `is_limited`) " +
+            String sql = "INSERT INTO abonnementer(`lejeaftale_id`, `lav_selvrisiko`, `afleveringsforsikring`, `lejeperiode_mdr`, `valgt_farve`, `is_limited`) " +
                     "VALUES (" +
                     "'" + abonnement.getLejeaftaleId() + "', " +
                     ""  + abonnement.isLavSelvrisiko() + ", " +
                     ""  + abonnement.isAfleveringsforsikring() + ", " +
                     "'" + abonnement.getLejeperiodeMdr() + "', " +
-                    "'" + abonnement.isValgtFarve() + "', " +
+                    "" + abonnement.isValgtFarve() + ", " +
                     " " + isLimited + ");";
 
 
             stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
-
+            return true;
         }
         catch (SQLException e){
             e.printStackTrace();
             System.out.println("Kunne ikke oprette abonnement tilhørende lejeaftale med id " + abonnement.getLejeaftaleId() + " i databasen");
         }
-
+        return false;
     }
 
-    private void insertAfhentningssted(AfhentningsSted afhentningsSted) {
+    private boolean insertAfhentningssted(AfhentningsSted afhentningsSted) {
 
         try{
             String sql = "INSERT INTO afhentningssteder(`lejeaftale_id`, `adresse`, `post_nummer`, `by_navn`, `levering`) " +
@@ -262,15 +266,16 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
 
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
-
+            return true;
         }
         catch (SQLException e){
             e.printStackTrace();
             System.out.println("Kunne ikke oprette afhentningsted med tilhørende lejeaftale id " + afhentningsSted.getLejeaftaleId() + " i databasen");
         }
+        return false;
     }
 
-    private void insertPrisoverslag(Prisoverslag prisoverslag) {
+    private boolean insertPrisoverslag(Prisoverslag prisoverslag) {
         try{
             String sql = "INSERT INTO prisoverslag(`lejeaftale_id`, `abonnements_længde`, `km_pr_mdr`, `totalpris`) " +
                     "VALUES (" +
@@ -282,15 +287,16 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
 
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
-
+            return true;
         }
         catch (SQLException e){
             e.printStackTrace();
             System.out.println("Kunne ikke oprette prisoverslag med tilhørende lejeaftale id " + prisoverslag.getLejeaftaleId() + " i databasen");
         }
+        return false;
     }
 
-    private void insertTilstandsrapport(Tilstandsrapport tilstandsrapport) {
+    private boolean insertTilstandsrapport(Tilstandsrapport tilstandsrapport) {
 
         try{
             String sql = "INSERT INTO tilstandsrapporter(`lejeaftale_id`) " +
@@ -298,11 +304,13 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
 
             stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
+            return true;
         }
         catch (SQLException e){
             e.printStackTrace();
             System.out.println("Kunne ikke oprette tilstandsrapport tilhørende lejeaftale id: " + tilstandsrapport.getLejeaftaleId() + " i databasen");
         }
+        return false;
     }
 
     // metoder der henter elementerne der hører til en lejeaftale
