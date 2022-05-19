@@ -40,6 +40,12 @@ public class Lejeaftale {
     }
 
 
+    private int udregnTotalPris(){
+
+
+
+        return 0;
+    }
 
     public int getId() {
         return id;

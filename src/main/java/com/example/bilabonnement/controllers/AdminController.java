@@ -12,9 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Arrays;
+import java.util.ArrayList;
 
-import static java.lang.Integer.parseInt;
 
 @Controller
 public class AdminController {
@@ -27,23 +26,30 @@ public class AdminController {
      */
 
     private DataregService dataregService = new DataregService();
-    private LejeaftaleRepo lejeaftaleRepo = new LejeaftaleRepo();
+
 
     @GetMapping("/admin")
     public String home(){
         return "admin";
     }
 
+    @GetMapping("logUd")
+    public String logUd(HttpSession session){
+        session.invalidate();
+        return "index";
+    }
+
     @GetMapping("/alleLejeaftaler")
-    public String alleLejeaftaler(){
+    public String alleLejeaftaler(Model model){
+        model.addAttribute("isGodkendt", false);
         return "alleLejeaftaler";
     }
 
     @GetMapping("/ikkeGodkendteLejeaftaler")
     public String seAlleLejeaftaler(Model model){
 
-
-        model.addAttribute("lejeaftaler", dataregService.læscsv());
+        model.addAttribute("isGodkendt", false);
+        model.addAttribute("igLejeaftaler", dataregService.læscsv());
 
         return "alleLejeaftaler";
     }
@@ -58,6 +64,7 @@ public class AdminController {
     public String testLeje(@RequestParam int nr, Model m, HttpServletRequest request){
         HttpSession session = request.getSession();
         m.addAttribute("lejeaftale", dataregService.vælgLejeaftale(nr));
+        m.addAttribute("isGodkendt", false);
 
         session.setAttribute("indexNummer", nr);
 
@@ -69,19 +76,17 @@ public class AdminController {
 
         int index = (int) session.getAttribute("indexNummer");
         dataregService.addLejeaftaleToDB(index);
-        session.invalidate();
+
 
         return "redirect:/ikkeGodkendteLejeaftaler";
     }
 
-
-
-
     @GetMapping("/godkendteLejeaftaler")
     public String godkendteLejeaftaler(Model model){
 
+        model.addAttribute("isGodkendt", true);
+        model.addAttribute("lejeaftaler", dataregService.seAlleGodkendte());
 
-        model.addAttribute("lejeaftaler", new LejeaftaleRepo().getAllEntities());
 
         return "alleLejeaftaler";
     }
@@ -95,7 +100,8 @@ public class AdminController {
     @GetMapping("/seLejeaftale")
     public String godkendteLejeaftaler(@RequestParam int nr, Model m, HttpServletRequest request){
         HttpSession session = request.getSession();
-        m.addAttribute("lejeaftale", new LejeaftaleRepo().getSingleEntityById(nr + 1));
+        m.addAttribute("lejeaftale", dataregService.vælgGodkendt(nr + 1));
+        m.addAttribute("isGodkendt", true);
 
         session.setAttribute("indexNummer", nr);
 

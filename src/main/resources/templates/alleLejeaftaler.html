@@ -9,6 +9,7 @@
 <body>
     <h2>Alle lejeaftaler</h2>
 
+
     <section class="section2">
 
             <table>
@@ -18,7 +19,8 @@
                     <th>Bil stelnummer</th>
 
                 </tr>
-                <tr th:each="lejeaftale,iter : ${lejeaftaler}">
+                <div>
+                <tr th:if="${!isGodkendt}" th:each="lejeaftale,iter : ${igLejeaftaler}">
                     <form method="POST" th:action="@{/ikkeGodkendteLejeaftaler/{aftaleNo}(aftaleNo = ${iter.index})}">
                         <td th:text="${lejeaftale.getOprettelsesDato()}"></td>
                         <td th:text="${lejeaftale.getKunde().getCpr()}"></td>
@@ -26,6 +28,16 @@
                         <td><button type="submit">GO</button></td>
                     </form>
                 </tr>
+
+                    <tr th:unless="${!isGodkendt}" th:each="lejeaftale,iter : ${lejeaftaler}">
+                    <form method="POST" th:action="@{/godkendteLejeaftaler/{aftaleNo}(aftaleNo = ${iter.index})}">
+                        <td th:text="${lejeaftale.getOprettelsesDato()}"></td>
+                        <td th:text="${lejeaftale.getKunde().getCpr()}"></td>
+                        <td th:text="${lejeaftale.getBil().getStelNummer()}"></td>
+                        <td><button type="submit">GO</button></td>
+                    </form>
+                </tr>
+                </div>
             </table>
         </form>
     </section>
