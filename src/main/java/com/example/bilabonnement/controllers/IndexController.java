@@ -38,15 +38,15 @@ public class IndexController {
             }
             else if(brugerType.equals(BrugerType.DATAREG)) {
                 System.out.println("datareg");
-                return "redirect:/admin";
+                return "redirect:/dataRegBruger";
             }
             else if(brugerType.equals(BrugerType.FORRETNING)) {
                 System.out.println("forretningsreg");
-                return "redirect:/admin";
+                return "redirect:/forretningBruger";
             }
             else if(brugerType.equals(BrugerType.SKADEREG)) {
                 System.out.println("skadereg");
-                return "redirect:/admin";
+                return "redirect:/skadeRegBruger";
             }
         return "index";
     }
