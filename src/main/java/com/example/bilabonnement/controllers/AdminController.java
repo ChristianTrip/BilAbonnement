@@ -64,6 +64,7 @@ public class AdminController {
     public String testLeje(@RequestParam int nr, Model m, HttpServletRequest request){
         HttpSession session = request.getSession();
         m.addAttribute("lejeaftale", dataregService.vælgLejeaftale(nr));
+        m.addAttribute("isGodkendt", false);
 
         session.setAttribute("indexNummer", nr);
 
