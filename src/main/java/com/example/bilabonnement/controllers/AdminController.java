@@ -1,7 +1,5 @@
 package com.example.bilabonnement.controllers;
 
-import com.example.bilabonnement.models.Lejeaftale;
-import com.example.bilabonnement.repositories.LejeaftaleRepo;
 import com.example.bilabonnement.services.DataregService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
+
 
 
 @Controller

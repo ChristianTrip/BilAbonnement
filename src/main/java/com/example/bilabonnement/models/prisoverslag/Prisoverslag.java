@@ -4,8 +4,6 @@ public class Prisoverslag {
 
     private int id;
     private int lejeaftaleId;
-    private int abonnementslængde;
-    private int totalpris;
     private int abonnementsLængde;
     private int kmPrMdr;
     private int totalPris;
@@ -24,6 +22,14 @@ public class Prisoverslag {
         this.totalPris = 0;
     }
 
+    public void setAbonnementsLængde(int abonnementsLængde) {
+        this.abonnementsLængde = abonnementsLængde;
+    }
+
+    private void udregnTotalpris(){
+
+    }
+
     public int getId() {
         return id;
     }
@@ -37,7 +43,7 @@ public class Prisoverslag {
     }
 
     public int getAbonnementsLaengde() {
-        return abonnementslængde;
+        return abonnementsLængde;
     }
 
     public int getKmPrMdr() {
@@ -52,8 +58,8 @@ public class Prisoverslag {
     public String toString() {
         return "Prisoverslag{" +
                 "id=" + id +
-                ", abonnementsLængde=" + abonnementslængde +
-                ", totalPris=" + totalpris +
+                ", abonnementsLængde=" + abonnementsLængde +
+                ", totalPris=" + totalPris +
                 '}';
     }
 }

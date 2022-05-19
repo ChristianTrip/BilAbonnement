@@ -25,8 +25,10 @@ public class Lejeaftale {
         this.tilstandsrapport = tilstandsrapport;
         this.abonnement = abonnement;
         this.prisoverslag = prisoverslag;
+        this.prisoverslag.setAbonnementsLængde(abonnement.getLejeperiodeMdr());
         this.afhentningsSted = afhentningsSted;
         this.oprettelsesDato = oprettelsesDato;
+        udregnTotalPris();
     }
 
     public Lejeaftale(Kunde kunde, Bil bil, Tilstandsrapport tilstandsrapport, Abonnement abonnement, Prisoverslag prisoverslag, AfhentningsSted afhentningsSted) {
@@ -35,16 +37,15 @@ public class Lejeaftale {
         this.tilstandsrapport = tilstandsrapport;
         this.abonnement = abonnement;
         this.prisoverslag = prisoverslag;
+        this.prisoverslag.setAbonnementsLængde(abonnement.getLejeperiodeMdr());
         this.afhentningsSted = afhentningsSted;
         this.oprettelsesDato = new Date();
+        udregnTotalPris();
     }
 
 
-    private int udregnTotalPris(){
-
-
-
-        return 0;
+    private void udregnTotalPris(){
+        totalPris = prisoverslag.getTotalPris();
     }
 
     public int getId() {
