@@ -50,7 +50,7 @@ public class Prisoverslag {
         return kmPrMdr;
     }
 
-    public int getTotalPris() {
+    public int getTotalpris() {
         return totalPris;
     }
 
