@@ -8,18 +8,21 @@ public class Prisoverslag {
     private int kmPrMdr;
     private int totalPris;
 
-    public Prisoverslag(int id, int lejeaftaleId, int abonnementslaengde, int kmPrMdr) {
+    // vi går ud fra at vi får en totalpris fra csv filen, sådan at vi ikke skal udregne den.
+    // så den skal sættes i constructoren
+
+    public Prisoverslag(int id, int lejeaftaleId, int abonnementslaengde, int kmPrMdr, int totalPris) {
         this.id = id;
         this.lejeaftaleId = lejeaftaleId;
         this.abonnementsLængde = abonnementslaengde;
         this.kmPrMdr = kmPrMdr;
-        this.totalPris = 0;
+        this.totalPris = totalPris;
     }
 
-    public Prisoverslag(int abonnementslaengde, int kmPrMdr){
+    public Prisoverslag(int abonnementslaengde, int kmPrMdr, int totalPris){
         this.abonnementsLængde = abonnementslaengde;
         this.kmPrMdr = kmPrMdr;
-        this.totalPris = 0;
+        this.totalPris = totalPris;
     }
 
     public void setAbonnementsLængde(int abonnementsLængde) {

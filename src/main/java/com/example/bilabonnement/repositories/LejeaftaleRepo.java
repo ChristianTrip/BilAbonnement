@@ -227,12 +227,13 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
         }
 
         try{
-            String sql = "INSERT INTO abonnementer(`lejeaftale_id`, `lav_selvrisiko`, `afleveringsforsikring`, `lejeperiode_mdr`, `is_limited`) " +
+            String sql = "INSERT INTO abonnementer(`lejeaftale_id`, `lav_selvrisiko`, `afleveringsforsikring`, `lejeperiode_mdr`, `valgt_farve` `is_limited`) " +
                     "VALUES (" +
                     "'" + abonnement.getLejeaftaleId() + "', " +
                     ""  + abonnement.isLavSelvrisiko() + ", " +
                     ""  + abonnement.isAfleveringsforsikring() + ", " +
                     "'" + abonnement.getLejeperiodeMdr() + "', " +
+                    "'" + abonnement.isValgtFarve() + "', " +
                     " " + isLimited + ");";
 
 
@@ -271,11 +272,12 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
 
     private void insertPrisoverslag(Prisoverslag prisoverslag) {
         try{
-            String sql = "INSERT INTO prisoverslag(`lejeaftale_id`, `abonnements_længde`, `km_pr_mdr`) " +
+            String sql = "INSERT INTO prisoverslag(`lejeaftale_id`, `abonnements_længde`, `km_pr_mdr`, `totalpris`) " +
                     "VALUES (" +
                     "'" + prisoverslag.getLejeaftaleId() + "', " +
                     "'" + prisoverslag.getAbonnementsLaengde() + "', " +
-                    "'" + prisoverslag.getKmPrMdr() + "');";
+                    "'" + prisoverslag.getKmPrMdr() + "', " +
+                    "'" + prisoverslag.getTotalpris() + "');";
 
 
             PreparedStatement stmt = conn.prepareStatement(sql);
@@ -376,15 +378,15 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
                 boolean lav_selvrisiko = rs.getBoolean(3);
                 boolean afleveringsforsikring = rs.getBoolean(4);
                 int lejeperiode_mdr = rs.getInt(5);
-                boolean is_limited = rs.getBoolean(6);
-
+                boolean valgt_farve = rs.getBoolean(6);
+                boolean is_limited = rs.getBoolean(7);
 
 
                 if (is_limited){
-                    return new LimitedAbonnement(abonnement_id, lav_selvrisiko);
+                    return new LimitedAbonnement(abonnement_id, lav_selvrisiko, valgt_farve);
                 }
                 else{
-                    return new UnlimitedAbonnement(abonnement_id, lejeperiode_mdr, lav_selvrisiko, afleveringsforsikring);
+                    return new UnlimitedAbonnement(abonnement_id, lejeperiode_mdr, lav_selvrisiko, afleveringsforsikring, valgt_farve);
                 }
 
             }
@@ -435,8 +437,9 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
                 int lejeaftale_id = rs.getInt(2);
                 int abonnements_længde = rs.getInt(3);
                 int kmPrMdr = rs.getInt(4);
+                int totalpris = rs.getInt(5);
 
-                return new Prisoverslag(prisoverslag_id, lejeaftale_id, abonnements_længde, kmPrMdr);
+                return new Prisoverslag(prisoverslag_id, lejeaftale_id, abonnements_længde, kmPrMdr, totalpris);
             }
         }
         catch (SQLException e){
@@ -477,18 +480,13 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
 
         Kunde kunde = new Kunde("John", "Andersen", "Holmbladsgade 30", "2300", "Kbh S", "Johnandersen@mail.dk", "12345678", "0910883485", "1234", "1234567890");
         Bil bil = new Bil("ZW00003344KL", "Fiat", "grand");
-        //Tilstandsrapport tilstandsrapport = new Tilstandsrapport();
-        Abonnement abonnement = new LimitedAbonnement(true);
-        Prisoverslag prisoverslag = new Prisoverslag(4000, 3);
+        Tilstandsrapport tilstandsrapport = new Tilstandsrapport();
+        Abonnement abonnement = new LimitedAbonnement(true, true);
+        Prisoverslag prisoverslag = new Prisoverslag(3, 4000, 6999);
         AfhentningsSted afhentningsSted = new AfhentningsSted("Lergravsvej 3", "2300", "København S", 300);
-        //Lejeaftale lejeaftale = new Lejeaftale(kunde, bil, tilstandsrapport, abonnement, prisoverslag, afhentningsSted);
+        Lejeaftale lejeaftale = new Lejeaftale(kunde, bil, tilstandsrapport, abonnement, prisoverslag, afhentningsSted);
 
 
-
-
-
-
-        System.out.println(repo.getAllEntities());
 
     }
 

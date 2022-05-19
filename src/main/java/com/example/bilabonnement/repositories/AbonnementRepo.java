@@ -60,13 +60,15 @@ public class AbonnementRepo implements CRUDInterface<Abonnement> {
                 boolean is_limited = rs.getBoolean(6);
 
 
-
+/*
                 if (is_limited){
                     return new LimitedAbonnement(abonnement_id, lav_selvrisiko);
                 }
                 else{
                     return new UnlimitedAbonnement(abonnement_id, lejeperiode_mdr, lav_selvrisiko, afleveringsforsikring);
                 }
+
+ */
 
             }
         }

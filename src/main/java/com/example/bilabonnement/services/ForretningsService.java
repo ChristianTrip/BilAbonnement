@@ -17,8 +17,15 @@ public class ForretningsService {
         System.out.println(udregnTotalPris(new ArrayList<Lejeaftale>()));
     }
 
-    private int udregnTotalPris(ArrayList<Lejeaftale> aftaler){
-        return 0;
+    public int udregnTotalPris(ArrayList<Lejeaftale> aftaler){
+
+        int totalpris = 0;
+
+        for (Lejeaftale aftale : aftaler) {
+            totalpris += aftale.getPrisoverslag().getTotalpris();
+        }
+
+        return totalpris;
     }
 
 }

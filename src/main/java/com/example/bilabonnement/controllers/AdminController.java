@@ -1,6 +1,7 @@
 package com.example.bilabonnement.controllers;
 
 import com.example.bilabonnement.services.DataregService;
+import com.example.bilabonnement.services.ForretningsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -85,6 +86,7 @@ public class AdminController {
         model.addAttribute("isGodkendt", true);
         model.addAttribute("lejeaftaler", dataregService.seAlleGodkendte());
 
+        new ForretningsService().udregnTotalPris(dataregService.seAlleGodkendte());
 
         return "alleLejeaftaler";
     }

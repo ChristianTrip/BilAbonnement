@@ -4,13 +4,14 @@ public class LimitedAbonnement extends Abonnement{
 
 
 
-    public LimitedAbonnement(int id, boolean selvRisiko) {
-        super(id, selvRisiko);
+    public LimitedAbonnement(int id, boolean selvRisiko, boolean valgtFarve) {
+        super(id, selvRisiko, valgtFarve);
         super.lejeperiodeMdr = 4;
     }
 
-    public LimitedAbonnement(boolean selvRisiko){
+    public LimitedAbonnement(boolean selvRisiko, boolean valgtFarve){
         super.lavSelvrisiko = selvRisiko;
+        super.valgtFarve = valgtFarve;
         super.lejeperiodeMdr = 4;
     }
 
