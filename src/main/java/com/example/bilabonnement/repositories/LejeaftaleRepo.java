@@ -274,7 +274,7 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
             String sql = "INSERT INTO prisoverslag(`lejeaftale_id`, `abonnements_længde`, `km_pr_mdr`) " +
                     "VALUES (" +
                     "'" + prisoverslag.getLejeaftaleId() + "', " +
-                    "'" + prisoverslag.getAbonnementsLængde() + "', " +
+                    "'" + prisoverslag.getAbonnementsLaengde() + "', " +
                     "'" + prisoverslag.getKmPrMdr() + "');";
 
 
