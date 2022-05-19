@@ -1,5 +1,7 @@
 package com.example.bilabonnement.controllers;
 
+import com.example.bilabonnement.models.brugere.Bruger;
+import com.example.bilabonnement.models.brugere.BrugerType;
 import com.example.bilabonnement.repositories.BrugerRepo;
 import com.example.bilabonnement.services.BrugerService;
 import org.springframework.stereotype.Controller;
@@ -28,10 +30,24 @@ public class IndexController {
         String brugernavn = request.getParameter("brugernavn");
         String adgangskode = request.getParameter("adgangskode");
 
-        if(bs.validateUserinfo(brugernavn, adgangskode)) {
-            return "redirect:/admin";
-        }
 
+        BrugerType brugerType = bs.determineBrugertype(brugernavn, adgangskode);
+
+            if(brugerType.equals(BrugerType.ADMIN)) {
+                return "redirect:/admin";
+            }
+            else if(brugerType.equals(BrugerType.DATAREG)) {
+                System.out.println("datareg");
+                return "redirect:/admin";
+            }
+            else if(brugerType.equals(BrugerType.FORRETNING)) {
+                System.out.println("forretningsreg");
+                return "redirect:/admin";
+            }
+            else if(brugerType.equals(BrugerType.SKADEREG)) {
+                System.out.println("skadereg");
+                return "redirect:/admin";
+            }
         return "index";
     }
 }

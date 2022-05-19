@@ -4,5 +4,7 @@ public enum BrugerType {
     ADMIN,
     DATAREG,
     FORRETNING,
-    SKADEREG;
+    SKADEREG,
+
+    IKKEBRUGER;
 }
