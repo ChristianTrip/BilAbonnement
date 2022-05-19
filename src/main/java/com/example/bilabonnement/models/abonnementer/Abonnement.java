@@ -40,4 +40,8 @@ public abstract class Abonnement {
     public boolean isAfleveringsforsikring() {
         return afleveringsforsikring;
     }
+
+    public boolean isValgtFarve() {
+        return valgtFarve;
+    }
 }
