@@ -7,20 +7,21 @@
     <link rel="stylesheet" th:href="@{style.css}" href="style.css">
 </head>
 <body>
-    <h2>Alle lejeaftaler</h2>
+<h2>Alle lejeaftaler</h2>
 
 
-    <section class="section2">
+<section class="section2">
 
-            <table>
-                <tr>
-                    <th>oprettelsesdato</th>
-                    <th>Kunde cpr</th>
-                    <th>Bil stelnummer</th>
+    <table>
+        <tr>
+            <th>oprettelsesdato</th>
+            <th>Kunde cpr</th>
+            <th>Bil stelnummer</th>
 
-                </tr>
-                <div>
-                <tr th:if="${!isGodkendt}" th:each="lejeaftale,iter : ${igLejeaftaler}">
+        </tr>
+        <div>
+            <span th:if="${!isGodkendt}">
+                <tr th:each="lejeaftale,iter : ${igLejeaftaler}">
                     <form method="POST" th:action="@{/ikkeGodkendteLejeaftaler/{aftaleNo}(aftaleNo = ${iter.index})}">
                         <td th:text="${lejeaftale.getOprettelsesDato()}"></td>
                         <td th:text="${lejeaftale.getKunde().getCpr()}"></td>
@@ -28,8 +29,10 @@
                         <td><button type="submit">GO</button></td>
                     </form>
                 </tr>
+            </span>
 
-                    <tr th:unless="${!isGodkendt}" th:each="lejeaftale,iter : ${lejeaftaler}">
+            <span th:unless="${!isGodkendt}">
+                <tr th:each="lejeaftale,iter : ${lejeaftaler}">
                     <form method="POST" th:action="@{/godkendteLejeaftaler/{aftaleNo}(aftaleNo = ${iter.index})}">
                         <td th:text="${lejeaftale.getOprettelsesDato()}"></td>
                         <td th:text="${lejeaftale.getKunde().getCpr()}"></td>
@@ -37,9 +40,14 @@
                         <td><button type="submit">GO</button></td>
                     </form>
                 </tr>
-                </div>
-            </table>
-        </form>
-    </section>
+                        <h2>Samlet udlejningspris: </h2>
+                    <a th:text="${totalpris}"></a>
+            </span>
+        </div>
+    </table>
+            <form class="buttonFormatting" method="GET" action="/admin">
+                <button type="submit">Tilbage</button>
+            </form>
+</section>
 </body>
 </html>

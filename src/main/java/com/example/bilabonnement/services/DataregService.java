@@ -150,7 +150,7 @@ public class DataregService {
                 int abonnementsLængde = parseInt(split[1]);
                 int kmPrmdr = parseInt((split[2]));
 
-                pOverslagListe.add(new Prisoverslag(totalPris,abonnementsLængde, kmPrmdr));
+                pOverslagListe.add(new Prisoverslag(abonnementsLængde, kmPrmdr, totalPris));
             }
         }
         catch(Exception e){

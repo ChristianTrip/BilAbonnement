@@ -1,5 +1,6 @@
 package com.example.bilabonnement.controllers;
 
+import com.example.bilabonnement.models.Lejeaftale;
 import com.example.bilabonnement.services.DataregService;
 import com.example.bilabonnement.services.ForretningsService;
 import org.springframework.stereotype.Controller;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
+import java.util.ArrayList;
 
 
 @Controller
@@ -25,6 +26,9 @@ public class AdminController {
      */
 
     private DataregService dataregService = new DataregService();
+    private ForretningsService forretningsService = new ForretningsService();
+    ArrayList<Lejeaftale> godkendteLejeaftaler;
+    ArrayList<Lejeaftale> ikkeGodkendteLejeaftaler;
 
 
     @GetMapping("/admin")
@@ -47,8 +51,10 @@ public class AdminController {
     @GetMapping("/ikkeGodkendteLejeaftaler")
     public String seAlleLejeaftaler(Model model){
 
+        ikkeGodkendteLejeaftaler = dataregService.læscsv();
+
         model.addAttribute("isGodkendt", false);
-        model.addAttribute("igLejeaftaler", dataregService.læscsv());
+        model.addAttribute("igLejeaftaler", ikkeGodkendteLejeaftaler);
 
         return "alleLejeaftaler";
     }
@@ -62,7 +68,7 @@ public class AdminController {
     @GetMapping("/visLejeaftale")
     public String testLeje(@RequestParam int nr, Model m, HttpServletRequest request){
         HttpSession session = request.getSession();
-        m.addAttribute("lejeaftale", dataregService.vælgLejeaftale(nr));
+        m.addAttribute("lejeaftale", ikkeGodkendteLejeaftaler.get(nr));
         m.addAttribute("isGodkendt", false);
 
         session.setAttribute("indexNummer", nr);
@@ -83,10 +89,13 @@ public class AdminController {
     @GetMapping("/godkendteLejeaftaler")
     public String godkendteLejeaftaler(Model model){
 
-        model.addAttribute("isGodkendt", true);
-        model.addAttribute("lejeaftaler", dataregService.seAlleGodkendte());
+        godkendteLejeaftaler = dataregService.seAlleGodkendte();
+        int totalpris = forretningsService.udregnTotalPris(godkendteLejeaftaler);
 
-        new ForretningsService().udregnTotalPris(dataregService.seAlleGodkendte());
+        model.addAttribute("isGodkendt", true);
+        model.addAttribute("lejeaftaler", godkendteLejeaftaler);
+
+        model.addAttribute("totalpris", totalpris);
 
         return "alleLejeaftaler";
     }
@@ -100,7 +109,8 @@ public class AdminController {
     @GetMapping("/seLejeaftale")
     public String godkendteLejeaftaler(@RequestParam int nr, Model m, HttpServletRequest request){
         HttpSession session = request.getSession();
-        m.addAttribute("lejeaftale", dataregService.vælgGodkendt(nr + 1));
+        //m.addAttribute("lejeaftale", dataregService.vælgGodkendt(nr + 1));
+        m.addAttribute("lejeaftale", godkendteLejeaftaler.get(nr));
         m.addAttribute("isGodkendt", true);
 
         session.setAttribute("indexNummer", nr);
