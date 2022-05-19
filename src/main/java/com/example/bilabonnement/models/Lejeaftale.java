@@ -45,7 +45,7 @@ public class Lejeaftale {
 
 
     private void udregnTotalPris(){
-        totalPris = prisoverslag.getTotalPris();
+        totalPris = prisoverslag.getTotalpris();
     }
 
     public int getId() {
