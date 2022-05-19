@@ -6,12 +6,12 @@ public class LimitedAbonnement extends Abonnement{
 
     public LimitedAbonnement(int id, boolean selvRisiko) {
         super(id, selvRisiko);
-        super.lejeperiodeMdr = 5;
+        super.lejeperiodeMdr = 4;
     }
 
     public LimitedAbonnement(boolean selvRisiko){
         super.lavSelvrisiko = selvRisiko;
-        super.lejeperiodeMdr = 5;
+        super.lejeperiodeMdr = 4;
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.example.bilabonnement.controllers;
 
+import com.example.bilabonnement.models.Lejeaftale;
+import com.example.bilabonnement.repositories.LejeaftaleRepo;
 import com.example.bilabonnement.services.DataregService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 
 
 @Controller
@@ -24,9 +27,16 @@ public class AdminController {
 
     private DataregService dataregService = new DataregService();
 
+
     @GetMapping("/admin")
     public String home(){
         return "admin";
+    }
+
+    @GetMapping("logUd")
+    public String logUd(HttpSession session){
+        session.invalidate();
+        return "index";
     }
 
     @GetMapping("/alleLejeaftaler")
@@ -65,20 +75,18 @@ public class AdminController {
 
         int index = (int) session.getAttribute("indexNummer");
         dataregService.addLejeaftaleToDB(index);
-        session.invalidate();
+
 
         return "redirect:/ikkeGodkendteLejeaftaler";
     }
 
-
-
-
     @GetMapping("/godkendteLejeaftaler")
     public String godkendteLejeaftaler(Model model){
 
-
         model.addAttribute("isGodkendt", true);
         model.addAttribute("lejeaftaler", dataregService.seAlleGodkendte());
+
+
         return "alleLejeaftaler";
     }
 
@@ -92,6 +100,7 @@ public class AdminController {
     public String godkendteLejeaftaler(@RequestParam int nr, Model m, HttpServletRequest request){
         HttpSession session = request.getSession();
         m.addAttribute("lejeaftale", dataregService.vælgGodkendt(nr + 1));
+        m.addAttribute("isGodkendt", true);
 
         session.setAttribute("indexNummer", nr);
 

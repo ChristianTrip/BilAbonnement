@@ -27,7 +27,14 @@
             <td th:text="${obj.getAfhentningsSted()}"></td>
         </tr>
     </table>
-    <form method="POST" action="/tilfoejDB">
+
+    <form th:if="${!isGodkendt}" method="GET" action="/ikkeGodkendteLejeaftaler">
+        <button type="submit">Tilbage</button>
+    </form>
+    <form th:unless="${!isGodkendt}" method="GET" action="/godkendteLejeaftaler">
+        <button type="submit">Tilbage</button>
+    </form>
+    <form th:if="${!isGodkendt}" method="POST" action="/tilfoejDB">
         <button type="submit">Godkend</button>
     </form>
 </section>

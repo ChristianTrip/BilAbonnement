@@ -5,18 +5,21 @@ public class Prisoverslag {
     private int id;
     private int lejeaftaleId;
     private int abonnementsLængde;
+    private int kmPrMdr;
     private int totalPris;
 
-    public Prisoverslag(int id, int lejeaftaleId, int totalpris, int abonnementslaengde) {
+    public Prisoverslag(int id, int lejeaftaleId, int abonnementslaengde, int kmPrMdr) {
         this.id = id;
         this.lejeaftaleId = lejeaftaleId;
-        this.totalPris = totalpris;
         this.abonnementsLængde = abonnementslaengde;
+        this.kmPrMdr = kmPrMdr;
+        this.totalPris = 0;
     }
 
-    public Prisoverslag(int totalpris, int abonnementslaengde){
-        this.totalPris = totalpris;
+    public Prisoverslag(int abonnementslaengde, int kmPrMdr){
         this.abonnementsLængde = abonnementslaengde;
+        this.kmPrMdr = kmPrMdr;
+        this.totalPris = 0;
     }
 
     public int getId() {
@@ -33,6 +36,10 @@ public class Prisoverslag {
 
     public int getAbonnementsLængde() {
         return abonnementsLængde;
+    }
+
+    public int getKmPrMdr() {
+        return kmPrMdr;
     }
 
     public int getTotalPris() {

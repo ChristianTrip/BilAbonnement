@@ -271,11 +271,11 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
 
     private void insertPrisoverslag(Prisoverslag prisoverslag) {
         try{
-            String sql = "INSERT INTO prisoverslag(`lejeaftale_id`, `total_pris`, `abonnements_længde`) " +
+            String sql = "INSERT INTO prisoverslag(`lejeaftale_id`, `abonnements_længde`, `km_pr_mdr`) " +
                     "VALUES (" +
                     "'" + prisoverslag.getLejeaftaleId() + "', " +
-                    "'" + prisoverslag.getTotalPris() + "', " +
-                    "'" + prisoverslag.getAbonnementsLængde() + "');";
+                    "'" + prisoverslag.getAbonnementsLængde() + "', " +
+                    "'" + prisoverslag.getKmPrMdr() + "');";
 
 
             PreparedStatement stmt = conn.prepareStatement(sql);
@@ -433,10 +433,10 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
             while(rs.next()) {
                 int prisoverslag_id = rs.getInt(1);
                 int lejeaftale_id = rs.getInt(2);
-                int total_pris = rs.getInt(3);
-                int abonnements_længde = rs.getInt(4);
+                int abonnements_længde = rs.getInt(3);
+                int kmPrMdr = rs.getInt(4);
 
-                return new Prisoverslag(prisoverslag_id, lejeaftale_id, total_pris, abonnements_længde);
+                return new Prisoverslag(prisoverslag_id, lejeaftale_id, abonnements_længde, kmPrMdr);
             }
         }
         catch (SQLException e){
