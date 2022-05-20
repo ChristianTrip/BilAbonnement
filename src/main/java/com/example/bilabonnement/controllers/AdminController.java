@@ -27,8 +27,8 @@ public class AdminController {
 
     private DataregService dataregService = new DataregService();
     private ForretningsService forretningsService = new ForretningsService();
-    ArrayList<Lejeaftale> godkendteLejeaftaler;
-    ArrayList<Lejeaftale> ikkeGodkendteLejeaftaler;
+    private ArrayList<Lejeaftale> godkendteLejeaftaler;
+    private ArrayList<Lejeaftale> ikkeGodkendteLejeaftaler;
 
 
     @GetMapping("/admin")
@@ -89,7 +89,9 @@ public class AdminController {
     @GetMapping("/godkendteLejeaftaler")
     public String godkendteLejeaftaler(Model model){
 
-        godkendteLejeaftaler = dataregService.seAlleGodkendte();
+        if (godkendteLejeaftaler == null){
+            godkendteLejeaftaler = dataregService.seAlleGodkendte();
+        }
         int totalpris = forretningsService.udregnTotalPris(godkendteLejeaftaler);
 
         model.addAttribute("isGodkendt", true);
