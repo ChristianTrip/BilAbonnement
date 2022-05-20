@@ -11,10 +11,7 @@ import com.example.bilabonnement.utility.CSVWriter;
 import org.springframework.http.converter.json.GsonBuilderUtils;
 
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -23,6 +20,7 @@ import java.util.stream.Collectors;
 import static java.lang.Integer.parseInt;
 
 public class DataregService {
+
 
     private LejeaftaleRepo lejeaftaleRepo = new LejeaftaleRepo();
     private ArrayList<Lejeaftale> liste = new ArrayList<>();
@@ -65,10 +63,11 @@ public class DataregService {
 
         // Kunde
         try{
-
+/*
             try {
-                InputStream inputStream = new FileInputStream("src/main/resources/csv/kunde.csv");
+                InputStream inputStream = getClass().getResourceAsStream("/kunde.csv");
                 System.out.println(inputStream);
+                System.out.println(getClass());
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
                 String contents = bufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
                 System.out.println(contents);
@@ -78,6 +77,7 @@ public class DataregService {
                 System.out.println("it did not work");
             }
 
+ */
 
             reader.setSc("src/main/resources/csv/kunde.csv");
             currSc = reader.getSc();
