@@ -4,14 +4,18 @@ import com.example.bilabonnement.models.Lejeaftale;
 import com.example.bilabonnement.models.Mangel;
 import com.example.bilabonnement.models.Skade;
 import com.example.bilabonnement.models.Tilstandsrapport;
+import com.example.bilabonnement.repositories.LejeaftaleRepo;
 
 import java.util.ArrayList;
 
 public class SkaderegService {
+
+    private LejeaftaleRepo lejeaftaleRepo = new LejeaftaleRepo();
     private Tilstandsrapport rapport = new Tilstandsrapport();
 
+
     public ArrayList<Lejeaftale> getLejeaftaler(){
-        return new ArrayList<Lejeaftale>();
+        return (ArrayList<Lejeaftale>) lejeaftaleRepo.getAllEntities();
     }
 
     public void opretSkade(String navn, String beskrivelse, int pris){

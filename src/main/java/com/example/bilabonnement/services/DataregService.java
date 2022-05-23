@@ -8,15 +8,19 @@ import com.example.bilabonnement.models.prisoverslag.Prisoverslag;
 import com.example.bilabonnement.repositories.LejeaftaleRepo;
 import com.example.bilabonnement.utility.CSVReader;
 import com.example.bilabonnement.utility.CSVWriter;
+import org.springframework.http.converter.json.GsonBuilderUtils;
 
 
+import java.io.*;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import static java.lang.Integer.parseInt;
 
 public class DataregService {
+
 
     private LejeaftaleRepo lejeaftaleRepo = new LejeaftaleRepo();
     private ArrayList<Lejeaftale> liste = new ArrayList<>();
@@ -59,6 +63,22 @@ public class DataregService {
 
         // Kunde
         try{
+/*
+            try {
+                InputStream inputStream = getClass().getResourceAsStream("/kunde.csv");
+                System.out.println(inputStream);
+                System.out.println(getClass());
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                String contents = bufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
+                System.out.println(contents);
+            }
+            catch (NullPointerException e){
+                e.printStackTrace();
+                System.out.println("it did not work");
+            }
+
+ */
+
             reader.setSc("src/main/resources/csv/kunde.csv");
             currSc = reader.getSc();
             currSc.nextLine();
