@@ -12,6 +12,21 @@ body{
     background-color: #BFBD93;
 }*/
 
+.container1 {
+    width: 1200px;
+    margin: 0 auto;
+    /*outline: dashed 1px black;*/
+}
+
+.lejeaftaleInfo {
+    margin-bottom: 30px;
+}
+
+.centerDiv {
+    margin: 20px auto;
+
+}
+
 .tables {
     text-align: left;
     display: inline-block;
@@ -30,4 +45,12 @@ body{
 
 table, th, td {
     border: 1px solid black;
+}
+
+.firstDiv {
+    padding-right: 20px;
+}
+
+.secondDiv {
+    padding-left: 20px;
 }

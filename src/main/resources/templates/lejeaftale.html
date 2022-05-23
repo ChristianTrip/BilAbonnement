@@ -10,6 +10,7 @@
         <h2>Lejeaftale</h2>
 
         <section class="lejeaftaleInfo">
+
             <div class="tables">
                 <table class="tableFormatting">
                     <thead>
@@ -160,16 +161,26 @@
                 </table>
             </div>
 
+
+
             <div>
-                <form class="buttonFormatting" th:if="${!isGodkendt}" method="GET" action="/ikkeGodkendteLejeaftaler">
-                    <button type="submit">Tilbage</button>
-                </form>
-                <form class="buttonFormatting" th:unless="${!isGodkendt}" method="GET" action="/godkendteLejeaftaler">
-                    <button type="submit">Tilbage</button>
-                </form>
-                <form class="buttonFormatting" th:if="${!isGodkendt}" method="POST" action="/tilfoejDB">
-                    <button type="submit">Godkend</button>
-                </form>
+                <span th:if="${!isGodkendt}">
+                    <form class="buttonFormatting" method="GET" action="/ikkeGodkendteLejeaftaler">
+                        <button type="submit">Tilbage</button>
+                    </form>
+                    <form class="buttonFormatting" th:if="${!isGodkendt}" method="POST" action="/tilfoejDB">
+                        <button type="submit">Godkend</button>
+                    </form>
+                </span>
+
+                <span th:unless="${!isGodkendt}">
+                    <form class="buttonFormatting" method="GET" action="/godkendteLejeaftaler">
+                        <button type="submit">Tilbage</button>
+                    </form>
+                    <form class="buttonFormatting" method="POST" action="/godkendteLejeaftaler/lejeaftale/tilstandsrapport">
+                        <button type="submit">Tilføj tilstandsrapport</button>
+                    </form>
+                </span>
             </div>
         </section>
     </body>

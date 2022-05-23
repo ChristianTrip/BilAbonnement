@@ -7,47 +7,73 @@
     <link rel="stylesheet" th:href="@{style.css}" href="style.css">
 </head>
 <body>
-<h2>Alle lejeaftaler</h2>
+    <div class="container1">
+        <h2>Alle lejeaftaler</h2>
 
+        <section class="section2">
+                <span th:if="${!isGodkendt}">
+                    <table class="centerDiv">
+                        <tr>
+                            <th>oprettelsesdato</th>
+                            <th>Kunde cpr</th>
+                            <th>Bil stelnummer</th>
+                        </tr>
 
-<section class="section2">
+                        <form class="buttonFormatting" method="GET" action="/admin">
+                            <button type="submit">Tilbage</button>
+                        </form>
 
-    <table>
-        <tr>
-            <th>oprettelsesdato</th>
-            <th>Kunde cpr</th>
-            <th>Bil stelnummer</th>
+                        <tr th:each="lejeaftale,iter : ${igLejeaftaler}">
+                            <form method="POST" th:action="@{/ikkeGodkendteLejeaftaler/{aftaleNo}(aftaleNo = ${iter.index})}">
+                                <td th:text="${lejeaftale.getOprettelsesDato()}"></td>
+                                <td th:text="${lejeaftale.getKunde().getCpr()}"></td>
+                                <td th:text="${lejeaftale.getBil().getStelnummer()}"></td>
+                                <td><button type="submit">GO</button></td>
+                            </form>
+                        </tr>
+                    </table>
 
-        </tr>
-        <div>
-            <span th:if="${!isGodkendt}">
-                <tr th:each="lejeaftale,iter : ${igLejeaftaler}">
-                    <form method="POST" th:action="@{/ikkeGodkendteLejeaftaler/{aftaleNo}(aftaleNo = ${iter.index})}">
-                        <td th:text="${lejeaftale.getOprettelsesDato()}"></td>
-                        <td th:text="${lejeaftale.getKunde().getCpr()}"></td>
-                        <td th:text="${lejeaftale.getBil().getStelnummer()}"></td>
-                        <td><button type="submit">GO</button></td>
+                </span>
+
+                <span th:unless="${!isGodkendt}">
+                    <div class="lejeaftaleInfo">
+                        <div class="buttonFormatting">
+                            <div class="firstDiv">
+                                <h3>Samlet udlejningspris: </h3>
+                                <a th:text="${totalpris}"></a>
+                            </div>
+                        </div>
+
+                        <div class="buttonFormatting">
+                            <div class="secondDiv">
+                                <h3>Nuværende antal udlejede biler: </h3>
+                                <a th:text="${antalUdlejedeBiler}"></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form class="buttonFormatting" method="GET" action="/admin">
+                        <button type="submit">Tilbage</button>
                     </form>
-                </tr>
-            </span>
 
-            <span th:unless="${!isGodkendt}">
-                <tr th:each="lejeaftale,iter : ${lejeaftaler}">
-                    <form method="POST" th:action="@{/godkendteLejeaftaler/{aftaleNo}(aftaleNo = ${iter.index})}">
-                        <td th:text="${lejeaftale.getOprettelsesDato()}"></td>
-                        <td th:text="${lejeaftale.getKunde().getCpr()}"></td>
-                        <td th:text="${lejeaftale.getBil().getStelnummer()}"></td>
-                        <td><button type="submit">GO</button></td>
-                    </form>
-                </tr>
-                        <h2>Samlet udlejningspris: </h2>
-                    <a th:text="${totalpris}"></a>
-            </span>
-        </div>
-    </table>
-            <form class="buttonFormatting" method="GET" action="/admin">
-                <button type="submit">Tilbage</button>
-            </form>
-</section>
+                    <table class="centerDiv">
+                        <tr>
+                            <th>oprettelsesdato</th>
+                            <th>Kunde cpr</th>
+                            <th>Bil stelnummer</th>
+                        </tr>
+
+                        <tr th:each="lejeaftale,iter : ${lejeaftaler}">
+                            <form method="POST" th:action="@{/godkendteLejeaftaler/{aftaleNo}(aftaleNo = ${iter.index})}">
+                                <td th:text="${lejeaftale.getOprettelsesDato()}"></td>
+                                <td th:text="${lejeaftale.getKunde().getCpr()}"></td>
+                                <td th:text="${lejeaftale.getBil().getStelnummer()}"></td>
+                                <td><button type="submit">GO</button></td>
+                            </form>
+                        </tr>
+                    </table>
+                </span>
+        </section>
+    </div>
 </body>
 </html>
