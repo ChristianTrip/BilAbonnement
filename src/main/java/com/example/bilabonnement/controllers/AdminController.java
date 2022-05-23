@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 
+import static java.lang.Integer.parseInt;
+
 
 @Controller
 public class AdminController {
@@ -30,6 +32,7 @@ public class AdminController {
     ArrayList<Lejeaftale> godkendteLejeaftaler;
     ArrayList<Lejeaftale> ikkeGodkendteLejeaftaler;
 
+    private int currentNumber = 0;
 
     @GetMapping("/admin")
     public String home(){
@@ -92,10 +95,14 @@ public class AdminController {
         godkendteLejeaftaler = dataregService.seAlleGodkendte();
         int totalpris = forretningsService.udregnTotalPris(godkendteLejeaftaler);
 
+        int antalUdlejedeBiler = forretningsService.getCount();
+
         model.addAttribute("isGodkendt", true);
         model.addAttribute("lejeaftaler", godkendteLejeaftaler);
 
         model.addAttribute("totalpris", totalpris);
+
+        model.addAttribute("antalUdlejedeBiler", antalUdlejedeBiler);
 
         return "alleLejeaftaler";
     }
@@ -103,7 +110,22 @@ public class AdminController {
     @PostMapping("/godkendteLejeaftaler/{aftaleNo}")
     public String godkendteLejeaftaler(@PathVariable("aftaleNo") String nummer){
 
+        System.out.println(nummer);
+        currentNumber = parseInt(nummer);
+        System.out.println(nummer);
+
         return "redirect:/seLejeaftale?nr=" + nummer;
+    }
+
+    @PostMapping("/godkendteLejeaftaler/lejeaftale/tilstandsrapport")
+    public String opretTilstandsrapportTilLejeaftale(){
+
+        return "redirect:/godkendteLejeaftaler/" + currentNumber + "/tilstandsrapport";
+    }
+
+    @GetMapping("/godkendteLejeaftaler/{aftaleNo}/tilstandsrapport")
+    public String opretTilstandsrapportTilLejeaftale(@PathVariable("aftaleNo") int nummer) {
+        return "tilstandsrapport";
     }
 
     @GetMapping("/seLejeaftale")
