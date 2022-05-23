@@ -15,11 +15,12 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class IndexController {
 
-    @GetMapping("/")
+   @GetMapping("/")
     public String index(){
         System.out.println("inside index controller");
         return "index";
     }
+
 
 
     @PostMapping("/login")

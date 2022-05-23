@@ -60,9 +60,11 @@ public class Prisoverslag {
     @Override
     public String toString() {
         return "Prisoverslag{" +
-                "id=" + id +
-                ", abonnementsLængde=" + abonnementsLængde +
-                ", totalPris=" + totalPris +
-                '}';
+                "\nid = " + id +
+                "\nlejeaftaleId = " + lejeaftaleId +
+                "\nabonnementsLængde = " + abonnementsLængde +
+                "\nkmPrMdr = " + kmPrMdr +
+                "\ntotalPris = " + totalPris +
+                '}' + "\n";
     }
 }

@@ -47,12 +47,12 @@ public class BilRepo implements CRUDInterface<Bil> {
 
             while(rs.next()){
 
-                int bil_id = rs.getInt(1);
+                int lejeaftale_id = rs.getInt(1);
                 String bil_stelnummer = rs.getString(2);
                 String bil_navn = rs.getString(3);
                 String bil_model = rs.getString(4);
 
-                return new Bil(bil_id, bil_stelnummer, bil_navn, bil_model);
+                return new Bil(lejeaftale_id, bil_stelnummer, bil_navn, bil_model);
             }
 
         }
@@ -74,11 +74,12 @@ public class BilRepo implements CRUDInterface<Bil> {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()){
-                String stelnummer = rs.getString(1);
-                String navn = rs.getString(2);
-                String model = rs.getString(3);
+                int lejeAftaleId = rs.getInt(1);
+                String stelnummer = rs.getString(2);
+                String navn = rs.getString(3);
+                String model = rs.getString(4);
 
-                Bil bil = new Bil(stelnummer, navn, model);
+                Bil bil = new Bil(lejeAftaleId, stelnummer, navn, model);
 
                 biler.add(bil);
             }
@@ -134,10 +135,13 @@ public class BilRepo implements CRUDInterface<Bil> {
     }
 
 
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
         BilRepo bil = new BilRepo();
 
+        System.out.println(bil.getAllEntities());
         //Testing
+
+        /*
 
         //Create
         //bil.create(new Bil("2jkh32hj", "Bentley", "F67"));
@@ -162,7 +166,7 @@ public class BilRepo implements CRUDInterface<Bil> {
         //deleteById
         //bil.deleteById(1);
 
-
-    }*/
+*/
+    }
 
 }

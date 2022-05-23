@@ -23,6 +23,11 @@ public class Skade {
         this.pris = pris;
     }
 
+
+    public void setTilstandsRapportId(int tilstandsRapportId) {
+        this.tilstandsRapportId = tilstandsRapportId;
+    }
+
     public int getId() {
         return id;
     }
@@ -41,5 +46,16 @@ public class Skade {
 
     public int getPris() {
         return pris;
+    }
+
+    @Override
+    public String toString() {
+        return "Skade{" +
+                "id=" + id +
+                ", tilstandsRapportId=" + tilstandsRapportId +
+                ", navn='" + navn + '\'' +
+                ", beskrivelse='" + beskrivelse + '\'' +
+                ", pris=" + pris +
+                '}';
     }
 }

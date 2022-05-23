@@ -69,7 +69,7 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
             prisoverslag.setLejeaftaleId(lejeaftaleId);
             allIsWell = insertPrisoverslag(prisoverslag);
 
-            Tilstandsrapport tilstandsrapport = new Tilstandsrapport();
+            Tilstandsrapport tilstandsrapport = new Tilstandsrapport(lejeaftaleId);
             tilstandsrapport.setLejeaftaleId(lejeaftaleId);
             allIsWell = insertTilstandsrapport(tilstandsrapport);
 
@@ -143,7 +143,33 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
 
     @Override
     public boolean update(Lejeaftale lejeaftale) {
-        return false;
+       /* try{
+            conn = DatabaseConnectionManager.getConnection();
+            String sql =    "UPDATE lejeaftaler " +
+                    "SET " +
+                    "for_navn = '" + kunde.getFornavn()         + "', " +
+                    "efter_navn = '" + kunde.getEfternavn()     + "', " +
+                    "adresse = '" + kunde.getAdresse()          + "', " +
+                    "post_nummer = '" + kunde.getPostnummer()   + "', " +
+                    "by_navn = '" + kunde.getBy()               + "', " +
+                    "email = '" + kunde.getEmail()              + "', " +
+                    "mobil = '" + kunde.getMobil()              + "', " +
+                    "cpr = '" + kunde.getCpr()                  + "', " +
+                    "reg_nummer = '" + kunde.getRegNummer()     + "', " +
+                    "konto_nummer = '" + kunde.getKontoNummer() + "' " +
+                    "WHERE cpr = " + kunde.getCpr() + ";";
+
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.executeUpdate();
+
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            System.out.println("Kunne ikke updatere kunde med cpr nummer: " + kunde.getCpr());
+            return false;
+        }*/
+
+        return true;
     }
 
     @Override
@@ -391,10 +417,10 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
 
 
                 if (is_limited){
-                    return new LimitedAbonnement(abonnement_id, lav_selvrisiko, valgt_farve);
+                    return new LimitedAbonnement(abonnement_id, lejeaftaleId, lav_selvrisiko, valgt_farve);
                 }
                 else{
-                    return new UnlimitedAbonnement(abonnement_id, lejeperiode_mdr, lav_selvrisiko, afleveringsforsikring, valgt_farve);
+                    return new UnlimitedAbonnement(abonnement_id, lejeaftaleId, lejeperiode_mdr, lav_selvrisiko, afleveringsforsikring, valgt_farve);
                 }
 
             }
@@ -488,11 +514,11 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
 
         Kunde kunde = new Kunde("John", "Andersen", "Holmbladsgade 30", "2300", "Kbh S", "Johnandersen@mail.dk", "12345678", "0910883485", "1234", "1234567890");
         Bil bil = new Bil("ZW00003344KL", "Fiat", "grand");
-        Tilstandsrapport tilstandsrapport = new Tilstandsrapport();
+
         Abonnement abonnement = new LimitedAbonnement(true, true);
         Prisoverslag prisoverslag = new Prisoverslag(3, 4000, 6999);
         AfhentningsSted afhentningsSted = new AfhentningsSted("Lergravsvej 3", "2300", "København S", 300);
-        Lejeaftale lejeaftale = new Lejeaftale(kunde, bil, tilstandsrapport, abonnement, prisoverslag, afhentningsSted);
+        Lejeaftale lejeaftale = new Lejeaftale(kunde, bil, null, abonnement, prisoverslag, afhentningsSted);
 
 
 

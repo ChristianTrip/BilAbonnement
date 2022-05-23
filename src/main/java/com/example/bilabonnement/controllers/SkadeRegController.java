@@ -34,7 +34,7 @@ public class SkadeRegController {
         return lejeaftale;
     }
 
- */
+*/
 
 
 
