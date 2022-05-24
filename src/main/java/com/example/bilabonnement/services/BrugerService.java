@@ -10,7 +10,7 @@ public class BrugerService {
 
 
 
-    private Bruger validateUserinfo(String brugernavn, String adgangskode) {
+    public Bruger validateUserinfo(String brugernavn, String adgangskode) {
 
         ArrayList<Bruger> brugere = (ArrayList<Bruger>) new BrugerRepo().getAllEntities();
 

@@ -1,6 +1,7 @@
 package com.example.bilabonnement.controllers;
 
 import com.example.bilabonnement.models.Lejeaftale;
+import com.example.bilabonnement.models.brugere.Bruger;
 import com.example.bilabonnement.models.brugere.BrugerType;
 import com.example.bilabonnement.services.DataregService;
 import com.example.bilabonnement.services.ForretningsService;
@@ -10,73 +11,76 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Map;
 
 import static java.lang.Integer.parseInt;
 
-
 @Controller
-public class AdminController {
-
-    /*
-    Kan se alle leje aftaler
-    Kan rediegre i alle lejeaftaler - slette, oprette, updatere
-    Kan oprette en tilstandsrapport til en lejeaftale
-    Skal kunne se den samlede pris for alle lejeaftaler
-
-
-
-    /admin
-    session brugere
-    Deployed app læser ikke databsen og csv filer
-    css læses ikke
-     */
-
-
+public class LejeaftalerController {
 
     private DataregService dataregService = new DataregService();
     private ForretningsService forretningsService = new ForretningsService();
     private ArrayList<Lejeaftale> godkendteLejeaftaler;
     private ArrayList<Lejeaftale> ikkeGodkendteLejeaftaler;
 
+
     private HttpSession session;
+    private Bruger currentUser;
+    private BrugerType brugerType;
 
-    private int currentNumber = 0;
 
+    private int currentNumber;
 
-    @GetMapping("/admin")
-    public String home(HttpServletRequest request){
+    @GetMapping("/login/success")
+    public String getSuccess(HttpServletRequest request) {
 
-      /*
-        session = request.getSession();
+        Map<String, ?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
 
-        if (session.getAttribute("admin") == BrugerType.ADMIN){
+        if (inputFlashMap != null) {
+            currentUser = (Bruger) inputFlashMap.get("bruger");
+            brugerType = currentUser.getBrugerType();
+            session = request.getSession();
+            System.out.println(currentUser.getNavn() + " er nu logget ind som " + brugerType + " bruger");
             return "admin";
         }
-        return "redirect:/";
-
-        */
-        return "admin";
+        else {
+            return "redirect:/login/submit";
+        }
     }
 
-  /*
-    @GetMapping("logUd")
+    @GetMapping("/logUd")
     public String logUd(){
         session.invalidate();
+        System.out.println(currentUser.getNavn() + " er nu logget ud");
         return "index";
     }
 
     @GetMapping("/alleLejeaftaler")
-    public String alleLejeaftaler(Model model){
+    public String alleLejeaftaler(Model model, HttpServletRequest request){
+
+        session = request.getSession();
+
+        if (session == null){
+            return "redirect:/";
+        }
+
         model.addAttribute("isGodkendt", false);
         return "alleLejeaftaler";
     }
 
     @GetMapping("/ikkeGodkendteLejeaftaler")
-    public String seAlleLejeaftaler(Model model){
+    public String seAlleLejeaftaler(Model model, HttpServletRequest request){
+
+        session = request.getSession();
+
+        if (session == null){
+            return "redirect:/";
+        }
 
         ikkeGodkendteLejeaftaler = dataregService.læscsv();
 
@@ -94,7 +98,13 @@ public class AdminController {
 
     @GetMapping("/visLejeaftale")
     public String testLeje(@RequestParam int nr, Model m, HttpServletRequest request){
-        HttpSession session = request.getSession();
+
+        session = request.getSession();
+
+        if (session == null){
+            return "redirect:/";
+        }
+
         m.addAttribute("lejeaftale", ikkeGodkendteLejeaftaler.get(nr));
         m.addAttribute("isGodkendt", false);
 
@@ -116,7 +126,7 @@ public class AdminController {
     @GetMapping("/godkendteLejeaftaler")
     public String godkendteLejeaftaler(Model model, HttpServletRequest request){
 
-        session = request.getSession(false);
+        session = request.getSession();
 
         if (session == null){
             return "redirect:/";
@@ -129,11 +139,11 @@ public class AdminController {
 
         int antalUdlejedeBiler = forretningsService.getCount();
 
-       *//* boolean isSkadeRegBruger = true;
+       /* boolean isSkadeRegBruger = true;
 
 
         model.addAttribute("isSkadeRegBruger", false);
-*//*
+*/
         model.addAttribute("isGodkendt", true);
         model.addAttribute("lejeaftaler", godkendteLejeaftaler);
 
@@ -163,12 +173,18 @@ public class AdminController {
 
     @GetMapping("/godkendteLejeaftaler/{aftaleNo}/tilstandsrapport")
     public String opretTilstandsrapportTilLejeaftale(@PathVariable("aftaleNo") int nummer) {
+
         return "tilstandsrapport";
     }
 
     @GetMapping("/seLejeaftale")
     public String godkendteLejeaftaler(@RequestParam int nr, Model m, HttpServletRequest request){
-        HttpSession session = request.getSession();
+
+        session = request.getSession();
+
+        if (session == null){
+            return "redirect:/";
+        }
         //m.addAttribute("lejeaftale", dataregService.vælgGodkendt(nr + 1));
         m.addAttribute("lejeaftale", godkendteLejeaftaler.get(nr));
         m.addAttribute("isGodkendt", true);
@@ -177,8 +193,6 @@ public class AdminController {
 
         return "lejeaftale";
     }
-
-*/
 
 
 }
