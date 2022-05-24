@@ -157,8 +157,8 @@ public class AdminController {
 
     @PostMapping("/godkendteLejeaftaler/lejeaftale/tilstandsrapport")
     public String opretTilstandsrapportTilLejeaftale(){
-
-        return "redirect:/godkendteLejeaftaler/" + currentNumber + "/tilstandsrapport";
+        return "tilstandsrapport";
+        /*return "redirect:/godkendteLejeaftaler/" + currentNumber + "/tilstandsrapport";*/
     }
 
     @GetMapping("/godkendteLejeaftaler/{aftaleNo}/tilstandsrapport")
