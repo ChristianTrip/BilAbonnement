@@ -1,6 +1,5 @@
 package com.example.bilabonnement.repositories;
 
-import com.example.bilabonnement.models.Mangel;
 import com.example.bilabonnement.models.Skade;
 import com.example.bilabonnement.utility.DatabaseConnectionManager;
 

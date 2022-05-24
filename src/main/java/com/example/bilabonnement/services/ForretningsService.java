@@ -9,6 +9,10 @@ import java.util.ArrayList;
 public class ForretningsService {
     //private CRUDInterface<Lejeaftale> lejeRepo = new LejeaftaleRepo();
 
+
+    public ForretningsService() {
+    }
+
     public ArrayList<Bil> seUdlejedeBiler(){
         return null;
     }

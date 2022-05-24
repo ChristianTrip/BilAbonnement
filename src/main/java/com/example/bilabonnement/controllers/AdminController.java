@@ -1,6 +1,7 @@
 package com.example.bilabonnement.controllers;
 
 import com.example.bilabonnement.models.Lejeaftale;
+import com.example.bilabonnement.models.brugere.BrugerType;
 import com.example.bilabonnement.services.DataregService;
 import com.example.bilabonnement.services.ForretningsService;
 import org.springframework.stereotype.Controller;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -26,6 +26,13 @@ public class AdminController {
     Kan rediegre i alle lejeaftaler - slette, oprette, updatere
     Kan oprette en tilstandsrapport til en lejeaftale
     Skal kunne se den samlede pris for alle lejeaftaler
+
+
+
+    /admin
+    session brugere
+    Deployed app læser ikke databsen og csv filer
+    css læses ikke
      */
 
     private DataregService dataregService = new DataregService();
@@ -33,15 +40,22 @@ public class AdminController {
     private ArrayList<Lejeaftale> godkendteLejeaftaler;
     private ArrayList<Lejeaftale> ikkeGodkendteLejeaftaler;
 
+    private HttpSession session;
+
     private int currentNumber = 0;
 
     @GetMapping("/admin")
-    public String home(){
-        return "admin";
+    public String home(HttpServletRequest request){
+        session = request.getSession();
+
+        if (session.getAttribute("admin") == BrugerType.ADMIN){
+            return "admin";
+        }
+        return "redirect:/";
     }
 
     @GetMapping("logUd")
-    public String logUd(HttpSession session){
+    public String logUd(){
         session.invalidate();
         return "index";
     }
@@ -91,7 +105,13 @@ public class AdminController {
     }
 
     @GetMapping("/godkendteLejeaftaler")
-    public String godkendteLejeaftaler(Model model){
+    public String godkendteLejeaftaler(Model model, HttpServletRequest request){
+
+        HttpSession session = request.getSession(false);
+
+        if (session == null){
+            return "redirect:/";
+        }
 
         if (godkendteLejeaftaler == null){
             godkendteLejeaftaler = dataregService.seAlleGodkendte();
@@ -100,12 +120,18 @@ public class AdminController {
 
         int antalUdlejedeBiler = forretningsService.getCount();
 
+       /* boolean isSkadeRegBruger = true;
+
+
+        model.addAttribute("isSkadeRegBruger", false);
+*/
         model.addAttribute("isGodkendt", true);
         model.addAttribute("lejeaftaler", godkendteLejeaftaler);
 
         model.addAttribute("totalpris", totalpris);
 
         model.addAttribute("antalUdlejedeBiler", antalUdlejedeBiler);
+
 
         return "alleLejeaftaler";
     }
@@ -142,5 +168,8 @@ public class AdminController {
 
         return "lejeaftale";
     }
+
+
+
 
 }

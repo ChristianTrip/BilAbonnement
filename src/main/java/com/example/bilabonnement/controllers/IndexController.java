@@ -32,9 +32,11 @@ public class IndexController {
         String adgangskode = request.getParameter("adgangskode");
 
 
-       /* BrugerType brugerType = bs.determineBrugertype(brugernavn, adgangskode);
+       BrugerType brugerType = bs.determineBrugertype(brugernavn, adgangskode);
+
 
             if(brugerType.equals(BrugerType.ADMIN)) {
+                session.setAttribute("admin", brugerType);
                 return "redirect:/admin";
             }
             else if(brugerType.equals(BrugerType.DATAREG)) {
@@ -49,7 +51,7 @@ public class IndexController {
                 System.out.println("skadereg");
                 return "redirect:/skadeRegBruger";
             }
-        return "index";*/
-        return "redirect:/admin";
+
+        return "redirect:/";
     }
 }

@@ -143,6 +143,16 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
 
     @Override
     public boolean update(Lejeaftale lejeaftale) {
+
+
+        Bil bil = lejeaftale.getBil();
+        Kunde kunde = lejeaftale.getKunde();
+        Abonnement abonnement = lejeaftale.getAbonnement();
+        AfhentningsSted afhentningsSted = lejeaftale.getAfhentningsSted();
+        Tilstandsrapport tilstandsrapport = lejeaftale.getTilstandsrapport();
+        Prisoverslag prisoverslag = lejeaftale.getPrisoverslag();
+
+
        /* try{
             conn = DatabaseConnectionManager.getConnection();
             String sql =    "UPDATE lejeaftaler " +
@@ -417,10 +427,10 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
 
 
                 if (is_limited){
-                    return new LimitedAbonnement(abonnement_id, lejeaftaleId, lav_selvrisiko, valgt_farve);
+                    return new LimitedAbonnement(abonnement_id, lejeaftale_id, lav_selvrisiko, valgt_farve);
                 }
                 else{
-                    return new UnlimitedAbonnement(abonnement_id, lejeaftaleId, lejeperiode_mdr, lav_selvrisiko, afleveringsforsikring, valgt_farve);
+                    return new UnlimitedAbonnement(abonnement_id, lejeaftale_id, lejeperiode_mdr, lav_selvrisiko, afleveringsforsikring, valgt_farve);
                 }
 
             }
@@ -448,7 +458,7 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
                 String by_navn = rs.getString(5);
                 int levering = rs.getInt(6);
 
-                return new AfhentningsSted(afhentningssted_id, adresse, post_nummer, by_navn, levering);
+                return new AfhentningsSted(afhentningssted_id, lejeaftale_id, adresse, post_nummer, by_navn, levering);
             }
         }
         catch (SQLException e){
