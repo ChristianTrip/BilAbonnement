@@ -10,6 +10,15 @@ public class AfhentningsSted {
     private final int leveringspris;
 
 
+    public AfhentningsSted(int id, int lejeaftaleId, String adresse, String postnummer, String by, int leveringspris) {
+        this.id = id;
+        this.lejeaftaleId = lejeaftaleId;
+        this.adresse = adresse;
+        this.postnummer = postnummer;
+        this.by = by;
+        this.leveringspris = leveringspris;
+    }
+
     public AfhentningsSted(int id, String adresse, String postnummer, String by, int leveringspris) {
         this.id = id;
         this.adresse = adresse;
@@ -56,10 +65,12 @@ public class AfhentningsSted {
     @Override
     public String toString() {
         return "AfhentningsSted{" +
-                "adresse='" + adresse + '\'' +
-                ", postNummer=" + postnummer +
-                ", by='" + by + '\'' +
-                ", levering=" + leveringspris +
-                '}';
+                "\nid = " + id +
+                "\nlejeaftaleId = " + lejeaftaleId +
+                "\nadresse = '" + adresse + '\'' +
+                "\npostnummer = '" + postnummer + '\'' +
+                "\nby = '" + by + '\'' +
+                "\nleveringspris = " + leveringspris +
+                '}' +"\n";
     }
 }

@@ -1,9 +1,6 @@
 package com.example.bilabonnement.repositories;
 
-import com.example.bilabonnement.models.Kunde;
-import com.example.bilabonnement.models.Mangel;
-import com.example.bilabonnement.models.Skade;
-import com.example.bilabonnement.models.Tilstandsrapport;
+import com.example.bilabonnement.models.*;
 import com.example.bilabonnement.utility.DatabaseConnectionManager;
 
 import java.sql.Connection;
@@ -32,6 +29,20 @@ public class TilstandsRapportRepo implements CRUDInterface<Tilstandsrapport>{
             conn = DatabaseConnectionManager.getConnection();
             stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
+
+            int tilstandsrapportId = getLastIndex();
+
+            for (Mangel mangel : tilstandsrapport.getMangler()) {
+                mangel.setTilstandsRapportId(tilstandsrapportId);
+                insertMangel(mangel);
+            }
+
+            for (Skade skade : tilstandsrapport.getSkader()) {
+                skade.setTilstandsRapportId(tilstandsrapportId);
+                insertSkade(skade);
+            }
+
+
             return true;
         }
         catch (SQLException e){
@@ -57,7 +68,10 @@ public class TilstandsRapportRepo implements CRUDInterface<Tilstandsrapport>{
                 int lejeaftale_id = rs.getInt(2);
 
 
-                return new Tilstandsrapport(tilstandsrapport_id, lejeaftale_id);
+                ArrayList<Mangel> mangler = getMangler(id);
+                ArrayList<Skade> skader = getSkader(id);
+
+                return new Tilstandsrapport(tilstandsrapport_id, lejeaftale_id, mangler, skader);
             }
         }
         catch (SQLException e){
@@ -93,24 +107,32 @@ public class TilstandsRapportRepo implements CRUDInterface<Tilstandsrapport>{
     @Override
     public boolean update(Tilstandsrapport tilstandsrapport) {
 
-        int id = tilstandsrapport.getId();
+        /*try{
+            Connection conn = DatabaseConnectionManager.getConnection();
+            String sql =    "UPDATE tilstandsrapporter " +
+                    "SET " +
+                    "for_navn = '" + kunde.getFornavn()         + "', " +
+                    "efter_navn = '" + kunde.getEfternavn()     + "', " +
+                    "adresse = '" + kunde.getAdresse()          + "', " +
+                    "post_nummer = '" + kunde.getPostnummer()   + "', " +
+                    "by_navn = '" + kunde.getBy()               + "', " +
+                    "email = '" + kunde.getEmail()              + "', " +
+                    "mobil = '" + kunde.getMobil()              + "', " +
+                    "cpr = '" + kunde.getCpr()                  + "', " +
+                    "reg_nummer = '" + kunde.getRegNummer()     + "', " +
+                    "konto_nummer = '" + kunde.getKontoNummer() + "' " +
+                    "WHERE cpr = " + kunde.getCpr() + ";";
 
-        try{
-           deleteAllMangler(id);
-           deleteAllSkader(id);
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.executeUpdate();
 
-            for (Mangel mangel : tilstandsrapport.getMangler()) {
-                mangelRepo.create(mangel);
-            }
-            for (Skade skade : tilstandsrapport.getSkader()) {
-                skadeRepo.create(skade);
-            }
+
             return true;
         }
         catch (Exception e){
             e.printStackTrace();
             System.out.println("Kunne ikke opdatere tilstandsrapport med id " + tilstandsrapport.getId());
-        }
+        }*/
         return false;
     }
 
@@ -133,41 +155,129 @@ public class TilstandsRapportRepo implements CRUDInterface<Tilstandsrapport>{
         return true;
     }
 
-    private void deleteAllMangler(int tilstandsRapportId){
-        for (Mangel mangel : mangelRepo.getAllEntities()) {
-            if (mangel.getTilstandsRapportId() == tilstandsRapportId){
-                mangelRepo.deleteById(mangel.getTilstandsRapportId());
+    private int getLastIndex(){
+
+        try {
+            String sql = "SELECT LAST_INSERT_ID();";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+
+            while(rs.next()){
+                return rs.getInt(1);
             }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+
+        return -1;
     }
 
-    private void deleteAllSkader(int tilstandsRapportId){
-        for (Skade skade : skadeRepo.getAllEntities()) {
-            if (skade.getTilstandsRapportId() == tilstandsRapportId){
-                skadeRepo.deleteById(skade.getTilstandsRapportId());
-            }
+
+    private boolean insertSkade(Skade skade){
+
+        try{
+            String sql = "INSERT IGNORE skader(`tilstandsrapport_id`, `skade_navn`, `skade_beskrivelse`, `skade_pris`) " +
+                    "VALUES (" +
+                    "'" + skade.getTilstandsRapportId() + "', " +
+                    "'" + skade.getNavn() + "', " +
+                    "'" + skade.getBeskrivelse() + "', " +
+                    "'" + skade.getPris() + "');";
+
+            stmt = conn.prepareStatement(sql);
+            stmt.executeUpdate();
+            return true;
         }
+        catch (SQLException e){
+            e.printStackTrace();
+            System.out.println("Kunne ikke oprette skade med tilstandsrapport Id " + skade.getTilstandsRapportId() + " i databasen");
+        }
+        return false;
     }
 
-    private ArrayList<Mangel> getMangler(int tilstandsRapportId){
-        ArrayList<Mangel> mangler = new ArrayList<>();
-        for (Mangel mangel : mangelRepo.getAllEntities()) {
-            if (mangel.getTilstandsRapportId() == tilstandsRapportId){
-                mangler.add(mangel);
-            }
+
+    private boolean insertMangel(Mangel mangel){
+
+        try{
+            String sql = "INSERT IGNORE mangler(`tilstandsrapport_id`, `mangel_navn`, `mangel_beskrivelse`, `mangel_pris`) " +
+                    "VALUES (" +
+                    "'" + mangel.getTilstandsRapportId() + "', " +
+                    "'" + mangel.getNavn() + "', " +
+                    "'" + mangel.getBeskrivelse() + "', " +
+                    "'" + mangel.getPris() + "');";
+
+            stmt = conn.prepareStatement(sql);
+            stmt.executeUpdate();
+            return true;
         }
-        return mangler;
+        catch (SQLException e){
+            e.printStackTrace();
+            System.out.println("Kunne ikke oprette mangel med tilstandsrapport Id " + mangel.getTilstandsRapportId() + " i databasen");
+        }
+        return false;
     }
 
-    private ArrayList<Skade> getSkader(int tilstandsRapportId){
+
+    private ArrayList<Skade> getSkader(int tilstandsrapportId) {
+
         ArrayList<Skade> skader = new ArrayList<>();
-        for (Skade skade : skadeRepo.getAllEntities()) {
-            if (skade.getTilstandsRapportId() == tilstandsRapportId){
-                skader.add(skade);
+
+        try {
+            String sql = "SELECT * FROM skader WHERE tilstandsrapport_id = '" + tilstandsrapportId + "';";
+
+            stmt = conn.prepareStatement(sql);
+            rs = stmt.executeQuery();
+
+            while(rs.next()) {
+                int skade_id = rs.getInt(1);
+                int tilstandsrapport_id = rs.getInt(2);
+                String skade_navn = rs.getString(3);
+                String skade_beskrivelse = rs.getString(4);
+                int skade_pris = rs.getInt(5);
+
+                skader.add(new Skade(skade_id, tilstandsrapport_id, skade_navn, skade_beskrivelse, skade_pris));
             }
+
+            return skader;
         }
-        return skader;
+        catch (SQLException e){
+            e.printStackTrace();
+            System.out.println("Kunne ikke finde skade tilhørende tilstandsrapport id: " + tilstandsrapportId);
+        }
+        return null;
     }
+
+    private ArrayList<Mangel> getMangler(int tilstandsrapportId) {
+
+        ArrayList<Mangel> mangler = new ArrayList<>();
+
+        try {
+            String sql = "SELECT * FROM mangler WHERE tilstandsrapport_id = '" + tilstandsrapportId + "';";
+
+            stmt = conn.prepareStatement(sql);
+            rs = stmt.executeQuery();
+
+            while(rs.next()) {
+                int mangel_id = rs.getInt(1);
+                int tilstandsrapport_id = rs.getInt(2);
+                String mangel_navn = rs.getString(3);
+                String mangel_beskrivelse = rs.getString(4);
+                int mangel_pris = rs.getInt(5);
+
+                mangler.add(new Mangel(mangel_id, tilstandsrapport_id, mangel_navn, mangel_beskrivelse, mangel_pris));
+            }
+
+            return mangler;
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            System.out.println("Kunne ikke finde skade tilhørende tilstandsrapport id: " + tilstandsrapportId);
+        }
+        return null;
+    }
+
+
+
 
     public static void main(String[] args) {
         TilstandsRapportRepo repo = new TilstandsRapportRepo();
@@ -176,9 +286,10 @@ public class TilstandsRapportRepo implements CRUDInterface<Tilstandsrapport>{
         ArrayList<Mangel> mangler = new ArrayList<>();
         skader.add(new Skade("flækket rude", "Bagruden er flæket i højre side, kræver udskiftning", 1000));
         mangler.add(new Mangel("Fodunderlag", "underlaget ved højre passagersæde mangler", 500));
-        Tilstandsrapport tilstandsrapport = new LejeaftaleRepo().getSingleEntityById(1).getTilstandsrapport();
+        Tilstandsrapport tilstandsrapport = new Tilstandsrapport(1);
         tilstandsrapport.setSkade(skader);
         tilstandsrapport.setMangel(mangler);
+        //repo.create(tilstandsrapport);
 
 
         System.out.println(repo.getAllEntities());

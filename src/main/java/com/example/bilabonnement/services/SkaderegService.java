@@ -11,8 +11,12 @@ import java.util.ArrayList;
 public class SkaderegService {
 
     private LejeaftaleRepo lejeaftaleRepo = new LejeaftaleRepo();
-    private Tilstandsrapport rapport = new Tilstandsrapport();
+    private Tilstandsrapport rapport;
 
+
+    public void setRapport(int lejeaftaleId){
+        rapport = lejeaftaleRepo.getSingleEntityById(lejeaftaleId).getTilstandsrapport();
+    }
 
     public ArrayList<Lejeaftale> getLejeaftaler(){
         return (ArrayList<Lejeaftale>) lejeaftaleRepo.getAllEntities();

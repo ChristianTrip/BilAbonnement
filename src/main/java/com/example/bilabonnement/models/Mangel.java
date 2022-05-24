@@ -22,6 +22,15 @@ public class Mangel {
         this.pris = pris;
     }
 
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setTilstandsRapportId(int tilstandsRapportId) {
+        this.tilstandsRapportId = tilstandsRapportId;
+    }
+
     public int getId() {
         return id;
     }
@@ -40,5 +49,16 @@ public class Mangel {
 
     public int getPris() {
         return pris;
+    }
+
+    @Override
+    public String toString() {
+        return "Mangel{" +
+                "id=" + id +
+                ", tilstandsRapportId=" + tilstandsRapportId +
+                ", navn='" + navn + '\'' +
+                ", beskrivelse='" + beskrivelse + '\'' +
+                ", pris=" + pris +
+                '}';
     }
 }

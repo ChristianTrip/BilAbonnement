@@ -4,10 +4,12 @@ public class LimitedAbonnement extends Abonnement{
 
 
 
-    public LimitedAbonnement(int id, boolean selvRisiko, boolean valgtFarve) {
-        super(id, selvRisiko, valgtFarve);
+    public LimitedAbonnement(int id, int lejeaftaleId, boolean selvRisiko, boolean valgtFarve) {
+        super(id, lejeaftaleId, selvRisiko, valgtFarve);
         super.lejeperiodeMdr = 4;
     }
+
+
 
     public LimitedAbonnement(boolean selvRisiko, boolean valgtFarve){
         super.lavSelvrisiko = selvRisiko;
@@ -18,9 +20,10 @@ public class LimitedAbonnement extends Abonnement{
     @Override
     public String toString() {
         return "LimitedAbonnement{" +
-                "id=" + id +
-                ", lavSelvrisiko=" + lavSelvrisiko +
-                ", lejeperiodeMdr=" + lejeperiodeMdr +
-                '}';
+                "\nid = " + id +
+                "\nlejeaftaleId = " + lejeaftaleId +
+                "\nlavSelvrisiko = " + lavSelvrisiko +
+                "\nlejeperiodeMdr = " + lejeperiodeMdr +
+                '}' + "\n";
     }
 }

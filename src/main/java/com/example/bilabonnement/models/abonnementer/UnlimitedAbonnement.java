@@ -3,8 +3,8 @@ package com.example.bilabonnement.models.abonnementer;
 public class UnlimitedAbonnement extends Abonnement{
 
 
-    public UnlimitedAbonnement(int id, int abonnementsLængde, boolean selvRisiko, boolean afleveringsForsikring, boolean valgtFarve) {
-        super(id,selvRisiko, valgtFarve);
+    public UnlimitedAbonnement(int id, int lejeaftaleId, int abonnementsLængde, boolean selvRisiko, boolean afleveringsForsikring, boolean valgtFarve) {
+        super(id,lejeaftaleId, selvRisiko, valgtFarve);
         super.lejeperiodeMdr = abonnementsLængde;
         super.afleveringsforsikring = afleveringsForsikring;
     }
@@ -19,10 +19,11 @@ public class UnlimitedAbonnement extends Abonnement{
     @Override
     public String toString() {
         return "UnlimitedAbonnement{" +
-                "id=" + id +
-                ", lavSelvrisiko=" + lavSelvrisiko +
-                ", lejeperiodeMdr=" + lejeperiodeMdr +
-                ", afleveringsForsikring=" + afleveringsforsikring +
-                '}';
+                "\nid = " + id +
+                "\nlejeaftaleId = " + lejeaftaleId +
+                "\nlavSelvrisiko = " + lavSelvrisiko +
+                "\nlejeperiodeMdr = " + lejeperiodeMdr +
+                "\nafleveringsForsikring = " + afleveringsforsikring +
+                '}' + "\n";
     }
 }

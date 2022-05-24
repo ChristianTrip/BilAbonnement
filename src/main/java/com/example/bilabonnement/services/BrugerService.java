@@ -8,10 +8,10 @@ import java.util.ArrayList;
 
 public class BrugerService {
 
-    public BrugerService() {
-    }
+
 
     private Bruger validateUserinfo(String brugernavn, String adgangskode) {
+
         ArrayList<Bruger> brugere = (ArrayList<Bruger>) new BrugerRepo().getAllEntities();
 
         for (Bruger bruger : brugere) {

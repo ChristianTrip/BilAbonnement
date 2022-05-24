@@ -1,6 +1,7 @@
 package com.example.bilabonnement.controllers;
 
 import com.example.bilabonnement.models.Lejeaftale;
+import com.example.bilabonnement.models.brugere.BrugerType;
 import com.example.bilabonnement.services.DataregService;
 import com.example.bilabonnement.services.ForretningsService;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 
+import static java.lang.Integer.parseInt;
+
 
 @Controller
 public class AdminController {
@@ -23,6 +26,13 @@ public class AdminController {
     Kan rediegre i alle lejeaftaler - slette, oprette, updatere
     Kan oprette en tilstandsrapport til en lejeaftale
     Skal kunne se den samlede pris for alle lejeaftaler
+
+
+
+    /admin
+    session brugere
+    Deployed app læser ikke databsen og csv filer
+    css læses ikke
      */
 
     private DataregService dataregService = new DataregService();
@@ -30,14 +40,22 @@ public class AdminController {
     private ArrayList<Lejeaftale> godkendteLejeaftaler;
     private ArrayList<Lejeaftale> ikkeGodkendteLejeaftaler;
 
+    private HttpSession session;
+
+    private int currentNumber = 0;
 
     @GetMapping("/admin")
-    public String home(){
-        return "admin";
+    public String home(HttpServletRequest request){
+        session = request.getSession();
+
+        if (session.getAttribute("admin") == BrugerType.ADMIN){
+            return "admin";
+        }
+        return "redirect:/";
     }
 
     @GetMapping("logUd")
-    public String logUd(HttpSession session){
+    public String logUd(){
         session.invalidate();
         return "index";
     }
@@ -87,17 +105,33 @@ public class AdminController {
     }
 
     @GetMapping("/godkendteLejeaftaler")
-    public String godkendteLejeaftaler(Model model){
+    public String godkendteLejeaftaler(Model model, HttpServletRequest request){
+
+        HttpSession session = request.getSession(false);
+
+        if (session == null){
+            return "redirect:/";
+        }
 
         if (godkendteLejeaftaler == null){
             godkendteLejeaftaler = dataregService.seAlleGodkendte();
         }
         int totalpris = forretningsService.udregnTotalPris(godkendteLejeaftaler);
 
+        int antalUdlejedeBiler = forretningsService.getCount();
+
+       /* boolean isSkadeRegBruger = true;
+
+
+        model.addAttribute("isSkadeRegBruger", false);
+*/
         model.addAttribute("isGodkendt", true);
         model.addAttribute("lejeaftaler", godkendteLejeaftaler);
 
         model.addAttribute("totalpris", totalpris);
+
+        model.addAttribute("antalUdlejedeBiler", antalUdlejedeBiler);
+
 
         return "alleLejeaftaler";
     }
@@ -105,7 +139,22 @@ public class AdminController {
     @PostMapping("/godkendteLejeaftaler/{aftaleNo}")
     public String godkendteLejeaftaler(@PathVariable("aftaleNo") String nummer){
 
+        System.out.println(nummer);
+        currentNumber = parseInt(nummer);
+        System.out.println(nummer);
+
         return "redirect:/seLejeaftale?nr=" + nummer;
+    }
+
+    @PostMapping("/godkendteLejeaftaler/lejeaftale/tilstandsrapport")
+    public String opretTilstandsrapportTilLejeaftale(){
+
+        return "redirect:/godkendteLejeaftaler/" + currentNumber + "/tilstandsrapport";
+    }
+
+    @GetMapping("/godkendteLejeaftaler/{aftaleNo}/tilstandsrapport")
+    public String opretTilstandsrapportTilLejeaftale(@PathVariable("aftaleNo") int nummer) {
+        return "tilstandsrapport";
     }
 
     @GetMapping("/seLejeaftale")
@@ -119,5 +168,8 @@ public class AdminController {
 
         return "lejeaftale";
     }
+
+
+
 
 }

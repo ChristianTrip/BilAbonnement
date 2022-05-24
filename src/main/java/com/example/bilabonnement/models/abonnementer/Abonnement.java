@@ -3,14 +3,15 @@ package com.example.bilabonnement.models.abonnementer;
 public abstract class Abonnement {
 
     protected int id;
-    public int lejeaftaleId;
+    protected int lejeaftaleId;
     protected boolean lavSelvrisiko;
     protected boolean afleveringsforsikring;
     protected boolean valgtFarve;
     protected int lejeperiodeMdr;
 
-    public Abonnement(int id, boolean lavSelvrisiko, boolean valgtFarve) {
+    public Abonnement(int id, int lejeaftaleId, boolean lavSelvrisiko, boolean valgtFarve) {
         this.id = id;
+        this.lejeaftaleId = lejeaftaleId;
         this.lavSelvrisiko = lavSelvrisiko;
         this.valgtFarve = valgtFarve;
     }

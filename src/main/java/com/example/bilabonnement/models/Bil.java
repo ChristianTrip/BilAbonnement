@@ -16,23 +16,14 @@ public class Bil {
     private boolean tilvalgtFarve;
      */
 
-    public Bil(int id, String stelnummer, String name, String model) {
-        this.id = id;
+    public Bil(int lejeaftaleId, String stelnummer, String name, String model) {
+        this.lejeaftaleId = lejeaftaleId;
         this.stelnummer = stelnummer;
         this.name = name;
         this.model = model;
     }
 
     public Bil(String stelnummer, String name, String model) {
-        /*
-        if(stelNummer == null)
-            throw new IllegalArgumentException("stelnummer er null");
-        if(name == null)
-            throw new IllegalArgumentException("name er null");
-        if(model == null)
-            throw new IllegalArgumentException("model er null");
-         */
-
         this.stelnummer = stelnummer;
         this.name = name;
         this.model = model;
@@ -77,10 +68,10 @@ public class Bil {
     @Override
     public String toString() {
         return "Bil{" +
-                "id=" + id +
-                ", stelNummer='" + stelnummer + '\'' +
-                ", name='" + name + '\'' +
-                ", model='" + model + '\'' +
-                '}';
+                "\nstelnummer = '" + stelnummer + '\'' +
+                "\nlejeaftaleId = " + lejeaftaleId +
+                "\nname = '" + name + '\'' +
+                "\nmodel = '" + model + '\'' +
+                '}' + "\n";
     }
 }
