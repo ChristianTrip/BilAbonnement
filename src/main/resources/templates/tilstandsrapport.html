@@ -4,16 +4,66 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bilabonnement</title>
-    <link rel="stylesheet" th:href="@{style.css}" href="style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div>
-    <h1>Hello admin</h1>
-    <button onclick="location.href='/ikkeGodkendteLejeaftaler'">Ikke godkendte lejeaftaler</button>
-    <button onclick="location.href='/godkendteLejeaftaler'">Godkendte lejeaftaler</button>
-    <form method="get" action="logUd">
-        <button type="submit">log ud</button>
-    </form>
+<h1>Tilføj Tilstandsrapport</h1>
+<div class="tables">
+    <section>
+        <table>
+            <h2>Skader</h2>
+            <tr>
+                <td>Titel</td>
+                <td>Beskrivelse</td>
+                <td>Pris</td>
+            </tr>
+            <tr th:each="skade,iter : ${tilstandsrapport.getSkader()}">
+                <form method="POST" th:action="@{/fjern-skade/{skadeIdx}(skadeIdx = ${iter.index})}">
+                    <td th:text="${skade.getNavn()}"></td>
+                    <td th:text="${skade.getBeskrivelse()}"></td>
+                    <td th:text="${skade.getPris()}"></td>
+                    <td><button type="submit">Fjern</button></td>
+                </form>
+            </tr>
+            <tr>
+                <form method="POST" th:action="@{/tilføj-skade/{tilstandsrapportId}(tilstandsrapportId = ${tilstandsrapport.getId()})}">
+                    <input name="titel" type="text" placeholder="Titel">
+                    <input name="beskrivelse" type="text" placeholder="Beskrivelse">
+                    <input name="pris" type="number" placeholder="Pris">
+                    <button type="submit">Tilføj</button>
+                </form>
+            </tr>
+        </table>
+    </section>
+
+    <section>
+        <table>
+            <h2>Mangler</h2>
+            <tr>
+                <td>Titel</td>
+                <td>Beskrivelse</td>
+                <td>Pris</td>
+            </tr>
+            <tr th:each="mangel,iter : ${tilstandsrapport.getMangler()}">
+                <form method="POST" th:action="@{/fjern-mangel/{mangelIdx}(mangelIdx = ${iter.index})}">
+                    <td th:text="${mangel.getNavn()}"></td>
+                    <td th:text="${mangel.getBeskrivelse()}"></td>
+                    <td th:text="${mangel.getPris()}"></td>
+                    <td><button type="submit">Fjern</button></td>
+                </form>
+            </tr>
+            <tr>
+                <form method="POST" th:action="@{/tilføj-mangel/{tilstandsrapportId}(tilstandsrapportId = ${tilstandsrapport.getId()})}">
+                    <input name="titel" type="text" placeholder="Titel">
+                    <input name="beskrivelse" type="text" placeholder="Beskrivelse">
+                    <input name="pris" type="number" placeholder="Pris">
+                    <button type="submit">Tilføj</button>
+                </form>
+            </tr>
+        </table>
+
+    </section>
+
 </div>
 </body>
 </html>
