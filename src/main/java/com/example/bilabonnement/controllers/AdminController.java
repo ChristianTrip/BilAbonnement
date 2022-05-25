@@ -159,7 +159,7 @@ public class AdminController {
     public String opretTilstandsrapportTilLejeaftale(){
         return "tilstandsrapport";
         /*return "redirect:/godkendteLejeaftaler/" + currentNumber + "/tilstandsrapport";*/
-    }
+    /*}
 
     @GetMapping("/godkendteLejeaftaler/{aftaleNo}/tilstandsrapport")
     public String opretTilstandsrapportTilLejeaftale(@PathVariable("aftaleNo") int nummer) {
@@ -176,9 +176,5 @@ public class AdminController {
         session.setAttribute("indexNummer", nr);
 
         return "lejeaftale";
-    }
-
-*/
-
-
+    }*/
 }

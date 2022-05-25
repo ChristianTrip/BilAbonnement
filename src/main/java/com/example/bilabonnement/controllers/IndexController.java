@@ -34,7 +34,7 @@ public class IndexController {
 
 
 
-    @PostMapping("/login/submit")
+    @PostMapping("/login-submit")
     public RedirectView submitPost(HttpServletRequest request, RedirectAttributes redirectAttributes) {
 
 
@@ -48,7 +48,7 @@ public class IndexController {
 
         if (bruger != null) {
             redirectAttributes.addFlashAttribute("bruger", bruger);
-            return new RedirectView("/login/success", true);
+            return new RedirectView("/login-success", true);
         } else {
             System.out.println("Login failed: Forkerte bruger information");
             return new RedirectView("/", true);

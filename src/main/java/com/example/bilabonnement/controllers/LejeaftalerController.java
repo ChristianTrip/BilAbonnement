@@ -7,11 +7,10 @@ import com.example.bilabonnement.services.DataregService;
 import com.example.bilabonnement.services.ForretningsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -34,9 +33,7 @@ public class LejeaftalerController {
     private BrugerType brugerType;
 
 
-    private int currentNumber;
-
-    @GetMapping("/login/success")
+    @GetMapping({"/login-success"})
     public String getSuccess(HttpServletRequest request) {
 
         Map<String, ?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
@@ -49,7 +46,7 @@ public class LejeaftalerController {
             return "admin";
         }
         else {
-            return "redirect:/login/submit";
+            return "redirect:/login-submit";
         }
     }
 
@@ -134,6 +131,7 @@ public class LejeaftalerController {
 
         if (godkendteLejeaftaler == null){
             godkendteLejeaftaler = dataregService.seAlleGodkendte();
+            System.out.println(godkendteLejeaftaler);
         }
         int totalpris = forretningsService.udregnTotalPris(godkendteLejeaftaler);
 
@@ -156,20 +154,26 @@ public class LejeaftalerController {
     }
 
     @PostMapping("/godkendteLejeaftaler/{aftaleNo}")
-    public String godkendteLejeaftaler(@PathVariable("aftaleNo") String nummer){
+    public RedirectView godkendteLejeaftaler(@PathVariable("aftaleNo") String nummer, @ModelAttribute Lejeaftale lejeaftale, RedirectAttributes redirectAttributes){
 
+        int currentNumber = parseInt(nummer);
         System.out.println(nummer);
-        currentNumber = parseInt(nummer);
-        System.out.println(nummer);
+        Lejeaftale la = dataregService.vælgGodkendt(currentNumber);
+        System.out.println(la);
 
-        return "redirect:/seLejeaftale?nr=" + nummer;
+        if(la != null) {
+            redirectAttributes.addFlashAttribute("lejeaftale", la);
+            return new RedirectView("/seLejeaftale", true);
+        } else {
+            return new RedirectView("/godkendteLejeaftaler", true);
+        }
     }
 
-    @PostMapping("/godkendteLejeaftaler/lejeaftale/tilstandsrapport")
+    /*@PostMapping("/godkendteLejeaftaler/lejeaftale/tilstandsrapport")
     public String opretTilstandsrapportTilLejeaftale(){
 
         return "redirect:/godkendteLejeaftaler/" + currentNumber + "/tilstandsrapport";
-    }
+    }*/
 
     @GetMapping("/godkendteLejeaftaler/{aftaleNo}/tilstandsrapport")
     public String opretTilstandsrapportTilLejeaftale(@PathVariable("aftaleNo") int nummer) {
@@ -178,21 +182,26 @@ public class LejeaftalerController {
     }
 
     @GetMapping("/seLejeaftale")
-    public String godkendteLejeaftaler(@RequestParam int nr, Model m, HttpServletRequest request){
+    public String godkendteLejeaftaler(HttpServletRequest request, Model m){
 
         session = request.getSession();
 
         if (session == null){
             return "redirect:/";
         }
-        //m.addAttribute("lejeaftale", dataregService.vælgGodkendt(nr + 1));
-        m.addAttribute("lejeaftale", godkendteLejeaftaler.get(nr));
-        m.addAttribute("isGodkendt", true);
 
-        session.setAttribute("indexNummer", nr);
+        Map<String, ?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
+        if (inputFlashMap != null) {
+            Lejeaftale lejeaftale = (Lejeaftale) inputFlashMap.get("lejeaftale");
+            System.out.println(lejeaftale + "getmapping");
 
-        return "lejeaftale";
+            m.addAttribute("lejeaftale", lejeaftale);
+            m.addAttribute("isGodkendt", true);
+
+            return "lejeaftale";
+
+        } else {
+            return "redirect:/godkendteLejeaftaler";
+        }
     }
-
-
 }
