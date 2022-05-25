@@ -66,6 +66,14 @@ public class Tilstandsrapport {
         skader.add(skade);
     }
 
+    public void removeMangel(int index){
+        this.mangler.remove(index - 1);
+    }
+
+    public void removeSkade(Skade skade){
+        this.skader.remove(skade);
+    }
+
     public void setMangel(ArrayList<Mangel> mangler) {
         this.mangler = mangler;
     }

@@ -107,6 +107,25 @@ public class TilstandsRapportRepo implements CRUDInterface<Tilstandsrapport>{
     @Override
     public boolean update(Tilstandsrapport tilstandsrapport) {
 
+
+        try{
+            conn = DatabaseConnectionManager.getConnection();
+
+
+            ArrayList<Mangel> mangler = tilstandsrapport.getMangler();
+            ArrayList<Skade> skader = tilstandsrapport.getSkader();
+
+            for (Mangel mangel : mangler) {
+                insertMangel(mangel);
+            }
+            for (Skade skade : skader) {
+                insertSkade(skade);
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
         /*try{
             Connection conn = DatabaseConnectionManager.getConnection();
             String sql =    "UPDATE tilstandsrapporter " +

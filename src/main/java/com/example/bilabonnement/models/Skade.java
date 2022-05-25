@@ -21,6 +21,7 @@ public class Skade {
         this.navn = navn;
         this.beskrivelse = beskrivelse;
         this.pris = pris;
+
     }
 
 

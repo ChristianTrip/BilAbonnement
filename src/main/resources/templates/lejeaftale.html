@@ -178,7 +178,7 @@
                         <button type="submit">Tilbage</button>
                     </form>
 
-                    <form class="buttonFormatting" method="POST" action="/lejeaftaler/godkendteLejeaftaler/tilstandsrapport">
+                    <form class="buttonFormatting" method="POST" th:action="@{/tilstandsrapport/{id}(id = ${lejeaftale.getId()})}">
                         <button type="submit">Tilføj tilstandsrapport</button>
                     </form>
 
