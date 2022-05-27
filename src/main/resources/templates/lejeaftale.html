@@ -169,6 +169,7 @@
                         <button type="submit">Tilbage</button>
                     </form>
                     <form class="buttonFormatting" th:if="${!isGodkendt}" method="POST" action="/tilfoejDB">
+                        <input name="startDato" type="date" placeholder="Start Dato" required>
                         <button type="submit">Godkend</button>
                     </form>
                 </span>
@@ -178,8 +179,8 @@
                         <button type="submit">Tilbage</button>
                     </form>
 
-                    <form class="buttonFormatting" method="POST" th:action="@{/tilstandsrapport/{id}(id = ${lejeaftale.getId()})}">
-                        <button type="submit">Tilføj tilstandsrapport</button>
+                    <form class="buttonFormatting" method="POST" th:if="${!lejeaftale.isActive()}" th:action="@{/tilstandsrapport/{id}(id = ${lejeaftale.getId()})}">
+                        <button type="submit">Rediger tilstandsrapport</button>
                     </form>
 
                 </span>

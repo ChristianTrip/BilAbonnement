@@ -38,12 +38,14 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
     public boolean create(Lejeaftale lejeaftale) {
 
         java.sql.Date mySQLDate = java.sql.Date.valueOf(lejeaftale.getOprettelsesDato());
+        java.sql.Date startDate = java.sql.Date.valueOf(lejeaftale.getStartDato());
 
 
         boolean allIsWell = false;
         try{
-            String sql = "INSERT INTO lejeaftaler(`oprettelsesdato`, `kunde_cpr`, `bil_stel_nummer`) " +
+            String sql = "INSERT INTO lejeaftaler(`oprettelsesdato`,`startdato`, `kunde_cpr`, `bil_stel_nummer`) " +
                     "VALUES ('" + mySQLDate + "', " +
+                            "'" + startDate + "', " +
                             "'" + lejeaftale.getKunde().getCpr() + "', " +
                             "'" + lejeaftale.getBil().getStelnummer() + "');";
 
@@ -99,21 +101,18 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
             while(rs.next()) {
                 int lejeaftale_id = rs.getInt(1);
                 java.sql.Date oprettelsesdato = rs.getDate(2);
-                String kundeCPR = rs.getString(3);
-                String bilStelNummer = rs.getString(4);
+                java.sql.Date startdato = rs.getDate(3);
+                String kundeCPR = rs.getString(4);
+                String bilStelNummer = rs.getString(5);
 
                 Kunde kunde = getKunde(kundeCPR);
                 Bil bil = getBil(bilStelNummer);
                 Tilstandsrapport tilstandsrapport = getTilstandsrapport(lejeaftale_id);
-                /*ArrayList<Mangel> mangler = new ArrayList<>();
-                ArrayList<Skade> skader = new ArrayList<>();
-                tilstandsrapport.setSkade(skader);
-                tilstandsrapport.setMangel(mangler);*/
                 Abonnement abonnement = getAbonnement(id);
                 Prisoverslag prisoverslag = getPrisoverslag(id);
                 AfhentningsSted afhentningsSted = getAfhentningssted(id);
 
-                return new Lejeaftale(lejeaftale_id, kunde, bil, tilstandsrapport, abonnement, prisoverslag, afhentningsSted, oprettelsesdato.toLocalDate());
+                return new Lejeaftale(lejeaftale_id, kunde, bil, tilstandsrapport, abonnement, prisoverslag, afhentningsSted, oprettelsesdato.toLocalDate(), startdato.toLocalDate());
             }
         }
         catch (SQLException e){

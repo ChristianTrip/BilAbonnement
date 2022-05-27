@@ -10,6 +10,8 @@ import com.example.bilabonnement.utility.CSVReader;
 import com.example.bilabonnement.utility.CSVWriter;
 
 import java.lang.reflect.Field;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 import static java.lang.Integer.parseInt;
@@ -44,13 +46,42 @@ public class DataregService {
     private ArrayList<Lejeaftale> liste = new ArrayList<>();
 
     public ArrayList<Lejeaftale> seAlleGodkendte(){
-        return (ArrayList<Lejeaftale>) lejeaftaleRepo.getAllEntities();
+        ArrayList<Lejeaftale> lejeaftaler = new ArrayList<>();
+
+        for (Lejeaftale la: lejeaftaleRepo.getAllEntities()) {
+            lejeaftaler.add(getLejeaftale(la.getId()));
+        }
+
+        return lejeaftaler;
     }
 
     public Lejeaftale vælgGodkendt(int id){
         return lejeaftaleRepo.getSingleEntityById(id);
     }
 
+    public ArrayList<Lejeaftale> getAllIgangværende(ArrayList<Lejeaftale> lejeaftaler){
+        ArrayList<Lejeaftale> lejeListe = new ArrayList<>();
+
+        for (Lejeaftale lejeaftale : lejeaftaler) {
+            if(lejeaftale.getSlutDato().isAfter(LocalDate.now())){
+                lejeListe.add(lejeaftale);
+            }
+        }
+
+        return lejeListe;
+    }
+
+    public ArrayList<Lejeaftale> getAllAfsluttede(ArrayList<Lejeaftale> lejeaftaler){
+        ArrayList<Lejeaftale> lejeListe = new ArrayList<>();
+
+        for (Lejeaftale lejeaftale : lejeaftaler) {
+            if(lejeaftale.getSlutDato().isBefore(LocalDate.now())){
+                lejeListe.add(lejeaftale);
+            }
+        }
+
+        return lejeListe;
+    }
 
     // man skal kunne vælge hvilken lejeaftale man gerne vil godkende
     // når man har godkendt den valgte lejeaftale skal den fjernes fra csv-filerne
@@ -61,8 +92,11 @@ public class DataregService {
     }
 
 
-    public boolean addLejeaftaleToDB(int index){
-        if(lejeaftaleRepo.create(liste.get(index))){
+    public boolean addLejeaftaleToDB(int index, Date dato){
+        Lejeaftale lejeaftale = liste.get(index);
+        lejeaftale.setStartDato(dato.toLocalDate());
+
+        if(lejeaftaleRepo.create(lejeaftale)){
             new CSVWriter().fjernLinje(index + 1);
             return true;
         }

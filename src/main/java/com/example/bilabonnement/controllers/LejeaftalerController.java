@@ -9,6 +9,7 @@ import com.example.bilabonnement.models.brugere.BrugerType;
 import com.example.bilabonnement.services.DataregService;
 import com.example.bilabonnement.services.ForretningsService;
 import com.example.bilabonnement.services.SkaderegService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -71,7 +73,7 @@ public class LejeaftalerController {
     @GetMapping("/alleLejeaftaler")
     public String alleLejeaftaler(Model model, HttpServletRequest request){
 
-        session = request.getSession();
+        session = request.getSession(false);
 
         if (session == null){
             return "redirect:/";
@@ -84,7 +86,7 @@ public class LejeaftalerController {
     @GetMapping("/ikkeGodkendteLejeaftaler")
     public String seAlleLejeaftaler(Model model, HttpServletRequest request){
 
-        session = request.getSession();
+        session = request.getSession(false);
 
         if (session == null){
             return "redirect:/";
@@ -107,7 +109,7 @@ public class LejeaftalerController {
     @GetMapping("/visLejeaftale")
     public String testLeje(@RequestParam int nr, Model m, HttpServletRequest request){
 
-        session = request.getSession();
+        session = request.getSession(false);
 
         if (session == null){
             return "redirect:/";
@@ -122,10 +124,11 @@ public class LejeaftalerController {
     }
 
     @PostMapping("/tilfoejDB")
-    public String tilfoejTilDatabase(Model model, HttpSession session){
-
+    public String tilfoejTilDatabase(HttpServletRequest request, Model model, HttpSession session){
+        Date startDato = java.sql.Date.valueOf(request.getParameter("startDato"));
         int index = (int) session.getAttribute("indexNummer");
-        dataregService.addLejeaftaleToDB(index);
+
+        dataregService.addLejeaftaleToDB(index, startDato);
 
 
         return "redirect:/ikkeGodkendteLejeaftaler";
@@ -134,18 +137,18 @@ public class LejeaftalerController {
     @GetMapping("/godkendteLejeaftaler")
     public String godkendteLejeaftaler(Model model, HttpServletRequest request){
 
-        session = request.getSession();
+        session = request.getSession(false);
 
         if (session == null){
             return "redirect:/";
         }
 
-        if (godkendteLejeaftaler == null){
-            godkendteLejeaftaler = dataregService.seAlleGodkendte();
-        }
+
+        godkendteLejeaftaler = dataregService.seAlleGodkendte();
+
         int totalpris = forretningsService.udregnTotalPris(godkendteLejeaftaler);
 
-        int antalUdlejedeBiler = forretningsService.getCount();
+        int antalUdlejedeBiler = forretningsService.getRentedCars(godkendteLejeaftaler);
 
        /* boolean isSkadeRegBruger = true;
 
@@ -153,7 +156,11 @@ public class LejeaftalerController {
         model.addAttribute("isSkadeRegBruger", false);
 */
         model.addAttribute("isGodkendt", true);
-        model.addAttribute("lejeaftaler", godkendteLejeaftaler);
+        model.addAttribute("igangvaerende", dataregService.getAllIgangværende(godkendteLejeaftaler));
+        model.addAttribute("afsluttede", dataregService.getAllAfsluttede(godkendteLejeaftaler));
+        model.addAttribute("manglerTilstandsrapport", "Ingen registrerede skader/mangler");
+        model.addAttribute("harTilstandsrapport", "Har skader/mangler");
+
 
         model.addAttribute("totalpris", totalpris);
 
@@ -181,7 +188,7 @@ public class LejeaftalerController {
     @GetMapping("/seLejeaftale")
     public String godkendteLejeaftaler(HttpServletRequest request, Model m){
 
-        session = request.getSession();
+        session = request.getSession(false);
 
         if (session == null){
             return "redirect:/";
@@ -218,7 +225,7 @@ public class LejeaftalerController {
 
     @GetMapping("/rediger-tilstandsrapport")
     public String redigerTilstandsrapport(HttpServletRequest request, Model m){
-        session = request.getSession();
+        session = request.getSession(false);
 
         if (session == null){
             return "redirect:/";

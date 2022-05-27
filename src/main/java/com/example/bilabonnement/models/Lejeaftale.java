@@ -20,7 +20,7 @@ public class Lejeaftale {
     private LocalDate slutDato;
 
 
-    public Lejeaftale(int id, Kunde kunde, Bil bil, Tilstandsrapport tilstandsrapport, Abonnement abonnement, Prisoverslag prisoverslag, AfhentningsSted afhentningsSted, LocalDate oprettelsesDato) {
+    public Lejeaftale(int id, Kunde kunde, Bil bil, Tilstandsrapport tilstandsrapport, Abonnement abonnement, Prisoverslag prisoverslag, AfhentningsSted afhentningsSted, LocalDate oprettelsesDato, LocalDate startDato) {
         this.id = id;
         this.kunde = kunde;
         this.bil = bil;
@@ -30,21 +30,8 @@ public class Lejeaftale {
         this.prisoverslag.setAbonnementsLængde(abonnement.getLejeperiodeMdr());
         this.afhentningsSted = afhentningsSted;
         this.oprettelsesDato = oprettelsesDato;
-        //this.startDato = startDato;
-        //setSlutDato();
-    }
-
-    // constructor til at oprette en lejeaftale i databasen
-    public Lejeaftale(Kunde kunde, Bil bil, Tilstandsrapport tilstandsrapport, Abonnement abonnement, Prisoverslag prisoverslag, AfhentningsSted afhentningsSted, LocalDate startDato) {
-        this.kunde = kunde;
-        this.bil = bil;
-        this.tilstandsrapport = tilstandsrapport;
-        this.abonnement = abonnement;
-        this.prisoverslag = prisoverslag;
-        this.prisoverslag.setAbonnementsLængde(abonnement.getLejeperiodeMdr());
-        this.afhentningsSted = afhentningsSted;
-        this.oprettelsesDato = LocalDate.now();
         this.startDato = startDato;
+        setSlutDato();
     }
 
     // constructor til at oprette en lejeaftale i databasen
@@ -58,6 +45,10 @@ public class Lejeaftale {
         this.afhentningsSted = afhentningsSted;
         this.oprettelsesDato = LocalDate.now();
 
+    }
+
+    public boolean isActive(){
+        return this.slutDato.isAfter(LocalDate.now());
     }
 
 
@@ -94,15 +85,30 @@ public class Lejeaftale {
         return afhentningsSted;
     }
 
-
     public LocalDate getOprettelsesDato() {
         return oprettelsesDato;
+    }
+
+    public LocalDate getStartDato() {
+        return startDato;
+    }
+
+    public LocalDate getSlutDato() {
+        return slutDato;
+    }
+
+    //Used in alleLejeaftaler.html(th:if)
+    public boolean isTilstandsrapportEmpty() {
+        return this.tilstandsrapport.getSkader().isEmpty() && this.tilstandsrapport.getMangler().isEmpty();
     }
 
     public void setTilstandsrapport(Tilstandsrapport tilstandsrapport) {
         this.tilstandsrapport = tilstandsrapport;
     }
 
+    public void setStartDato(LocalDate startDato) {
+        this.startDato = startDato;
+    }
 
     @Override
     public String toString() {

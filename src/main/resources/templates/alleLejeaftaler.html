@@ -57,17 +57,43 @@
                     </form>
 
                     <table class="centerDiv">
+                        <h2>Igangværende</h2>
                         <tr>
-                            <th>oprettelsesdato</th>
+                            <th>Oprettelsesdato</th>
+                            <th>Startdato</th>
                             <th>Kunde cpr</th>
                             <th>Bil stelnummer</th>
                         </tr>
 
-                        <tr th:each="lejeaftale : ${lejeaftaler}">
+                        <tr th:each="lejeaftale : ${igangvaerende}">
                             <form method="POST" th:action="@{/godkendteLejeaftaler/{aftaleNo}(aftaleNo = ${lejeaftale.getId()})}">
                                 <td th:text="${lejeaftale.getOprettelsesDato()}"></td>
+                                <td th:text="${lejeaftale.getStartDato()}"></td>
                                 <td th:text="${lejeaftale.getKunde().getCpr()}"></td>
                                 <td th:text="${lejeaftale.getBil().getStelnummer()}"></td>
+                                <td><button type="submit">GO</button></td>
+                            </form>
+                        </tr>
+                    </table>
+
+                    <table class="centerDiv">
+                        <h2>Afsluttede</h2>
+                        <tr>
+                            <th>Oprettelsesdato</th>
+                            <th>Startdato</th>
+                            <th>Kunde cpr</th>
+                            <th>Bil stelnummer</th>
+                            <th>Tilstandsrapport status</th>
+                        </tr>
+
+                        <tr th:each="lejeaftale : ${afsluttede}">
+                            <form method="POST" th:action="@{/godkendteLejeaftaler/{aftaleNo}(aftaleNo = ${lejeaftale.getId()})}">
+                                <td th:text="${lejeaftale.getOprettelsesDato()}"></td>
+                                <td th:text="${lejeaftale.getStartDato()}"></td>
+                                <td th:text="${lejeaftale.getKunde().getCpr()}"></td>
+                                <td th:text="${lejeaftale.getBil().getStelnummer()}"></td>
+                                <td th:if="${lejeaftale.isTilstandsrapportEmpty() == true}" th:text="${manglerTilstandsrapport}"></td>
+                                <td th:unless="${lejeaftale.isTilstandsrapportEmpty() == true}" th:text="${harTilstandsrapport}"></td>
                                 <td><button type="submit">GO</button></td>
                             </form>
                         </tr>
