@@ -6,12 +6,15 @@ import com.example.bilabonnement.models.abonnementer.LimitedAbonnement;
 import com.example.bilabonnement.models.abonnementer.UnlimitedAbonnement;
 import com.example.bilabonnement.models.prisoverslag.Prisoverslag;
 import com.example.bilabonnement.utility.DatabaseConnectionManager;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -34,7 +37,8 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
     @Override
     public boolean create(Lejeaftale lejeaftale) {
 
-        java.sql.Date mySQLDate = new java.sql.Date(lejeaftale.getOprettelsesDato().getTime());
+        java.sql.Date mySQLDate = java.sql.Date.valueOf(lejeaftale.getOprettelsesDato());
+
 
         boolean allIsWell = false;
         try{
@@ -94,19 +98,22 @@ public class LejeaftaleRepo implements CRUDInterface <Lejeaftale>{
 
             while(rs.next()) {
                 int lejeaftale_id = rs.getInt(1);
-                Date oprettelsesdato = rs.getDate(2);
+                java.sql.Date oprettelsesdato = rs.getDate(2);
                 String kundeCPR = rs.getString(3);
                 String bilStelNummer = rs.getString(4);
 
                 Kunde kunde = getKunde(kundeCPR);
                 Bil bil = getBil(bilStelNummer);
                 Tilstandsrapport tilstandsrapport = getTilstandsrapport(lejeaftale_id);
+                /*ArrayList<Mangel> mangler = new ArrayList<>();
+                ArrayList<Skade> skader = new ArrayList<>();
+                tilstandsrapport.setSkade(skader);
+                tilstandsrapport.setMangel(mangler);*/
                 Abonnement abonnement = getAbonnement(id);
                 Prisoverslag prisoverslag = getPrisoverslag(id);
                 AfhentningsSted afhentningsSted = getAfhentningssted(id);
 
-
-                return new Lejeaftale(lejeaftale_id, kunde, bil, tilstandsrapport, abonnement, prisoverslag, afhentningsSted, oprettelsesdato);
+                return new Lejeaftale(lejeaftale_id, kunde, bil, tilstandsrapport, abonnement, prisoverslag, afhentningsSted, oprettelsesdato.toLocalDate());
             }
         }
         catch (SQLException e){

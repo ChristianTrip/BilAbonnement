@@ -5,24 +5,42 @@ import com.example.bilabonnement.models.abonnementer.Abonnement;
 import com.example.bilabonnement.models.abonnementer.LimitedAbonnement;
 import com.example.bilabonnement.models.abonnementer.UnlimitedAbonnement;
 import com.example.bilabonnement.models.prisoverslag.Prisoverslag;
-import com.example.bilabonnement.repositories.LejeaftaleRepo;
+import com.example.bilabonnement.repositories.*;
 import com.example.bilabonnement.utility.CSVReader;
 import com.example.bilabonnement.utility.CSVWriter;
 
-
-
-import java.io.*;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.stream.Collectors;
-
 import static java.lang.Integer.parseInt;
 
 public class DataregService {
 
 
     private LejeaftaleRepo lejeaftaleRepo = new LejeaftaleRepo();
+    private KundeRepo kundeRepo = new KundeRepo();
+    private BilRepo bilRepo = new BilRepo();
+    private AbonnementRepo abonnementRepo = new AbonnementRepo();
+    private AfhentningsstedRepo afhentningsstedRepo = new AfhentningsstedRepo();
+    private PrisoverslagRepo prisoverslagRepo = new PrisoverslagRepo();
+    private TilstandsrapportRepo tilstandsrapportRepo = new TilstandsrapportRepo();
+    private SkadeRepo skadeRepo = new SkadeRepo();
+    private MangelRepo mangelRepo = new MangelRepo();
+
+
+    public Lejeaftale getLejeaftale(int id){
+        Lejeaftale lejeaftale = lejeaftaleRepo.getSingleEntityById(id);
+
+
+        for (Tilstandsrapport rapport : tilstandsrapportRepo.getAllEntities()) {
+            if (rapport.getLejeaftaleId() == id){
+                lejeaftale.setTilstandsrapport(rapport);
+            }
+        }
+
+        return lejeaftale;
+    }
+
     private ArrayList<Lejeaftale> liste = new ArrayList<>();
 
     public ArrayList<Lejeaftale> seAlleGodkendte(){

@@ -19,7 +19,7 @@
                             <th>Bil stelnummer</th>
                         </tr>
 
-                        <form class="buttonFormatting" method="GET" action="/admin">
+                        <form class="buttonFormatting" method="GET" action="/login-success">
                             <button type="submit">Tilbage</button>
                         </form>
 
@@ -52,7 +52,7 @@
                         </div>
                     </div>
 
-                    <form class="buttonFormatting" method="GET" action="/admin">
+                    <form class="buttonFormatting" method="GET" action="/login-success">
                         <button type="submit">Tilbage</button>
                     </form>
 
@@ -63,8 +63,8 @@
                             <th>Bil stelnummer</th>
                         </tr>
 
-                        <tr th:each="lejeaftale,iter : ${lejeaftaler}">
-                            <form method="POST" th:action="@{/godkendteLejeaftaler/{aftaleNo}(aftaleNo = ${iter.index})}">
+                        <tr th:each="lejeaftale : ${lejeaftaler}">
+                            <form method="POST" th:action="@{/godkendteLejeaftaler/{aftaleNo}(aftaleNo = ${lejeaftale.getId()})}">
                                 <td th:text="${lejeaftale.getOprettelsesDato()}"></td>
                                 <td th:text="${lejeaftale.getKunde().getCpr()}"></td>
                                 <td th:text="${lejeaftale.getBil().getStelnummer()}"></td>

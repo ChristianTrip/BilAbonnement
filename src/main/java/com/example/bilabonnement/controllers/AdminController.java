@@ -47,10 +47,11 @@ public class AdminController {
     private int currentNumber = 0;
 
 
+  /*
     @GetMapping("/admin")
     public String home(HttpServletRequest request){
 
-      /*
+
         session = request.getSession();
 
         if (session.getAttribute("admin") == BrugerType.ADMIN){
@@ -58,11 +59,10 @@ public class AdminController {
         }
         return "redirect:/";
 
-        */
+
         return "admin";
     }
 
-  /*
     @GetMapping("logUd")
     public String logUd(){
         session.invalidate();

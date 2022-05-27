@@ -1,11 +1,11 @@
 package com.example.bilabonnement.controllers;
 
 import com.example.bilabonnement.models.Lejeaftale;
+import com.example.bilabonnement.models.Mangel;
 import com.example.bilabonnement.models.Skade;
 import com.example.bilabonnement.models.Tilstandsrapport;
 import com.example.bilabonnement.models.brugere.Bruger;
 import com.example.bilabonnement.models.brugere.BrugerType;
-import com.example.bilabonnement.repositories.TilstandsRapportRepo;
 import com.example.bilabonnement.services.DataregService;
 import com.example.bilabonnement.services.ForretningsService;
 import com.example.bilabonnement.services.SkaderegService;
@@ -42,6 +42,10 @@ public class LejeaftalerController {
     @GetMapping({"/login-success"})
     public String getSuccess(HttpServletRequest request) {
 
+        if (currentUser != null){
+            session = request.getSession(false);
+            return "admin";
+        }
         Map<String, ?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
 
         if (inputFlashMap != null) {
@@ -60,6 +64,7 @@ public class LejeaftalerController {
     public String logUd(){
         session.invalidate();
         System.out.println(currentUser.getNavn() + " er nu logget ud");
+        currentUser = null;
         return "index";
     }
 
@@ -162,7 +167,7 @@ public class LejeaftalerController {
     public RedirectView godkendteLejeaftaler(@PathVariable("aftaleNo") String nummer, RedirectAttributes redirectAttributes){
 
         int currentNumber = parseInt(nummer);
-        Lejeaftale la = dataregService.vælgGodkendt(currentNumber + 1);
+        Lejeaftale la = dataregService.getLejeaftale(currentNumber);
 
 
         if(la != null) {
@@ -198,16 +203,17 @@ public class LejeaftalerController {
 
     @PostMapping("/tilstandsrapport/{id}")
     public RedirectView seTilstandsrapport(@PathVariable int id, RedirectAttributes redirectAttributes){
-        Lejeaftale lejeaftale = dataregService.vælgGodkendt(id);
+        Lejeaftale lejeaftale = dataregService.getLejeaftale(id);
+        Tilstandsrapport tilstandsrapport = lejeaftale.getTilstandsrapport();
 
         if(lejeaftale != null){
-            redirectAttributes.addFlashAttribute("lejeaftale",lejeaftale);
+            redirectAttributes.addFlashAttribute("lejeaftale", lejeaftale);
+            //redirectAttributes.addFlashAttribute("tilstandsrapport", tilstandsrapport);
             return new RedirectView("/rediger-tilstandsrapport", true);
         }
         else{
             return new RedirectView("/seLejeaftale", true);
         }
-
     }
 
     @GetMapping("/rediger-tilstandsrapport")
@@ -221,12 +227,15 @@ public class LejeaftalerController {
         Map<String, ?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
         if (inputFlashMap != null) {
             Lejeaftale lejeaftale = (Lejeaftale) inputFlashMap.get("lejeaftale");
+            Tilstandsrapport tilstandsrapport = lejeaftale.getTilstandsrapport();
+            skaderegService.setRapport(tilstandsrapport);
+
 
             m.addAttribute("lejeaftale", lejeaftale);
-            m.addAttribute("tilstandsrapport",new TilstandsRapportRepo().getSingleEntityById(lejeaftale.getId()));
+            m.addAttribute("tilstandsrapport", tilstandsrapport);
             m.addAttribute("isGodkendt", true);
-            skaderegService.setRapport(lejeaftale.getId());
 
+            System.out.println(lejeaftale);
 
             return "tilstandsrapport";
 
@@ -235,45 +244,40 @@ public class LejeaftalerController {
         }
     }
 
-    @PostMapping("/tilføj-skade/{tilstandsrapportId}")
-    public RedirectView tilføjSkade(HttpServletRequest request, @PathVariable int tilstandsrapportId, RedirectAttributes redirectAttributes){
+    @PostMapping("/tilføj-skade")
+    public RedirectView tilføjSkade(HttpServletRequest request, RedirectAttributes redirectAttributes){
         String titel = request.getParameter("titel");
         String beskrivelse = request.getParameter("beskrivelse");
         String pris = request.getParameter("pris");
 
 
-
         Tilstandsrapport tilstandsrapport = skaderegService.getRapport();
-        Lejeaftale lejeaftale = dataregService.vælgGodkendt(tilstandsrapport.getLejeaftaleId());
-        redirectAttributes.addFlashAttribute("lejeaftale",lejeaftale);
 
-        if(titel.equals("") || beskrivelse.equals("") || pris.equals("")){
-            return new RedirectView("/rediger-tilstandsrapport", true);
+        if(skaderegService.tilføjSkade(titel, beskrivelse, pris)){
+
+            Lejeaftale lejeaftale = dataregService.getLejeaftale(tilstandsrapport.getLejeaftaleId());
+            redirectAttributes.addFlashAttribute("lejeaftale",lejeaftale);
         }
-        skaderegService.createSkade(titel,beskrivelse,parseInt(pris));
-        skaderegService.opdaterTilstandsRapport();
+
 
         return new RedirectView("/rediger-tilstandsrapport", true);
 
     }
 
-    @PostMapping("/tilføj-mangel/{tilstandsrapportId}")
-    public RedirectView tilføjMangel(HttpServletRequest request, @PathVariable int tilstandsrapportId, RedirectAttributes redirectAttributes){
+    @PostMapping("/tilføj-mangel")
+    public RedirectView tilføjMangel(HttpServletRequest request, RedirectAttributes redirectAttributes){
         String titel = request.getParameter("titel");
         String beskrivelse = request.getParameter("beskrivelse");
         String pris = request.getParameter("pris");
 
 
-
         Tilstandsrapport tilstandsrapport = skaderegService.getRapport();
-        Lejeaftale lejeaftale = dataregService.vælgGodkendt(tilstandsrapport.getLejeaftaleId());
-        redirectAttributes.addFlashAttribute("lejeaftale",lejeaftale);
 
-        if(titel.equals("") || beskrivelse.equals("") || pris.equals("")){
-            return new RedirectView("/rediger-tilstandsrapport", true);
+        if(skaderegService.tilføjMangel(titel, beskrivelse, pris)){
+
+            Lejeaftale lejeaftale = dataregService.getLejeaftale(tilstandsrapport.getLejeaftaleId());
+            redirectAttributes.addFlashAttribute("lejeaftale",lejeaftale);
         }
-        skaderegService.createMangel(titel,beskrivelse,parseInt(pris));
-        skaderegService.opdaterTilstandsRapport();
 
         return new RedirectView("/rediger-tilstandsrapport", true);
 
@@ -289,10 +293,10 @@ public class LejeaftalerController {
         Skade skade = tilstandsrapport.getSkader().get(skadeIdx);
         System.out.println(skade);
 
-        skaderegService.removeSkade(skade);
-        skaderegService.opdaterTilstandsRapport();
+        skaderegService.fjernSkade(skade);
 
-        Lejeaftale lejeaftale = dataregService.vælgGodkendt(tilstandsrapport.getLejeaftaleId());
+
+        Lejeaftale lejeaftale = dataregService.getLejeaftale(tilstandsrapport.getLejeaftaleId());
         redirectAttributes.addFlashAttribute("lejeaftale",lejeaftale);
 
 
@@ -301,6 +305,17 @@ public class LejeaftalerController {
 
     }
 
+    @PostMapping("/fjern-mangel/{mangelIdx}")
+    public RedirectView fjernMangel(@PathVariable int mangelIdx, RedirectAttributes redirectAttributes){
+        Tilstandsrapport tilstandsrapport = skaderegService.getRapport();
 
+        Mangel mangel = tilstandsrapport.getMangler().get(mangelIdx);
 
+        skaderegService.fjernMangel(mangel);
+
+        Lejeaftale lejeaftale = dataregService.getLejeaftale(tilstandsrapport.getLejeaftaleId());
+        redirectAttributes.addFlashAttribute("lejeaftale",lejeaftale);
+
+        return new RedirectView("/rediger-tilstandsrapport", true);
+    }
 }

@@ -20,7 +20,7 @@ public class SkadeRepo implements CRUDInterface<Skade>{
     public boolean create(Skade skade) {
 
         try{
-            String sql = "INSERT INTO skader(`tilstandsrapport_id`, `mangel_navn`, `mangel_beskrivelse`, `mangel_pris`) " +
+            String sql = "INSERT INTO skader(`tilstandsrapport_id`, `skade_navn`, `skade_beskrivelse`, `skade_pris`) " +
                     "VALUES (" +
                     "'" + skade.getTilstandsRapportId() + "', " +
                     "'" + skade.getNavn() + "', " +
@@ -103,10 +103,10 @@ public class SkadeRepo implements CRUDInterface<Skade>{
         try{
             String sql =    "UPDATE skader " +
                     "SET " +
-                    "mangel_navn = '" + skade.getNavn() + "', " +
-                    "mangel_beskrivelse = '" + skade.getBeskrivelse() + "', " +
-                    "mangel_pris = '" + skade.getPris() + "', " +
-                    "WHERE mangel_id = " + skade.getId() + ";";
+                    "skade_navn = '" + skade.getNavn() + "', " +
+                    "skade_beskrivelse = '" + skade.getBeskrivelse() + "', " +
+                    "skade_pris = '" + skade.getPris() + "', " +
+                    "WHERE skade_id = " + skade.getId() + ";";
 
             conn = DatabaseConnectionManager.getConnection();
             stmt = conn.prepareStatement(sql);

@@ -26,10 +26,10 @@
                 </form>
             </tr>
             <tr>
-                <form method="POST" th:action="@{/tilføj-skade/{tilstandsrapportId}(tilstandsrapportId = ${tilstandsrapport.getId()})}">
+                <form method="POST" th:action="@{/tilføj-skade}">
                     <input name="titel" type="text" placeholder="Titel">
                     <input name="beskrivelse" type="text" placeholder="Beskrivelse">
-                    <input name="pris" type="number" placeholder="Pris">
+                    <input name="pris" type="number" min="1" max="2147483647" placeholder="Pris">
                     <button type="submit">Tilføj</button>
                 </form>
             </tr>
@@ -53,16 +53,19 @@
                 </form>
             </tr>
             <tr>
-                <form method="POST" th:action="@{/tilføj-mangel/{tilstandsrapportId}(tilstandsrapportId = ${tilstandsrapport.getId()})}">
+                <form method="POST" th:action="@{/tilføj-mangel}">
                     <input name="titel" type="text" placeholder="Titel">
                     <input name="beskrivelse" type="text" placeholder="Beskrivelse">
-                    <input name="pris" type="number" placeholder="Pris">
+                    <input name="pris" type="number" min="1" max="2147483647" placeholder="Pris">
                     <button type="submit">Tilføj</button>
                 </form>
             </tr>
         </table>
 
     </section>
+    <form class="buttonFormatting" method="POST" th:action="@{/godkendteLejeaftaler/{aftaleNo} (aftaleNo = ${lejeaftale.getId()})}">
+        <button type="submit">Tilbage</button>
+    </form>
 
 </div>
 </body>
