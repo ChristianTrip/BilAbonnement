@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TilstandsRapportRepo implements CRUDInterface<Tilstandsrapport>{
+public class TilstandsrapportRepo implements CRUDInterface<Tilstandsrapport>{
 
     private MangelRepo mangelRepo = new MangelRepo();
     private SkadeRepo skadeRepo = new SkadeRepo();
@@ -112,6 +112,7 @@ public class TilstandsRapportRepo implements CRUDInterface<Tilstandsrapport>{
             conn = DatabaseConnectionManager.getConnection();
 
 
+
             ArrayList<Mangel> mangler = tilstandsrapport.getMangler();
             ArrayList<Skade> skader = tilstandsrapport.getSkader();
 
@@ -126,32 +127,7 @@ public class TilstandsRapportRepo implements CRUDInterface<Tilstandsrapport>{
             e.printStackTrace();
         }
 
-        /*try{
-            Connection conn = DatabaseConnectionManager.getConnection();
-            String sql =    "UPDATE tilstandsrapporter " +
-                    "SET " +
-                    "for_navn = '" + kunde.getFornavn()         + "', " +
-                    "efter_navn = '" + kunde.getEfternavn()     + "', " +
-                    "adresse = '" + kunde.getAdresse()          + "', " +
-                    "post_nummer = '" + kunde.getPostnummer()   + "', " +
-                    "by_navn = '" + kunde.getBy()               + "', " +
-                    "email = '" + kunde.getEmail()              + "', " +
-                    "mobil = '" + kunde.getMobil()              + "', " +
-                    "cpr = '" + kunde.getCpr()                  + "', " +
-                    "reg_nummer = '" + kunde.getRegNummer()     + "', " +
-                    "konto_nummer = '" + kunde.getKontoNummer() + "' " +
-                    "WHERE cpr = " + kunde.getCpr() + ";";
 
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.executeUpdate();
-
-
-            return true;
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            System.out.println("Kunne ikke opdatere tilstandsrapport med id " + tilstandsrapport.getId());
-        }*/
         return false;
     }
 
@@ -299,7 +275,7 @@ public class TilstandsRapportRepo implements CRUDInterface<Tilstandsrapport>{
 
 
     public static void main(String[] args) {
-        TilstandsRapportRepo repo = new TilstandsRapportRepo();
+        TilstandsrapportRepo repo = new TilstandsrapportRepo();
 
         ArrayList<Skade> skader = new ArrayList<>();
         ArrayList<Mangel> mangler = new ArrayList<>();
