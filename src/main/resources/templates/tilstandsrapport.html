@@ -17,16 +17,16 @@
                 <td>Beskrivelse</td>
                 <td>Pris</td>
             </tr>
-            <tr th:each="skade,iter : ${tilstandsrapport.getSkader()}">
-                <form method="POST" th:action="@{/fjern-skade/{skadeIdx}(skadeIdx = ${iter.index})}">
-                    <td th:text="${skade.getNavn()}"></td>
-                    <td th:text="${skade.getBeskrivelse()}"></td>
-                    <td th:text="${skade.getPris()}"></td>
+            <tr th:each="injury,iter : ${surveyReport.getInjuries()}">
+                <form method="POST" th:action="@{/fjern-injury/{skadeIdx}(skadeIdx = ${iter.index})}">
+                    <td th:text="${injury.getTitle()}"></td>
+                    <td th:text="${injury.getDescription()}"></td>
+                    <td th:text="${injury.getPrice()}"></td>
                     <td><button type="submit">Fjern</button></td>
                 </form>
             </tr>
             <tr>
-                <form method="POST" th:action="@{/tilføj-skade}">
+                <form method="POST" th:action="@{/tilføj-injury}">
                     <input name="titel" type="text" placeholder="Titel">
                     <input name="beskrivelse" type="text" placeholder="Beskrivelse">
                     <input name="pris" type="number" min="1" max="2147483647" placeholder="Pris">
@@ -44,16 +44,16 @@
                 <td>Beskrivelse</td>
                 <td>Pris</td>
             </tr>
-            <tr th:each="mangel,iter : ${tilstandsrapport.getMangler()}">
-                <form method="POST" th:action="@{/fjern-mangel/{mangelIdx}(mangelIdx = ${iter.index})}">
-                    <td th:text="${mangel.getNavn()}"></td>
-                    <td th:text="${mangel.getBeskrivelse()}"></td>
-                    <td th:text="${mangel.getPris()}"></td>
+            <tr th:each="deficiency,iter : ${surveyReport.getDeficiencies()}">
+                <form method="POST" th:action="@{/fjern-deficiency/{mangelIdx}(mangelIdx = ${iter.index})}">
+                    <td th:text="${deficiency.getTitle()}"></td>
+                    <td th:text="${deficiency.getDescription()}"></td>
+                    <td th:text="${deficiency.getPrice()}"></td>
                     <td><button type="submit">Fjern</button></td>
                 </form>
             </tr>
             <tr>
-                <form method="POST" th:action="@{/tilføj-mangel}">
+                <form method="POST" th:action="@{/tilføj-deficiency}">
                     <input name="titel" type="text" placeholder="Titel">
                     <input name="beskrivelse" type="text" placeholder="Beskrivelse">
                     <input name="pris" type="number" min="1" max="2147483647" placeholder="Pris">
@@ -63,7 +63,7 @@
         </table>
 
     </section>
-    <form class="buttonFormatting" method="POST" th:action="@{/godkendteLejeaftaler/{aftaleNo} (aftaleNo = ${lejeaftale.getId()})}">
+    <form class="buttonFormatting" method="POST" th:action="@{/godkendteLejeaftaler/{aftaleNo} (aftaleNo = ${leaseAgreement.getId()})}">
         <button type="submit">Tilbage</button>
     </form>
 

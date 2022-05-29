@@ -20,46 +20,46 @@
                         </tr>
                     </thead>
 
-                    <tbody th:each="kunde : ${lejeaftale.getKunde()}">
+                    <tbody th:each="customer : ${leaseAgreement.getCustomer()}">
                         <tr>
                             <td>Fornavn</td>
-                            <td th:text="${kunde.getFornavn()}"></td>
+                            <td th:text="${customer.getFirstName()}"></td>
                         </tr>
                         <tr>
                             <td>Efternavn</td>
-                            <td th:text="${kunde.getEfternavn()}"></td>
+                            <td th:text="${customer.getLastName()}"></td>
                         </tr>
                         <tr>
                             <td>Adresse</td>
-                            <td th:text="${kunde.getAdresse()}"></td>
+                            <td th:text="${customer.getAddress()}"></td>
                         </tr>
                         <tr>
                             <td>Postnummer</td>
-                            <td th:text="${kunde.getPostnummer()}"></td>
+                            <td th:text="${customer.getPostalCode()}"></td>
                         </tr>
                         <tr>
                             <td>By</td>
-                            <td th:text="${kunde.getBy()}"></td>
+                            <td th:text="${customer.getCity()}"></td>
                         </tr>
                         <tr>
                             <td>Email</td>
-                            <td th:text="${kunde.getEmail()}"></td>
+                            <td th:text="${customer.getEmail()}"></td>
                         </tr>
                         <tr>
                             <td>Mobil</td>
-                            <td th:text="${kunde.getMobil()}"></td>
+                            <td th:text="${customer.getPhoneNumber()}"></td>
                         </tr>
                         <tr>
                             <td>CPR</td>
-                            <td th:text="${kunde.getCpr()}"></td>
+                            <td th:text="${customer.getCpr()}"></td>
                         </tr>
                         <tr>
                             <td>Reg.Nummer</td>
-                            <td th:text="${kunde.getRegNummer()}"></td>
+                            <td th:text="${customer.getRegNumber()}"></td>
                         </tr>
                         <tr>
                             <td>kontonummer</td>
-                            <td th:text="${kunde.getKontoNummer()}"></td>
+                            <td th:text="${customer.getAccountNumber()}"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -72,18 +72,18 @@
                         </tr>
                     </thead>
 
-                    <tbody th:each="bil : ${lejeaftale.getBil()}">
+                    <tbody th:each="car : ${leaseAgreement.getCar()}">
                         <tr>
                             <td>Bilnavn</td>
-                            <td th:text="${bil.getName()}"></td>
+                            <td th:text="${car.getBrand()}"></td>
                         </tr>
                         <tr>
                             <td>Model</td>
-                            <td th:text="${bil.getModel()}"></td>
+                            <td th:text="${car.getModel()}"></td>
                         </tr>
                         <tr>
                             <td>Stelnummer</td>
-                            <td th:text="${bil.getStelnummer()}"></td>
+                            <td th:text="${car.getChassisNumber()}"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -96,18 +96,22 @@
                         </tr>
                     </thead>
 
-                    <tbody th:each="abonnement : ${lejeaftale.getAbonnement()}">
+                    <tbody th:each="subscription : ${leaseAgreement.getSubscription()}">
                         <tr>
                             <td>Lejeperiode/måned</td>
-                            <td th:text="${abonnement.getLejeperiodeMdr()}"></td>
+                            <td th:text="${subscription.getLengthInMonths()}"></td>
                         </tr>
                         <tr>
                             <td>Lav selvrisiko</td>
-                            <td th:text="${abonnement.isLavSelvrisiko()}"></td>
+                            <td th:text="${subscription.hasLowDeductible()}"></td>
                         </tr>
                         <tr>
                             <td>Afleveringsforsikring</td>
-                            <td th:text="${abonnement.isAfleveringsforsikring()}"></td>
+                            <td th:text="${subscription.hasDeliveryInsurance()}"></td>
+                        </tr>
+                        <tr>
+                            <td>Valgt farve</td>
+                            <td th:text="${subscription.hasStandardColor()}"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -120,14 +124,14 @@
                         </tr>
                     </thead>
 
-                    <tbody th:each="prisoverslag : ${lejeaftale.getPrisoverslag()}">
+                    <tbody th:each="priceEstimate : ${leaseAgreement.getPriceEstimate()}">
                         <tr>
                             <td>Lejeperiode/måned</td>
-                            <td th:text="${prisoverslag.getAbonnementsLaengde()}"></td>
+                            <td th:text="${priceEstimate.getSubscriptionLength()}"></td>
                         </tr>
                         <tr>
                             <td>Totalpris</td>
-                            <td th:text="${prisoverslag.getTotalpris()}"></td>
+                            <td th:text="${priceEstimate.getTotalPrice()}"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -140,22 +144,22 @@
                         </tr>
                     </thead>
 
-                    <tbody th:each="afhentningssted : ${lejeaftale.getAfhentningsSted()}">
+                    <tbody th:each="afhentningssted : ${leaseAgreement.getPickupPlace()}">
                         <tr>
                             <td>Adresse</td>
-                            <td th:text="${afhentningssted.getAdresse()}"></td>
+                            <td th:text="${afhentningssted.getAddress()}"></td>
                         </tr>
                         <tr>
                             <td>Postnummer</td>
-                            <td th:text="${afhentningssted.getPostnummer()}"></td>
+                            <td th:text="${afhentningssted.getPostalCode()}"></td>
                         </tr>
                         <tr>
                             <td>By</td>
-                            <td th:text="${afhentningssted.getBy()}"></td>
+                            <td th:text="${afhentningssted.getCity()}"></td>
                         </tr>
                         <tr>
                             <td>Leveringspris</td>
-                            <td th:text="${afhentningssted.getLeveringspris()}"></td>
+                            <td th:text="${afhentningssted.getDeliveryPrice()}"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -179,8 +183,8 @@
                         <button type="submit">Tilbage</button>
                     </form>
 
-                    <form class="buttonFormatting" method="POST" th:if="${!lejeaftale.isActive()}" th:action="@{/tilstandsrapport/{id}(id = ${lejeaftale.getId()})}">
-                        <button type="submit">Rediger tilstandsrapport</button>
+                    <form class="buttonFormatting" method="POST" th:if="${!leaseAgreement.isActive()}" th:action="@{/surveyReport/{id}(id = ${leaseAgreement.getId()})}">
+                        <button type="submit">Rediger surveyReport</button>
                     </form>
 
                 </span>

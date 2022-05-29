@@ -1,115 +1,81 @@
 package com.example.bilabonnement.utility;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class CSVWriter {
 
-    public void fjernLinje(int linje){
-        CSVReader reader = new CSVReader();
-        String filSti;
-        ArrayList<String> alleStrings;
+    private CSVReader reader;
+    private BufferedWriter bufferedWriter;
+    private File file;
+    private ArrayList<String> allLines;
 
-        //KUNDE
+    public void removeLineFromAllFiles(int lineIndex){
+        reader = CSVReader.getInstance();
+
+        //Customer
         //Læs alt ned på en arraylist
-        filSti = "src/main/resources/csv/kunde.csv";
-        reader.setSc(filSti);
-        alleStrings = reader.læsAlt();
-        //Fjern linje fra arraylist
-        alleStrings.remove(linje);
+        file = new File("src/main/resources/csv/kunde.csv");
+        allLines = reader.getAllLinesFromFile(file);
+        //Fjern lineIndex fra arraylist
+        allLines.remove(lineIndex);
         //Skriv arraylisten ind i csv igen
-        try{
-            BufferedWriter fr = new BufferedWriter(new FileWriter(filSti));
+        writeToFile(file);
 
-            for (String s : alleStrings) {
-                fr.write(s);
-                fr.newLine();
-            }
+        //Car
+        file = new File("src/main/resources/csv/bil.csv");
+        allLines = reader.getAllLinesFromFile(file);
+        allLines.remove(lineIndex);
 
-            fr.close();
-        }catch(IOException e){
-            e.printStackTrace();
-        }
+        writeToFile(file);
 
-        //BIL
-        filSti = "src/main/resources/csv/bil.csv";
-        reader.setSc(filSti);
-        alleStrings = reader.læsAlt();
-        alleStrings.remove(linje);
+        //Subscription
+        file = new File("src/main/resources/csv/abonnement.csv");
+        allLines = reader.getAllLinesFromFile(file);
+        allLines.remove(lineIndex);
 
-        try{
-            BufferedWriter fr = new BufferedWriter(new FileWriter(filSti));
+        writeToFile(file);
 
-            for (String s : alleStrings) {
-                fr.write(s);
-                fr.newLine();
-            }
+        //PriceEstimate
+        file = new File("src/main/resources/csv/prisoverslag.csv");
+        allLines = reader.getAllLinesFromFile(file);
+        allLines.remove(lineIndex);
 
-            fr.close();
-        }catch(IOException e){
-            e.printStackTrace();
-        }
+        writeToFile(file);
 
-        //ABONNEMENT
-        filSti = "src/main/resources/csv/abonnement.csv";
-        reader.setSc(filSti);
-        alleStrings = reader.læsAlt();
-        alleStrings.remove(linje);
+        //PickupPlace
+        file = new File("src/main/resources/csv/afhentningssted.csv");
+        allLines = reader.getAllLinesFromFile(file);
+        allLines.remove(lineIndex);
 
-        try{
-            BufferedWriter fr = new BufferedWriter(new FileWriter(filSti));
-
-            for (String s : alleStrings) {
-                fr.write(s);
-                fr.newLine();
-            }
-
-            fr.close();
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-
-        //PRISOVERSLAG
-        filSti = "src/main/resources/csv/prisoverslag.csv";
-        reader.setSc(filSti);
-        alleStrings = reader.læsAlt();
-        alleStrings.remove(linje);
-
-        try{
-            BufferedWriter fr = new BufferedWriter(new FileWriter(filSti));
-
-            for (String s : alleStrings) {
-                fr.write(s);
-                fr.newLine();
-            }
-
-            fr.close();
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-
-        //AFHENTNINGSSTED
-        filSti = "src/main/resources/csv/afhentningssted.csv";
-        reader.setSc(filSti);
-        alleStrings = reader.læsAlt();
-        alleStrings.remove(linje);
-
-        try{
-            BufferedWriter fr = new BufferedWriter(new FileWriter(filSti));
-
-            for (String s : alleStrings) {
-                fr.write(s);
-                fr.newLine();
-            }
-
-            fr.close();
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-
+        writeToFile(file);
 
     }
+
+    private void writeToFile(File file){
+
+        try{
+            bufferedWriter = new BufferedWriter(new FileWriter(file));
+
+            for (String line : allLines) {
+                bufferedWriter.write(line);
+                bufferedWriter.newLine();
+            }
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+
+        try {
+            bufferedWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
 }

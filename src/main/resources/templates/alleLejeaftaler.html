@@ -23,11 +23,11 @@
                             <button type="submit">Tilbage</button>
                         </form>
 
-                        <tr th:each="lejeaftale,iter : ${igLejeaftaler}">
+                        <tr th:each="leaseAgreement,iter : ${igLejeaftaler}">
                             <form method="POST" th:action="@{/ikkeGodkendteLejeaftaler/{aftaleNo}(aftaleNo = ${iter.index})}">
-                                <td th:text="${lejeaftale.getOprettelsesDato()}"></td>
-                                <td th:text="${lejeaftale.getKunde().getCpr()}"></td>
-                                <td th:text="${lejeaftale.getBil().getStelnummer()}"></td>
+                                <td th:text="${leaseAgreement.getApprovalDate()}"></td>
+                                <td th:text="${leaseAgreement.getCustomer().getCpr()}"></td>
+                                <td th:text="${leaseAgreement.getCar().getChassisNumber()}"></td>
                                 <td><button type="submit">GO</button></td>
                             </form>
                         </tr>
@@ -65,12 +65,12 @@
                             <th>Bil stelnummer</th>
                         </tr>
 
-                        <tr th:each="lejeaftale : ${igangvaerende}">
-                            <form method="POST" th:action="@{/godkendteLejeaftaler/{aftaleNo}(aftaleNo = ${lejeaftale.getId()})}">
-                                <td th:text="${lejeaftale.getOprettelsesDato()}"></td>
-                                <td th:text="${lejeaftale.getStartDato()}"></td>
-                                <td th:text="${lejeaftale.getKunde().getCpr()}"></td>
-                                <td th:text="${lejeaftale.getBil().getStelnummer()}"></td>
+                        <tr th:each="leaseAgreement : ${igangvaerende}">
+                            <form method="POST" th:action="@{/godkendteLejeaftaler/{aftaleNo}(aftaleNo = ${leaseAgreement.getId()})}">
+                                <td th:text="${leaseAgreement.getApprovalDate()}"></td>
+                                <td th:text="${leaseAgreement.getStartDate()}"></td>
+                                <td th:text="${leaseAgreement.getCustomer().getCpr()}"></td>
+                                <td th:text="${leaseAgreement.getCar().getChassisNumber()}"></td>
                                 <td><button type="submit">GO</button></td>
                             </form>
                         </tr>
@@ -86,14 +86,14 @@
                             <th>Tilstandsrapport status</th>
                         </tr>
 
-                        <tr th:each="lejeaftale : ${afsluttede}">
-                            <form method="POST" th:action="@{/godkendteLejeaftaler/{aftaleNo}(aftaleNo = ${lejeaftale.getId()})}">
-                                <td th:text="${lejeaftale.getOprettelsesDato()}"></td>
-                                <td th:text="${lejeaftale.getStartDato()}"></td>
-                                <td th:text="${lejeaftale.getKunde().getCpr()}"></td>
-                                <td th:text="${lejeaftale.getBil().getStelnummer()}"></td>
-                                <td th:if="${lejeaftale.isTilstandsrapportEmpty() == true}" th:text="${manglerTilstandsrapport}"></td>
-                                <td th:unless="${lejeaftale.isTilstandsrapportEmpty() == true}" th:text="${harTilstandsrapport}"></td>
+                        <tr th:each="leaseAgreement : ${afsluttede}">
+                            <form method="POST" th:action="@{/godkendteLejeaftaler/{aftaleNo}(aftaleNo = ${leaseAgreement.getId()})}">
+                                <td th:text="${leaseAgreement.getApprovalDate()}"></td>
+                                <td th:text="${leaseAgreement.getStartDate()}"></td>
+                                <td th:text="${leaseAgreement.getCustomer().getCpr()}"></td>
+                                <td th:text="${leaseAgreement.getCar().getChassisNumber()}"></td>
+                                <td th:if="${leaseAgreement.isSurveyReportEmpty() == true}" th:text="${manglerTilstandsrapport}"></td>
+                                <td th:unless="${leaseAgreement.isSurveyReportEmpty() == true}" th:text="${harTilstandsrapport}"></td>
                                 <td><button type="submit">GO</button></td>
                             </form>
                         </tr>
