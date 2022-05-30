@@ -4,7 +4,6 @@ import com.example.bilabonnement.models.users.User;
 import com.example.bilabonnement.models.users.UserType;
 import com.example.bilabonnement.services.UserService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.context.request.WebRequest;
@@ -25,19 +24,16 @@ public class IndexController {
     private UserType userType;
 
 
-
    @GetMapping("/")
     public String index(){
-        System.out.println("inside index controller");
         return "index";
     }
-
 
     @PostMapping("/login-submit")
     public RedirectView submitPost(HttpServletRequest request, RedirectAttributes redirectAttributes) {
 
 
-        redirectAttributes.addFlashAttribute("bruger", new User("john", "password", UserType.ADMIN));
+        redirectAttributes.addFlashAttribute("user", new User("john", "password", UserType.ADMIN));
         return new RedirectView("/login-success", true);
 
       /*
@@ -49,10 +45,10 @@ public class IndexController {
         User user = userService.validateUserinfo(userName, password);
 
         if (user != null) {
-            redirectAttributes.addFlashAttribute("bruger", user);
+            redirectAttributes.addFlashAttribute("user", user);
             return new RedirectView("/login-success", true);
         } else {
-            System.out.println("Login failed: Forkerte bruger information");
+            System.out.println("Login failed: Forkerte user information");
             return new RedirectView("/", true);
         }*/
     }
@@ -71,10 +67,10 @@ public class IndexController {
         Map<String, ?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
 
         if (inputFlashMap != null) {
-            currentUser = (User) inputFlashMap.get("bruger");
+            currentUser = (User) inputFlashMap.get("user");
             userType = currentUser.getUserType();
             session = request.getSession();
-            System.out.println(currentUser.getName() + " er nu logget ind som " + userType + " bruger");
+            System.out.println(currentUser.getName() + " er nu logget ind som " + userType + " user");
             return "admin";
         }
         else {
@@ -101,9 +97,7 @@ public class IndexController {
         String brugernavn = request.getParameter("brugernavn");
         String adgangskode = request.getParameter("adgangskode");
 
-
        UserType userType = bs.determineBrugertype(brugernavn, adgangskode);
-
 
             if(userType.equals(UserType.ADMIN)) {
                 session.setAttribute("admin", userType);

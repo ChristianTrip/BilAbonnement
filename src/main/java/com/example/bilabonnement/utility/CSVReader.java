@@ -11,7 +11,6 @@ import com.example.bilabonnement.models.subscriptions.UnlimitedSubscription;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 import static java.lang.Integer.parseInt;
@@ -38,7 +37,7 @@ public class CSVReader {
 
         ArrayList<Customer> customers = new ArrayList<>();
         try{
-            file = new File("src/main/resources/csv/kunde.csv");
+            file = new File("src/main/resources/csvFiles/incomingCustomers.csv");
             scanner = new Scanner(file);
             
             scanner.nextLine();
@@ -57,7 +56,7 @@ public class CSVReader {
                 String regNumber = (attributes[8]);
                 String accountNumber = (attributes[9]);
 
-                customers.add(new Customer(firstName,lastName,address,postalCode,city,email,phone,cpr,regNumber,accountNumber));
+                customers.add(new Customer(firstName, lastName, address, postalCode, city, email, phone, cpr, regNumber, accountNumber));
             }
         }
         catch(Exception e){
@@ -69,7 +68,7 @@ public class CSVReader {
     public ArrayList<Car> getCars(){
         ArrayList<Car> cars = new ArrayList<>();
         try{
-            file = new File("src/main/resources/csv/bil.csv");
+            file = new File("src/main/resources/csvFiles/incomingCars.csv");
             scanner = new Scanner(file);
 
             scanner.nextLine();
@@ -93,7 +92,7 @@ public class CSVReader {
     public ArrayList<PickupPlace> getPickupPlaces(){
         ArrayList<PickupPlace> pickupPlaces = new ArrayList<>();
         try{
-            file = new File("src/main/resources/csv/afhentningssted.csv");
+            file = new File("src/main/resources/csvFiles/incomingPickupPlaces.csv");
             scanner = new Scanner(file);
 
             scanner.nextLine();
@@ -118,7 +117,7 @@ public class CSVReader {
     public ArrayList<Subscription> getSubscriptions(){
         ArrayList<Subscription> subscriptions = new ArrayList<>();
         try{
-            file = new File("src/main/resources/csv/abonnement.csv");
+            file = new File("src/main/resources/csvFiles/incomingSubscriptions.csv");
             scanner = new Scanner(file);
 
             scanner.nextLine();
@@ -155,7 +154,7 @@ public class CSVReader {
     public ArrayList<PriceEstimate> getPriceEstimates(){
         ArrayList<PriceEstimate> priceEstimates = new ArrayList<>();
         try{
-            file = new File("src/main/resources/csv/prisoverslag.csv");
+            file = new File("src/main/resources/csvFiles/incomingPriceEstimates.csv");
             scanner = new Scanner(file);
 
             scanner.nextLine();

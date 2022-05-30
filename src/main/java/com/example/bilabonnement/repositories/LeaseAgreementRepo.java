@@ -30,7 +30,7 @@ public class LeaseAgreementRepo implements CRUDInterface <LeaseAgreement>{
         boolean allIsWell = true;
         try{
             conn = DatabaseConnectionManager.getConnection();
-            String sql = "INSERT INTO lejeaftaler(`oprettelsesdato`,`startdato`, `kunde_cpr`, `bil_stel_nummer`) " +
+            String sql = "INSERT INTO lease_agreements(`approval_date`,`start_date`, `customer_cpr`, `chassis_number`) " +
                     "VALUES ('" + approvalDate + "', " +
                             "'" + startDate + "', " +
                             "'" + leaseAgreement.getCustomer().getCpr() + "', " +
@@ -40,24 +40,24 @@ public class LeaseAgreementRepo implements CRUDInterface <LeaseAgreement>{
             stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
 
-            int lejeaftaleId = getLastIndex();
+            int agreementId = getLastIndex();
 
             Customer customer = leaseAgreement.getCustomer();
 
             Car car = leaseAgreement.getCar();
-            car.setAgreementId(lejeaftaleId);
+            car.setAgreementId(agreementId);
 
             Subscription subscription = leaseAgreement.getSubscription();
-            subscription.setAgreementId(lejeaftaleId);
+            subscription.setAgreementId(agreementId);
 
             PickupPlace pickupPlace = leaseAgreement.getPickupPlace();
-            pickupPlace.setAgreementId(lejeaftaleId);
+            pickupPlace.setAgreementId(agreementId);
 
             PriceEstimate priceEstimate = leaseAgreement.getPriceEstimate();
-            priceEstimate.setAgreementId(lejeaftaleId);
+            priceEstimate.setAgreementId(agreementId);
 
-            SurveyReport surveyReport = new SurveyReport(lejeaftaleId);
-            surveyReport.setAgreementId(lejeaftaleId);
+            SurveyReport surveyReport = new SurveyReport(agreementId);
+            surveyReport.setAgreementId(agreementId);
 
 
             if (!insertCustomer(customer) ||
@@ -83,25 +83,25 @@ public class LeaseAgreementRepo implements CRUDInterface <LeaseAgreement>{
 
         try {
             conn = DatabaseConnectionManager.getConnection();
-            String sql = "SELECT * FROM lejeaftaler WHERE lejeaftale_id = '" + id + "';";
+            String sql = "SELECT * FROM lease_agreements WHERE agreement_id = '" + id + "';";
             stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
 
             while(rs.next()) {
-                int lejeaftale_id = rs.getInt(1);
+                int agreement_id = rs.getInt(1);
                 java.sql.Date oprettelsesdato = rs.getDate(2);
                 java.sql.Date startdato = rs.getDate(3);
-                String kundeCPR = rs.getString(4);
-                String bilStelNummer = rs.getString(5);
+                String cpr = rs.getString(4);
+                String chassisNumber = rs.getString(5);
 
-                Customer customer = getCustomer(kundeCPR);
-                Car car = getCar(bilStelNummer);
-                SurveyReport surveyReport = getSurveyReport(lejeaftale_id);
+                Customer customer = getCustomer(cpr);
+                Car car = getCar(chassisNumber);
+                SurveyReport surveyReport = getSurveyReport(agreement_id);
                 Subscription subscription = getSubscription(id);
                 PriceEstimate priceEstimate = getPriceEstimate(id);
                 PickupPlace pickupPlace = getPickupPlace(id);
 
-                return new LeaseAgreement(lejeaftale_id, customer, car, surveyReport, subscription, priceEstimate, pickupPlace, oprettelsesdato.toLocalDate(), startdato.toLocalDate());
+                return new LeaseAgreement(agreement_id, customer, car, surveyReport, subscription, priceEstimate, pickupPlace, oprettelsesdato.toLocalDate(), startdato.toLocalDate());
             }
         }
         catch (SQLException e){
@@ -117,14 +117,14 @@ public class LeaseAgreementRepo implements CRUDInterface <LeaseAgreement>{
         ArrayList<LeaseAgreement> leaseAgreements = new ArrayList<>();
         try {
             conn = DatabaseConnectionManager.getConnection();
-            String sql = "SELECT * FROM lejeaftaler;";
+            String sql = "SELECT * FROM lease_agreements;";
             stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()){
-                int lejeaftaleId = rs.getInt(1);
+                int agreementId = rs.getInt(1);
 
-                leaseAgreements.add(getSingleEntityById(lejeaftaleId));
+                leaseAgreements.add(getSingleEntityById(agreementId));
             }
 
         }
@@ -138,29 +138,14 @@ public class LeaseAgreementRepo implements CRUDInterface <LeaseAgreement>{
     @Override
     public boolean update(LeaseAgreement leaseAgreement) {
 
-        Car car = leaseAgreement.getCar();
-        Customer customer = leaseAgreement.getCustomer();
-        Subscription subscription = leaseAgreement.getSubscription();
-        PickupPlace pickupPlace = leaseAgreement.getPickupPlace();
-        SurveyReport surveyReport = leaseAgreement.getSurveyReport();
-        PriceEstimate priceEstimate = leaseAgreement.getPriceEstimate();
-
-
-       /* try{
+        try{
             conn = DatabaseConnectionManager.getConnection();
-            String sql =    "UPDATE lejeaftaler " +
+            String sql =    "UPDATE lease_agreements " +
                     "SET " +
-                    "for_navn = '" + kunde.getFornavn()         + "', " +
-                    "efter_navn = '" + kunde.getEfternavn()     + "', " +
-                    "adresse = '" + kunde.getAdresse()          + "', " +
-                    "post_nummer = '" + kunde.getPostnummer()   + "', " +
-                    "by_navn = '" + kunde.getBy()               + "', " +
-                    "email = '" + kunde.getEmail()              + "', " +
-                    "mobil = '" + kunde.getMobil()              + "', " +
-                    "cpr = '" + kunde.getCpr()                  + "', " +
-                    "reg_nummer = '" + kunde.getRegNummer()     + "', " +
-                    "konto_nummer = '" + kunde.getKontoNummer() + "' " +
-                    "WHERE cpr = " + kunde.getCpr() + ";";
+                    "start_date = '" + leaseAgreement.getStartDate()                    + "', " +
+                    "customer_cpr = '" + leaseAgreement.getCustomer().getCpr()          + "', " +
+                    "chassis_number = '" + leaseAgreement.getCar().getChassisNumber()   + "'" +
+                    "WHERE agreement_id = " + leaseAgreement.getId() + ";";
 
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
@@ -168,9 +153,9 @@ public class LeaseAgreementRepo implements CRUDInterface <LeaseAgreement>{
         }
         catch (SQLException e){
             e.printStackTrace();
-            System.out.println("Kunne ikke updatere kunde med cpr nummer: " + kunde.getCpr());
+            System.out.println("Kunne ikke updatere kunde med cpr nummer: " + leaseAgreement.getId());
             return false;
-        }*/
+        }
 
         return true;
     }
@@ -207,7 +192,7 @@ public class LeaseAgreementRepo implements CRUDInterface <LeaseAgreement>{
     private boolean insertCar(Car car){
 
         try{
-            String sql = "INSERT IGNORE biler(`lejeaftale_id`, `bil_stelnummer`, `bil_name`, `bil_model`) " +
+            String sql = "INSERT IGNORE cars(`agreement_id`, `chassis_number`, `brand`, `model`) " +
                     "VALUES (" +
                     "'" + car.getAgreementId() + "', " +
                     "'" + car.getChassisNumber() + "', " +
@@ -228,7 +213,7 @@ public class LeaseAgreementRepo implements CRUDInterface <LeaseAgreement>{
     private boolean insertCustomer(Customer customer){
 
         try{
-            String sql = "INSERT IGNORE INTO kunder(`for_navn`, `efter_navn`, `adresse`, `post_nummer`, `by_navn`, `email`, `mobil`, `cpr`, `reg_nummer`, `konto_nummer`) " +
+            String sql = "INSERT IGNORE INTO customers(`first_name`, `last_name`, `address`, `postal_code`, `city`, `email`, `phone`, `cpr`, `reg_number`, `account_number`) " +
                     "VALUES ('" + customer.getFirstName() + "', " +
                     "'" + customer.getLastName() + "', " +
                     "'" + customer.getAddress() + "', " +
@@ -260,7 +245,7 @@ public class LeaseAgreementRepo implements CRUDInterface <LeaseAgreement>{
         }
 
         try{
-            String sql = "INSERT INTO abonnementer(`lejeaftale_id`, `lav_selvrisiko`, `afleveringsforsikring`, `lejeperiode_mdr`, `valgt_farve`, `is_limited`) " +
+            String sql = "INSERT INTO subscriptions(`agreement_id`, `low_deductible`, `delivery_insurance`, `length_in_months`, `has_standard_color`, `is_limited`) " +
                     "VALUES (" +
                     "'" + subscription.getAgreementId() + "', " +
                     ""  + subscription.hasLowDeductible() + ", " +
@@ -284,13 +269,13 @@ public class LeaseAgreementRepo implements CRUDInterface <LeaseAgreement>{
     private boolean insertPickupPlace(PickupPlace pickupPlace) {
 
         try{
-            String sql = "INSERT INTO afhentningssteder(`lejeaftale_id`, `adresse`, `post_nummer`, `by_navn`, `levering`) " +
+            String sql = "INSERT INTO pickup_places(`agreement_id`, `address`, `postal_code`, `city`, `delivery_cost`) " +
                     "VALUES (" +
                     "'" + pickupPlace.getAgreementId() + "', " +
                     "'" + pickupPlace.getAddress() + "', " +
                     "'" + pickupPlace.getPostalCode() + "', " +
                     "'" + pickupPlace.getCity() + "', " +
-                    "'" + pickupPlace.getDeliveryPrice() + "');";
+                    "'" + pickupPlace.getDeliveryCost() + "');";
 
 
             PreparedStatement stmt = conn.prepareStatement(sql);
@@ -306,7 +291,7 @@ public class LeaseAgreementRepo implements CRUDInterface <LeaseAgreement>{
 
     private boolean insertPriceEstimate(PriceEstimate priceEstimate) {
         try{
-            String sql = "INSERT INTO prisoverslag(`lejeaftale_id`, `abonnements_længde`, `km_pr_mdr`, `totalpris`) " +
+            String sql = "INSERT INTO price_estimates(`agreement_id`, `subscription_length`, `km_per_month`, `total_price`) " +
                     "VALUES (" +
                     "'" + priceEstimate.getAgreementId() + "', " +
                     "'" + priceEstimate.getSubscriptionLength() + "', " +
@@ -328,7 +313,7 @@ public class LeaseAgreementRepo implements CRUDInterface <LeaseAgreement>{
     private boolean insertSurveyReport(SurveyReport surveyReport) {
 
         try{
-            String sql = "INSERT INTO tilstandsrapporter(`lejeaftale_id`) " +
+            String sql = "INSERT INTO survey_reports(`agreement_id`) " +
                     "VALUES ('" + surveyReport.getAgreementId() + "');";
 
             stmt = conn.prepareStatement(sql);
@@ -347,19 +332,20 @@ public class LeaseAgreementRepo implements CRUDInterface <LeaseAgreement>{
     private Car getCar(String chassisNumber) {
 
         try {
-            String sql = "SELECT * FROM biler WHERE bil_stelnummer = '" + chassisNumber + "';";
+            String sql = "SELECT * FROM cars WHERE chassis_number = '" + chassisNumber + "';";
 
             stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
 
             while(rs.next()){
 
-                int bil_id = rs.getInt(1);
-                String bil_stelnummer = rs.getString(2);
-                String bil_navn = rs.getString(3);
-                String bil_model = rs.getString(4);
+                int carId = rs.getInt(1);
+                int agreementId = rs.getInt(2);
+                String chassisNo = rs.getString(3);
+                String brand = rs.getString(4);
+                String model = rs.getString(5);
 
-                return new Car(bil_id, bil_stelnummer, bil_navn, bil_model);
+                return new Car(carId, agreementId, chassisNo, brand, model);
             }
 
         }
@@ -373,25 +359,26 @@ public class LeaseAgreementRepo implements CRUDInterface <LeaseAgreement>{
     private Customer getCustomer(String cpr) {
 
         try {
-            String sql = "SELECT * FROM kunder WHERE cpr = '" + cpr + "';";
+            String sql = "SELECT * FROM customers WHERE cpr = '" + cpr + "';";
 
 
             stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
 
             while(rs.next()) {
-                String for_navn = rs.getString(1);
-                String efter_navn = rs.getString(2);
-                String adresse = rs.getString(3);
-                String post_nummer = rs.getString(4);
-                String by_navn = rs.getString(5);
-                String email = rs.getString(6);
-                String mobil = rs.getString(7);
-                String cpr_nummer = rs.getString(8);
-                String reg_nummer = rs.getString(9);
-                String konto_nummer = rs.getString(10);
+                int customerId = rs.getInt(1);
+                String firstName = rs.getString(2);
+                String lastName = rs.getString(3);
+                String address = rs.getString(4);
+                String postalCode = rs.getString(5);
+                String city = rs.getString(6);
+                String email = rs.getString(7);
+                String phone = rs.getString(8);
+                String cprNumber = rs.getString(9);
+                String regNumber = rs.getString(10);
+                String accountNuber = rs.getString(11);
 
-                return new Customer(for_navn, efter_navn, adresse, post_nummer, by_navn, email, mobil, cpr_nummer, reg_nummer, konto_nummer);
+                return new Customer(customerId, firstName, lastName, address, postalCode, city, email, phone, cprNumber, regNumber, accountNuber);
             }
         }
         catch (SQLException e){
@@ -404,26 +391,26 @@ public class LeaseAgreementRepo implements CRUDInterface <LeaseAgreement>{
     private Subscription getSubscription(int AgreementId) {
 
         try {
-            String sql = "SELECT * FROM abonnementer WHERE lejeaftale_id = '" + AgreementId + "';";
+            String sql = "SELECT * FROM subscriptions WHERE agreement_id = '" + AgreementId + "';";
 
             stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
 
             while(rs.next()) {
-                int abonnement_id = rs.getInt(1);
-                int lejeaftale_id = rs.getInt(2);
-                boolean lav_selvrisiko = rs.getBoolean(3);
-                boolean afleveringsforsikring = rs.getBoolean(4);
-                int lejeperiode_mdr = rs.getInt(5);
-                boolean valgt_farve = rs.getBoolean(6);
-                boolean is_limited = rs.getBoolean(7);
+                int subscriptionId = rs.getInt(1);
+                int agreementId = rs.getInt(2);
+                boolean lowDeductible = rs.getBoolean(3);
+                boolean deliveryInsurance = rs.getBoolean(4);
+                int lengthInMonths = rs.getInt(5);
+                boolean standartColor = rs.getBoolean(6);
+                boolean isLimited = rs.getBoolean(7);
 
 
-                if (is_limited){
-                    return new LimitedSubscription(abonnement_id, lejeaftale_id, lav_selvrisiko, valgt_farve);
+                if (isLimited){
+                    return new LimitedSubscription(subscriptionId, agreementId, lowDeductible, standartColor);
                 }
                 else{
-                    return new UnlimitedSubscription(abonnement_id, lejeaftale_id, lejeperiode_mdr, lav_selvrisiko, afleveringsforsikring, valgt_farve);
+                    return new UnlimitedSubscription(subscriptionId, agreementId, lengthInMonths, lowDeductible, deliveryInsurance, standartColor);
                 }
 
             }
@@ -438,20 +425,20 @@ public class LeaseAgreementRepo implements CRUDInterface <LeaseAgreement>{
     private PickupPlace getPickupPlace(int agreementId) {
 
         try {
-            String sql = "SELECT * FROM afhentningssteder WHERE lejeaftale_id = '" + agreementId + "';";
+            String sql = "SELECT * FROM pickup_places WHERE agreement_id = '" + agreementId + "';";
 
             stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
 
             while(rs.next()) {
-                int afhentningssted_id = rs.getInt(1);
-                int lejeaftale_id = rs.getInt(2);
-                String adresse = rs.getString(3);
-                String post_nummer = rs.getString(4);
-                String by_navn = rs.getString(5);
-                int levering = rs.getInt(6);
+                int pickupId = rs.getInt(1);
+                int leaseAgreementId = rs.getInt(2);
+                String address = rs.getString(3);
+                String postalCode = rs.getString(4);
+                String city = rs.getString(5);
+                int deliveryCost = rs.getInt(6);
 
-                return new PickupPlace(afhentningssted_id, lejeaftale_id, adresse, post_nummer, by_navn, levering);
+                return new PickupPlace(pickupId, leaseAgreementId, address, postalCode, city, deliveryCost);
             }
         }
         catch (SQLException e){
@@ -464,19 +451,19 @@ public class LeaseAgreementRepo implements CRUDInterface <LeaseAgreement>{
     private PriceEstimate getPriceEstimate(int agreementId) {
 
         try {
-            String sql = "SELECT * FROM prisoverslag WHERE lejeaftale_id = '" + agreementId + "';";
+            String sql = "SELECT * FROM price_estimates WHERE agreement_id = '" + agreementId + "';";
 
             stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
 
             while(rs.next()) {
-                int prisoverslag_id = rs.getInt(1);
-                int lejeaftale_id = rs.getInt(2);
-                int abonnements_længde = rs.getInt(3);
-                int kmPrMdr = rs.getInt(4);
-                int totalpris = rs.getInt(5);
+                int priceEstimateId = rs.getInt(1);
+                int leaseAgreementId = rs.getInt(2);
+                int subscriptionLength = rs.getInt(3);
+                int kmPerMonth = rs.getInt(4);
+                int totalPrice = rs.getInt(5);
 
-                return new PriceEstimate(prisoverslag_id, lejeaftale_id, abonnements_længde, kmPrMdr, totalpris);
+                return new PriceEstimate(priceEstimateId, leaseAgreementId, subscriptionLength, kmPerMonth, totalPrice);
             }
         }
         catch (SQLException e){
@@ -489,17 +476,17 @@ public class LeaseAgreementRepo implements CRUDInterface <LeaseAgreement>{
 
     private SurveyReport getSurveyReport(int agreementId) {
         try {
-            String sql = "SELECT * FROM tilstandsrapporter WHERE lejeaftale_id = '" + agreementId + "';";
+            String sql = "SELECT * FROM survey_reports WHERE agreement_id = '" + agreementId + "';";
 
             conn = DatabaseConnectionManager.getConnection();
             stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
 
             while(rs.next()) {
-                int tilstandsrapport_id = rs.getInt(1);
-                int lejeaftale_id = rs.getInt(2);
+                int reportId = rs.getInt(1);
+                int leaseAgreementId = rs.getInt(2);
 
-                return new SurveyReport(tilstandsrapport_id, lejeaftale_id);
+                return new SurveyReport(reportId, leaseAgreementId);
             }
         }
         catch (SQLException e){

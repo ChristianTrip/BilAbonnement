@@ -46,7 +46,7 @@
 
             <resource>
 
-                <directory>src/main/resources/csv</directory>
+                <directory>src/main/resources/csvFiles</directory>
 
             </resource>
 

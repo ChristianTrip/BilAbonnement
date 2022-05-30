@@ -21,21 +21,21 @@ public class SurveyReportRepo implements CRUDInterface<SurveyReport>{
 
         try{
             conn = DatabaseConnectionManager.getConnection();
-            String sql = "INSERT INTO tilstandsrapporter(`lejeaftale_id`) " +
+            String sql = "INSERT INTO survey_reports(`agreement_id`) " +
                     "VALUES ('" + surveyReport.getAgreementId() + "');";
 
             stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
 
-            int tilstandsrapportId = getLastIndex();
+            int reportId = getLastIndex();
 
             for (Deficiency deficiency : surveyReport.getDeficiencies()) {
-                deficiency.setAgreementId(tilstandsrapportId);
+                deficiency.setReportId(reportId);
                 insertShortcoming(deficiency);
             }
 
             for (Injury injury : surveyReport.getInjuries()) {
-                injury.setSurveyReportId(tilstandsrapportId);
+                injury.setSurveyReportId(reportId);
                 insertInjury(injury);
             }
 
@@ -54,18 +54,18 @@ public class SurveyReportRepo implements CRUDInterface<SurveyReport>{
     public SurveyReport getSingleEntityById(int id) {
         try {
             conn = DatabaseConnectionManager.getConnection();
-            String sql = "SELECT * FROM tilstandsrapporter WHERE tilstandsrapport_id = '" + id + "';";
+            String sql = "SELECT * FROM survey_reports WHERE report_id = '" + id + "';";
             stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
 
             while(rs.next()) {
-                int tilstandsrapport_id = rs.getInt(1);
-                int lejeaftale_id = rs.getInt(2);
+                int reportId = rs.getInt(1);
+                int agreementId = rs.getInt(2);
 
-                ArrayList<Deficiency> deficiencies = getShortcomings(id);
-                ArrayList<Injury> injuries = getInjuries(id);
+                ArrayList<Deficiency> deficiencies = getShortcomings(reportId);
+                ArrayList<Injury> injuries = getInjuries(reportId);
 
-                return new SurveyReport(tilstandsrapport_id, lejeaftale_id, deficiencies, injuries);
+                return new SurveyReport(reportId, agreementId, deficiencies, injuries);
             }
         }
         catch (SQLException e){
@@ -81,14 +81,14 @@ public class SurveyReportRepo implements CRUDInterface<SurveyReport>{
         ArrayList<SurveyReport> surveyReports = new ArrayList<>();
         try {
             conn = DatabaseConnectionManager.getConnection();
-            String sql = "SELECT * FROM tilstandsrapporter;";
+            String sql = "SELECT * FROM survey_reports;";
             stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
 
             while(rs.next()) {
-                int tilstandsrapport_id = rs.getInt(1);
+                int reportId = rs.getInt(1);
 
-                surveyReports.add(getSingleEntityById(tilstandsrapport_id));
+                surveyReports.add(getSingleEntityById(reportId));
             }
             return surveyReports;
         }
@@ -102,15 +102,18 @@ public class SurveyReportRepo implements CRUDInterface<SurveyReport>{
     @Override
     public boolean update(SurveyReport surveyReport) {
 
-
         try{
             conn = DatabaseConnectionManager.getConnection();
-
+            String sql =    "UPDATE survey_reports " +
+                            "SET report_id = " + surveyReport.getId() + ", " +
+                            "agreement_id = " + surveyReport.getAgreementId() +
+                            "WHERE report_id = " + surveyReport.getId();
+            stmt = conn.prepareStatement(sql);
+            stmt.executeUpdate();
 
         }catch(Exception e){
             e.printStackTrace();
         }
-
 
         return false;
     }
@@ -120,7 +123,7 @@ public class SurveyReportRepo implements CRUDInterface<SurveyReport>{
 
         try{
             conn = DatabaseConnectionManager.getConnection();
-            String sql = "DELETE FROM tilstandsrapporter WHERE tilstandsrapport_id = " + id + ";";
+            String sql = "DELETE FROM survey_reports WHERE report_id = " + id + ";";
             stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
 
@@ -156,7 +159,7 @@ public class SurveyReportRepo implements CRUDInterface<SurveyReport>{
     private boolean insertInjury(Injury injury){
 
         try{
-            String sql = "INSERT IGNORE skader(`tilstandsrapport_id`, `skade_navn`, `skade_beskrivelse`, `skade_pris`) " +
+            String sql = "INSERT IGNORE injuries(`report_id`, `title`, `description`, `price`) " +
                     "VALUES (" +
                     "'" + injury.getSurveyReportId() + "', " +
                     "'" + injury.getTitle() + "', " +
@@ -178,9 +181,9 @@ public class SurveyReportRepo implements CRUDInterface<SurveyReport>{
     private boolean insertShortcoming(Deficiency deficiency){
 
         try{
-            String sql = "INSERT IGNORE mangler(`tilstandsrapport_id`, `mangel_navn`, `mangel_beskrivelse`, `mangel_pris`) " +
+            String sql = "INSERT IGNORE deficiencies(`report_id`, `title`, `description`, `price`) " +
                     "VALUES (" +
-                    "'" + deficiency.getAgreementId() + "', " +
+                    "'" + deficiency.getReportId() + "', " +
                     "'" + deficiency.getTitle() + "', " +
                     "'" + deficiency.getDescription() + "', " +
                     "'" + deficiency.getPrice() + "');";
@@ -191,7 +194,7 @@ public class SurveyReportRepo implements CRUDInterface<SurveyReport>{
         }
         catch (SQLException e){
             e.printStackTrace();
-            System.out.println("Kunne ikke oprette mangel med tilstandsrapport Id " + deficiency.getAgreementId() + " i databasen");
+            System.out.println("Kunne ikke oprette mangel med tilstandsrapport Id " + deficiency.getReportId() + " i databasen");
         }
         return false;
     }
@@ -202,19 +205,19 @@ public class SurveyReportRepo implements CRUDInterface<SurveyReport>{
         ArrayList<Injury> injuries = new ArrayList<>();
 
         try {
-            String sql = "SELECT * FROM skader WHERE tilstandsrapport_id = '" + surveyReportId + "';";
+            String sql = "SELECT * FROM injuries WHERE report_id = '" + surveyReportId + "';";
 
             stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
 
             while(rs.next()) {
-                int skade_id = rs.getInt(1);
-                int tilstandsrapport_id = rs.getInt(2);
-                String skade_navn = rs.getString(3);
-                String skade_beskrivelse = rs.getString(4);
-                int skade_pris = rs.getInt(5);
+                int injuryId = rs.getInt(1);
+                int reportId = rs.getInt(2);
+                String title = rs.getString(3);
+                String description = rs.getString(4);
+                int price = rs.getInt(5);
 
-                injuries.add(new Injury(skade_id, tilstandsrapport_id, skade_navn, skade_beskrivelse, skade_pris));
+                injuries.add(new Injury(injuryId, reportId, title, description, price));
             }
 
             return injuries;
@@ -231,18 +234,18 @@ public class SurveyReportRepo implements CRUDInterface<SurveyReport>{
         ArrayList<Deficiency> deficiencies = new ArrayList<>();
 
         try {
-            String sql = "SELECT * FROM mangler WHERE tilstandsrapport_id = '" + surveyReportId + "';";
+            String sql = "SELECT * FROM deficiencies WHERE report_id = '" + surveyReportId + "';";
             stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
 
             while(rs.next()) {
-                int mangel_id = rs.getInt(1);
-                int tilstandsrapport_id = rs.getInt(2);
-                String mangel_navn = rs.getString(3);
-                String mangel_beskrivelse = rs.getString(4);
-                int mangel_pris = rs.getInt(5);
+                int deficiencyId = rs.getInt(1);
+                int reportId = rs.getInt(2);
+                String title = rs.getString(3);
+                String description = rs.getString(4);
+                int price = rs.getInt(5);
 
-                deficiencies.add(new Deficiency(mangel_id, tilstandsrapport_id, mangel_navn, mangel_beskrivelse, mangel_pris));
+                deficiencies.add(new Deficiency(deficiencyId, reportId, title, description, price));
             }
 
             return deficiencies;

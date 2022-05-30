@@ -23,7 +23,7 @@ public class LeaseAgreementService {
     private PriceEstimateRepo priceEstimateRepo = new PriceEstimateRepo();
     private SurveyReportRepo surveyReportRepo = new SurveyReportRepo();
     private InjuryRepo injuryRepo = new InjuryRepo();
-    private ShortcomingRepo shortcomingRepo = new ShortcomingRepo();
+    private DeficiencyRepo deficiencyRepo = new DeficiencyRepo();
 
 
     private ArrayList<LeaseAgreement> nonAgreedLeases = new ArrayList<>();
@@ -115,8 +115,6 @@ public class LeaseAgreementService {
         return nonAgreedLeases;
     }
 
-    //lav metode der validerer objecter inden LegeaftaleRepo().create() bliver kaldt;
-
 
     public boolean testValidate(Object o){
         try {
@@ -134,9 +132,5 @@ public class LeaseAgreementService {
         return true;
     }
 
-    public static void main(String[] args) {
-        LeaseAgreementService service = new LeaseAgreementService();
-        System.out.println(service.getNonAgreedleases());
-    }
 
 }

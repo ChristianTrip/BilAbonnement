@@ -22,7 +22,7 @@ public class UserRepo implements CRUDInterface<User>{
 
         try{
             conn = DatabaseConnectionManager.getConnection();
-            String sql = "INSERT INTO brugere(`bruger_type`, `bruger_navn`, `adgangskode`) " +
+            String sql = "INSERT INTO users(`user_type`, `name`, `password`) " +
                     "VALUES ('" + user.getUserType() + "', " +
                     "'" + user.getName() + "', " +
                     "'" + user.getPassword() + "');";
@@ -33,7 +33,7 @@ public class UserRepo implements CRUDInterface<User>{
         }
         catch (SQLException e){
             e.printStackTrace();
-            System.out.println("Kunne ikke oprette bruger med id " + user.getId() + " i databasen");
+            System.out.println("Kunne ikke oprette user med id " + user.getId() + " i databasen");
         }
 
         return false;
@@ -44,27 +44,27 @@ public class UserRepo implements CRUDInterface<User>{
 
         try {
             conn = DatabaseConnectionManager.getConnection();
-            String sql = "SELECT * FROM brugere WHERE bruger_id = " + id + ";";
+            String sql = "SELECT * FROM users WHERE user_id = " + id + ";";
             stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
 
             while(rs.next()){
 
-                int bruger_id = rs.getInt(1);
-                String bruger_type = rs.getString(2);
-                String navn = rs.getString(3);
-                String adgangskode = rs.getString(4);
+                int userId = rs.getInt(1);
+                String userType = rs.getString(2);
+                String name = rs.getString(3);
+                String password = rs.getString(4);
 
                 UserType type;
-                type = UserType.valueOf(bruger_type);
+                type = UserType.valueOf(userType);
 
-                return new User(bruger_id, navn, adgangskode, type);
+                return new User(userId, name, password, type);
             }
 
         }
         catch (SQLException e){
             e.printStackTrace();
-            System.out.println("Kunne ikke finde bruger med id: " + id);
+            System.out.println("Kunne ikke finde user med id: " + id);
         }
         return null;
     }
@@ -80,15 +80,15 @@ public class UserRepo implements CRUDInterface<User>{
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()){
-                int bruger_id = rs.getInt(1);
-                String bruger_type = rs.getString(2);
-                String navn = rs.getString(3);
-                String adgangskode = rs.getString(4);
+                int userId = rs.getInt(1);
+                String userType = rs.getString(2);
+                String name = rs.getString(3);
+                String password = rs.getString(4);
 
                 UserType type;
-                type = UserType.valueOf(bruger_type);
+                type = UserType.valueOf(userType);
 
-                User user = new User(bruger_id, navn, adgangskode, type);
+                User user = new User(userId, name, password, type);
 
                 users.add(user);
             }
@@ -105,11 +105,11 @@ public class UserRepo implements CRUDInterface<User>{
 
         try {
             conn = DatabaseConnectionManager.getConnection();
-            String sql = "UPDATE brugere " +
+            String sql = "UPDATE users " +
                     "SET " +
-                    "bruger_navn = '" + user.getName() + "', " +
-                    "adgangskode = '" + user.getPassword() + "' " +
-                    "WHERE bruger_id = " + user.getId() + ";";
+                    "name = '" + user.getName() + "', " +
+                    "password = '" + user.getPassword() + "' " +
+                    "WHERE user_id = " + user.getId() + ";";
             stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
 
@@ -127,7 +127,7 @@ public class UserRepo implements CRUDInterface<User>{
 
         try{
             conn = DatabaseConnectionManager.getConnection();
-            String sql = "DELETE FROM brugere WHERE bruger_id = " + id + ";";
+            String sql = "DELETE FROM users WHERE user_id = " + id + ";";
             stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
         }

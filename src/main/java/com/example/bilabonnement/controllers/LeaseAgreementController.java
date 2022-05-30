@@ -111,30 +111,32 @@ public class LeaseAgreementController {
             return "redirect:/";
         }
 
+        try{
         godkendteLejeaftaler = leaseAgreementService.getAllLeaseAgreements();
 
-        int totalpris = businessService.getTotalPrice(godkendteLejeaftaler);
+            int totalpris = businessService.getTotalPrice(godkendteLejeaftaler);
+            int antalUdlejedeBiler = businessService.getNumberOfRentedOutCars(godkendteLejeaftaler);
 
-        int antalUdlejedeBiler = businessService.getNumberOfRentedOutCars(godkendteLejeaftaler);
+            model.addAttribute("isGodkendt", true);
+            model.addAttribute("igangvaerende", leaseAgreementService.getAllActiveAgreements(godkendteLejeaftaler));
+            model.addAttribute("afsluttede", leaseAgreementService.getAllEndedAgreements(godkendteLejeaftaler));
+            model.addAttribute("manglerTilstandsrapport", "Ingen registrerede skader/mangler");
+            model.addAttribute("harTilstandsrapport", "Har skader/mangler");
 
-       /* boolean isSkadeRegBruger = true;
+            model.addAttribute("totalpris", totalpris);
+            model.addAttribute("antalUdlejedeBiler", antalUdlejedeBiler);
 
+            return "alleLejeaftaler";
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return "redirect:/error";
+        }
+    }
 
-        model.addAttribute("isSkadeRegBruger", false);
-*/
-        model.addAttribute("isGodkendt", true);
-        model.addAttribute("igangvaerende", leaseAgreementService.getAllActiveAgreements(godkendteLejeaftaler));
-        model.addAttribute("afsluttede", leaseAgreementService.getAllEndedAgreements(godkendteLejeaftaler));
-        model.addAttribute("manglerTilstandsrapport", "Ingen registrerede skader/mangler");
-        model.addAttribute("harTilstandsrapport", "Har skader/mangler");
-
-
-        model.addAttribute("totalpris", totalpris);
-
-        model.addAttribute("antalUdlejedeBiler", antalUdlejedeBiler);
-
-
-        return "alleLejeaftaler";
+    @GetMapping("/error")
+    public String getErrorPage(){
+        return "error";
     }
 
     @PostMapping("/godkendteLejeaftaler/{aftaleNo}")
@@ -150,6 +152,7 @@ public class LeaseAgreementController {
         } else {
             return new RedirectView("/godkendteLejeaftaler", true);
         }
+
     }
 
     @GetMapping("/seLejeaftale")

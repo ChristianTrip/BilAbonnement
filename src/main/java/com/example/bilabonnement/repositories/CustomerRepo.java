@@ -21,7 +21,7 @@ public class CustomerRepo implements CRUDInterface <Customer>{
 
         try{
             conn = DatabaseConnectionManager.getConnection();
-            String sql = "INSERT INTO kunder(`lejeaftale_id`, `for_navn`, `efter_navn`, `adresse`, `post_nummer`, `by_navn`, `email`, `mobil`, `cpr`, `reg_nummer`, `konto_nummer`) " +
+            String sql = "INSERT INTO customers(`agreement_id`, `first_name`, `last_name`, `address`, `postal_code`, `city`, `email`, `phone`, `cpr`, `reg_number`, `account_number`) " +
                     "VALUES ('" + customer.getAgreementId() + "', " +
                     "'" + customer.getFirstName() + "', " +
                     "'" + customer.getLastName() + "', " +
@@ -40,39 +40,40 @@ public class CustomerRepo implements CRUDInterface <Customer>{
         }
         catch (SQLException e){
             e.printStackTrace();
-            System.out.println("Kunne ikke oprette bruger med cpr nummer " + customer.getCpr() + " i databasen");
+            System.out.println("Could not create customer with cpr number '" + customer.getCpr()+ "' in database");
         }
 
         return false;
     }
 
     @Override
-    public Customer getSingleEntityById(int cpr) {
+    public Customer getSingleEntityById(int id) {
 
         try {
             conn = DatabaseConnectionManager.getConnection();
-            String sql = "SELECT * FROM kunder WHERE cpr = '" + cpr + "';";
+            String sql = "SELECT * FROM customers WHERE customer_id = '" + id + "';";
             stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
 
             while(rs.next()) {
-                String for_navn = rs.getString(1);
-                String efter_navn = rs.getString(2);
-                String adresse = rs.getString(3);
-                String post_nummer = rs.getString(4);
-                String by = rs.getString(5);
-                String email = rs.getString(6);
-                String mobil = rs.getString(7);
-                String cpr_nummer = rs.getString(8);
-                String reg_nummer = rs.getString(9);
-                String konto_nummer = rs.getString(10);
+                int customerId = rs.getInt(1);
+                String firstName = rs.getString(2);
+                String lastName = rs.getString(3);
+                String address = rs.getString(4);
+                String postalCode = rs.getString(5);
+                String city = rs.getString(6);
+                String email = rs.getString(7);
+                String phone = rs.getString(8);
+                String cpr = rs.getString(9);
+                String regNumber = rs.getString(10);
+                String accountNuber = rs.getString(11);
 
-                return new Customer(for_navn, efter_navn, adresse, post_nummer, by, email, mobil, cpr_nummer, reg_nummer, konto_nummer);
+                return new Customer(customerId, firstName, lastName, address, postalCode, city, email, phone, cpr, regNumber, accountNuber);
             }
         }
         catch (SQLException e){
             e.printStackTrace();
-            System.out.println("Kunne ikke finde kunde med cpr nummer: " + cpr);
+            System.out.println("Could not find customer with id '" + id + "' in database");
         }
         return null;
     }
@@ -83,29 +84,30 @@ public class CustomerRepo implements CRUDInterface <Customer>{
         ArrayList<Customer> customers = new ArrayList<>();
         try {
             conn = DatabaseConnectionManager.getConnection();
-            String sql = "SELECT * FROM kunder;";
+            String sql = "SELECT * FROM customers;";
             stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
 
             while(rs.next()) {
-                String for_navn = rs.getString(1);
-                String efter_navn = rs.getString(2);
-                String adresse = rs.getString(3);
-                String post_nummer = rs.getString(4);
-                String by = rs.getString(5);
-                String email = rs.getString(6);
-                String mobil = rs.getString(7);
-                String cpr = rs.getString(8);
-                String reg_nummer = rs.getString(9);
-                String konto_nummer = rs.getString(10);
+                int customerId = rs.getInt(1);
+                String firstName = rs.getString(2);
+                String lastName = rs.getString(3);
+                String address = rs.getString(4);
+                String postalCode = rs.getString(5);
+                String city = rs.getString(6);
+                String email = rs.getString(7);
+                String phone = rs.getString(8);
+                String cpr = rs.getString(9);
+                String regNumber = rs.getString(10);
+                String accountNuber = rs.getString(11);
 
-                Customer customer = new Customer(for_navn, efter_navn, adresse, post_nummer, by, email, mobil, cpr, reg_nummer, konto_nummer);
+                Customer customer = new Customer(customerId, firstName, lastName, address, postalCode, city, email, phone, cpr, regNumber, accountNuber);
                 customers.add(customer);
             }
         }
         catch (SQLException e){
             e.printStackTrace();
-            System.out.println("Kunne ikke finde customers");
+            System.out.println("Could not retrieve customers from database");
         }
         return customers;
     }
@@ -115,45 +117,46 @@ public class CustomerRepo implements CRUDInterface <Customer>{
 
         try{
             conn = DatabaseConnectionManager.getConnection();
-            String sql =    "UPDATE kunder " +
+            String sql =    "UPDATE customers " +
                             "SET " +
-                            "for_navn = '" + customer.getFirstName()         + "', " +
-                            "efter_navn = '" + customer.getLastName()     + "', " +
-                            "adresse = '" + customer.getAddress()          + "', " +
-                            "post_nummer = '" + customer.getPostalCode()   + "', " +
-                            "by_navn = '" + customer.getCity()               + "', " +
+                            "first_name = '" + customer.getFirstName()         + "', " +
+                            "last_name = '" + customer.getLastName()     + "', " +
+                            "address = '" + customer.getAddress()          + "', " +
+                            "postal_code = '" + customer.getPostalCode()   + "', " +
+                            "city = '" + customer.getCity()               + "', " +
                             "email = '" + customer.getEmail()              + "', " +
-                            "mobil = '" + customer.getPhoneNumber()              + "', " +
+                            "phone = '" + customer.getPhoneNumber()              + "', " +
                             "cpr = '" + customer.getCpr()                  + "', " +
-                            "reg_nummer = '" + customer.getRegNumber()     + "', " +
-                            "konto_nummer = '" + customer.getAccountNumber() + "' " +
-                            "WHERE cpr = " + customer.getCpr() + ";";
+                            "reg_number = '" + customer.getRegNumber()     + "', " +
+                            "account_number = '" + customer.getAccountNumber() + "' " +
+                            "WHERE cpr = '" + customer.getCpr() + "';";
 
             stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
         }
         catch (SQLException e){
             e.printStackTrace();
-            System.out.println("Kunne ikke updatere kunde med cpr nummer: " + customer.getCpr());
+            System.out.println("Could not update customer with cpr number '" + customer.getCpr() + "'");
             return false;
         }
         return true;
     }
 
     @Override
-    public boolean deleteById(int cpr) {
+    public boolean deleteById(int id) {
 
         try{
             conn = DatabaseConnectionManager.getConnection();
-            String sql = "DELETE FROM kunder WHERE cpr = " + cpr + ";";
+            String sql = "DELETE FROM customers WHERE customer_id = " + id + ";";
             stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
         }
         catch (SQLException e){
             e.printStackTrace();
-            System.out.println("Kunne ikke slette kunde med cpr nummer: " + cpr);
+            System.out.println("Could not delete customer with id number '" + id + "' from database");
             return false;
         }
         return true;
     }
+
 }

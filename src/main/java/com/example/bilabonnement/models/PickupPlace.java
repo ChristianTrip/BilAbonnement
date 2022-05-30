@@ -7,31 +7,31 @@ public class PickupPlace {
     private final String address;
     private final String postalCode;
     private final String city;
-    private final int deliveryPrice;
+    private final int deliveryCost;
 
 
-    public PickupPlace(int id, int agreementId, String address, String postalCode, String city, int deliveryPrice) {
+    public PickupPlace(int id, int agreementId, String address, String postalCode, String city, int deliveryCost) {
         this.id = id;
         this.agreementId = agreementId;
         this.address = address;
         this.postalCode = postalCode;
         this.city = city;
-        this.deliveryPrice = deliveryPrice;
+        this.deliveryCost = deliveryCost;
     }
 
-    public PickupPlace(int id, String address, String postalCode, String city, int deliveryPrice) {
+    public PickupPlace(int id, String address, String postalCode, String city, int deliveryCost) {
         this.id = id;
         this.address = address;
         this.postalCode = postalCode;
         this.city = city;
-        this.deliveryPrice = deliveryPrice;
+        this.deliveryCost = deliveryCost;
     }
 
-    public PickupPlace(String address, String postalCode, String city, int deliveryPrice) {
+    public PickupPlace(String address, String postalCode, String city, int deliveryCost) {
         this.address = address;
         this.postalCode = postalCode;
         this.city = city;
-        this.deliveryPrice = deliveryPrice;
+        this.deliveryCost = deliveryCost;
     }
 
     public int getId() {
@@ -58,8 +58,8 @@ public class PickupPlace {
         return city;
     }
 
-    public int getDeliveryPrice() {
-        return deliveryPrice;
+    public int getDeliveryCost() {
+        return deliveryCost;
     }
 
     @Override
@@ -70,7 +70,7 @@ public class PickupPlace {
                 "\naddress = '" + address + '\'' +
                 "\npostalCode = '" + postalCode + '\'' +
                 "\ncity = '" + city + '\'' +
-                "\ndeliveryPrice = " + deliveryPrice +
+                "\ndeliveryCost = " + deliveryCost +
                 '}' +"\n";
     }
 }

@@ -3,7 +3,7 @@ package com.example.bilabonnement.services;
 import com.example.bilabonnement.models.Deficiency;
 import com.example.bilabonnement.models.Injury;
 import com.example.bilabonnement.models.SurveyReport;
-import com.example.bilabonnement.repositories.ShortcomingRepo;
+import com.example.bilabonnement.repositories.DeficiencyRepo;
 import com.example.bilabonnement.repositories.InjuryRepo;
 
 import static java.lang.Integer.parseInt;
@@ -11,7 +11,7 @@ import static java.lang.Integer.parseInt;
 public class SurveyReportService {
 
     private InjuryRepo injuryRepo = new InjuryRepo();
-    private ShortcomingRepo shortcomingRepo = new ShortcomingRepo();
+    private DeficiencyRepo deficiencyRepo = new DeficiencyRepo();
     private SurveyReport surveyReport;
 
     public boolean addInjury(String title, String description, String price){
@@ -29,8 +29,8 @@ public class SurveyReportService {
 
         if(!titel.equals("") || !beskrivelse.equals("") || !pris.equals("")) {
             Deficiency deficiency = new Deficiency(titel, beskrivelse, parseInt(pris));
-            deficiency.setAgreementId(surveyReport.getId());
-            if (shortcomingRepo.create(deficiency)){
+            deficiency.setReportId(surveyReport.getId());
+            if (deficiencyRepo.create(deficiency)){
                 return true;
             }
         }
@@ -47,7 +47,7 @@ public class SurveyReportService {
 
     public boolean removeShortcoming(Deficiency deficiency){
 
-        if (shortcomingRepo.deleteById(deficiency.getId())){
+        if (deficiencyRepo.deleteById(deficiency.getId())){
             return true;
         }
         return false;

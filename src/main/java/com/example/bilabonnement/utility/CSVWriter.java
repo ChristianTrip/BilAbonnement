@@ -17,8 +17,8 @@ public class CSVWriter {
         reader = CSVReader.getInstance();
 
         //Customer
-        //Læs alt ned på en arraylist
-        file = new File("src/main/resources/csv/kunde.csv");
+        //Læs alt ned på en arrayliste
+        file = new File("src/main/resources/csvFiles/incomingCustomers.csv");
         allLines = reader.getAllLinesFromFile(file);
         //Fjern lineIndex fra arraylist
         allLines.remove(lineIndex);
@@ -26,28 +26,28 @@ public class CSVWriter {
         writeToFile(file);
 
         //Car
-        file = new File("src/main/resources/csv/bil.csv");
+        file = new File("src/main/resources/csvFiles/incomingCars.csv");
         allLines = reader.getAllLinesFromFile(file);
         allLines.remove(lineIndex);
 
         writeToFile(file);
 
         //Subscription
-        file = new File("src/main/resources/csv/abonnement.csv");
+        file = new File("src/main/resources/csvFiles/incomingSubscriptions.csv");
         allLines = reader.getAllLinesFromFile(file);
         allLines.remove(lineIndex);
 
         writeToFile(file);
 
         //PriceEstimate
-        file = new File("src/main/resources/csv/prisoverslag.csv");
+        file = new File("src/main/resources/csvFiles/incomingPriceEstimates.csv");
         allLines = reader.getAllLinesFromFile(file);
         allLines.remove(lineIndex);
 
         writeToFile(file);
 
         //PickupPlace
-        file = new File("src/main/resources/csv/afhentningssted.csv");
+        file = new File("src/main/resources/csvFiles/incomingPickupPlaces.csv");
         allLines = reader.getAllLinesFromFile(file);
         allLines.remove(lineIndex);
 

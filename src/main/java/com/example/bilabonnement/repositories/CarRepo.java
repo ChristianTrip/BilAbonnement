@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class CarRepo implements CRUDInterface<Car> {
 
@@ -18,9 +19,12 @@ public class CarRepo implements CRUDInterface<Car> {
 
     @Override
     public boolean create(Car car) {
+
+        Properties connectionInfo = null;
         try{
             conn = DatabaseConnectionManager.getConnection();
-            String sql = "INSERT INTO biler(`lejeaftale_id`, `bil_stelnummer`, `bil_name`, `bil_model`) " +
+            connectionInfo = conn.getClientInfo();
+            String sql = "INSERT INTO cars(`agreement_id`, `chassis_number`, `brand`, `model`) " +
                     "VALUES (" +
                     "'" + car.getAgreementId() + "', " +
                     "'" + car.getChassisNumber() + "', " +
@@ -29,11 +33,12 @@ public class CarRepo implements CRUDInterface<Car> {
 
             stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
+            conn.close();
             return true;
         }
         catch (SQLException e){
             e.printStackTrace();
-            System.out.println("Kunne ikke oprette bil med stelnummer " + car.getChassisNumber() + " i databasen");
+            System.out.println("Could not create car with chassis number '" + car.getChassisNumber() + "' on connection " + connectionInfo);
         }
 
         return false;
@@ -44,24 +49,24 @@ public class CarRepo implements CRUDInterface<Car> {
 
         try {
             conn = DatabaseConnectionManager.getConnection();
-            String sql = "SELECT * FROM biler WHERE bil_id = '" + id + "';";
+            String sql = "SELECT * FROM cars WHERE car_id = '" + id + "';";
             stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
 
             while(rs.next()){
+                int carId = rs.getInt(1);
+                int agreementId = rs.getInt(2);
+                String chassisNumber = rs.getString(3);
+                String brand = rs.getString(4);
+                String model = rs.getString(5);
 
-                int lejeaftale_id = rs.getInt(1);
-                String bil_stelnummer = rs.getString(2);
-                String bil_navn = rs.getString(3);
-                String bil_model = rs.getString(4);
-
-                return new Car(lejeaftale_id, bil_stelnummer, bil_navn, bil_model);
+                conn.close();
+                return new Car(carId, agreementId, chassisNumber, brand, model);
             }
-
         }
         catch (SQLException e){
             e.printStackTrace();
-            System.out.println("Kunne ikke finde bil med id: " + id);
+            System.out.println("Could not find car with id '" + id + "' in database");
         }
         return null;
     }
@@ -72,24 +77,25 @@ public class CarRepo implements CRUDInterface<Car> {
 
         try {
             conn = DatabaseConnectionManager.getConnection();
-            String sql = "SELECT * FROM biler;";
+            String sql = "SELECT * FROM cars;";
             stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
 
             while (rs.next()){
-                int lejeAftaleId = rs.getInt(1);
-                String stelnummer = rs.getString(2);
-                String navn = rs.getString(3);
-                String model = rs.getString(4);
+                int carId = rs.getInt(1);
+                int agreementId = rs.getInt(2);
+                String chassisNumber = rs.getString(3);
+                String brand = rs.getString(4);
+                String model = rs.getString(5);
 
-                Car car = new Car(lejeAftaleId, stelnummer, navn, model);
-
+                Car car = new Car(carId, agreementId, chassisNumber, brand, model);
                 cars.add(car);
             }
+            conn.close();
         }
         catch (SQLException e){
             e.printStackTrace();
-            System.out.println("Kunne ikke finde brugere");
+            System.out.println("Could not retrieve cars from database");
         }
         return cars;
     }
@@ -99,21 +105,20 @@ public class CarRepo implements CRUDInterface<Car> {
 
         try {
             conn = DatabaseConnectionManager.getConnection();
-            String sql = "UPDATE biler " +
+            String sql = "UPDATE cars " +
                     "SET " +
-                    "bil_stelnummer = '" + car.getChassisNumber() + "', " +
-                    "bil_name = '" + car.getBrand() + "', " +
-                    "bil_model = '" + car.getModel() + "' " +
-                    "WHERE bil_stelnummer = " + car.getChassisNumber() + ";";
+                    "brand = '" + car.getBrand() + "', " +
+                    "model = '" + car.getModel() + "' " +
+                    "WHERE chassis_number = '" + car.getChassisNumber() + "';";
 
             stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
-
+            conn.close();
             return true;
 
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Kunne ikke opdatere bil med stelnummer: " + car.getChassisNumber());
+            System.out.println("Could not update car with chassis number '" + car.getChassisNumber() + "'");
         }
         return false;
     }
@@ -123,13 +128,14 @@ public class CarRepo implements CRUDInterface<Car> {
 
         try{
             conn = DatabaseConnectionManager.getConnection();
-            String sql = "DELETE FROM biler WHERE bil_id = " + id + ";";
+            String sql = "DELETE FROM cars WHERE car_id = " + id + ";";
             stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
+            conn.close();
         }
         catch (SQLException e){
             e.printStackTrace();
-            System.out.println("Kunne ikke slette bil med id: " + id);
+            System.out.println("Could not delete car with id number '" + id + "'");
             return false;
         }
         return true;

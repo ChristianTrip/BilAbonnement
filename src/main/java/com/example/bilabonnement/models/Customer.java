@@ -2,6 +2,7 @@ package com.example.bilabonnement.models;
 
 public class Customer {
 
+    private int id;
     private int agreementId;
     private String firstName;
     private String lastName;
@@ -14,6 +15,23 @@ public class Customer {
     private String regNumber;
     private String accountNumber;
 
+    // Constructor for retrieving a customer object from the database
+    public Customer(int id, String firstName, String lastName, String address, String postalCode, String city, String email, String phoneNumber, String cpr, String regNumber, String accountNumber) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.postalCode = postalCode;
+        this.city = city;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.cpr = cpr;
+        this.regNumber = regNumber;
+        this.accountNumber = accountNumber;
+    }
+
+    // Constructor for inserting a customer object to the database table
+    // Also used when retrieving a customer object from the customers.csv file
     public Customer(String firstName, String lastName, String address, String postalCode, String city, String email, String phoneNumber, String cpr, String regNumber, String accountNumber) {
         this.firstName = firstName;
         this.lastName = lastName;

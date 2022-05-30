@@ -29,7 +29,7 @@ public class SubscriptionRepo implements CRUDInterface<Subscription> {
                 isLimited = false;
             }
 
-            String sql = "INSERT INTO abonnementer(`lejeaftale_id`, `lav_selvrisiko`, `afleveringsforsikring`, `lejeperiode_mdr`, `valgt_farve`, `is_limited`) " +
+            String sql = "INSERT INTO subscriptions(`agreement_id`, `low_deductible`, `delivery_insurance`, `length_in_months`, `has_standard_color`, `is_limited`) " +
                     "VALUES (" +
                     "'" + subscription.getAgreementId() + "', " +
                     ""  + subscription.hasLowDeductible() + ", " +
@@ -51,36 +51,36 @@ public class SubscriptionRepo implements CRUDInterface<Subscription> {
     }
 
     @Override
-    public Subscription getSingleEntityById(int agreementId) {
+    public Subscription getSingleEntityById(int id) {
 
         try {
-            String sql = "SELECT * FROM abonnementer WHERE lejeaftale_id = '" + agreementId + "';";
+            String sql = "SELECT * FROM subscriptions WHERE subscriptionId = '" + id + "';";
             conn = DatabaseConnectionManager.getConnection();
             stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
 
             while(rs.next()) {
-                int abonnement_id = rs.getInt(1);
-                int lejeaftale_id = rs.getInt(2);
-                boolean lav_selvrisiko = rs.getBoolean(3);
-                boolean afleveringsforsikring = rs.getBoolean(4);
-                int lejeperiode_mdr = rs.getInt(5);
-                boolean valgt_farve = rs.getBoolean(6);
+                int subsriptionId = rs.getInt(1);
+                int agreementId = rs.getInt(2);
+                boolean lowDeductible = rs.getBoolean(3);
+                boolean deliveryInsurance = rs.getBoolean(4);
+                int lengthInMonths = rs.getInt(5);
+                boolean hasStandardColor = rs.getBoolean(6);
                 boolean is_limited = rs.getBoolean(7);
 
 
                 if (is_limited){
-                    return new LimitedSubscription(abonnement_id, lejeaftale_id, lav_selvrisiko, valgt_farve);
+                    return new LimitedSubscription(subsriptionId, agreementId, lowDeductible, hasStandardColor);
                 }
                 else{
-                    return new UnlimitedSubscription(abonnement_id, agreementId, lejeperiode_mdr, lav_selvrisiko, afleveringsforsikring, valgt_farve);
+                    return new UnlimitedSubscription(subsriptionId, agreementId, lengthInMonths, lowDeductible, deliveryInsurance, hasStandardColor);
                 }
 
             }
         }
         catch (SQLException e){
             e.printStackTrace();
-            System.out.println("Kunne ikke finde abonnement tilhørende lejeaftale id: " + agreementId);
+            System.out.println("Kunne ikke finde abonnement tilhørende lejeaftale id: " + id);
         }
         return null;
     }
@@ -91,26 +91,26 @@ public class SubscriptionRepo implements CRUDInterface<Subscription> {
         List<Subscription> subscriptions = new ArrayList<>();
 
         try {
-            String sql = "SELECT * FROM abonnementer;";
+            String sql = "SELECT * FROM subscriptions;";
             conn = DatabaseConnectionManager.getConnection();
             stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
 
             while(rs.next()){
-                int abonnement_id = rs.getInt(1);
-                int lejeaftale_id = rs.getInt(2);
-                boolean lav_selvrisiko = rs.getBoolean(3);
-                boolean afleveringsforsikring = rs.getBoolean(4);
-                int lejeperiode_mdr = rs.getInt(5);
-                boolean valgt_farve = rs.getBoolean(6);
+                int subsriptionId = rs.getInt(1);
+                int agreementId = rs.getInt(2);
+                boolean lowDeductible = rs.getBoolean(3);
+                boolean deliveryInsurance = rs.getBoolean(4);
+                int lengthInMonths = rs.getInt(5);
+                boolean hasStandardColor = rs.getBoolean(6);
                 boolean is_limited = rs.getBoolean(7);
 
 
                 if (is_limited){
-                    subscriptions.add(new LimitedSubscription(abonnement_id, lejeaftale_id, lav_selvrisiko, valgt_farve));
+                    subscriptions.add(new LimitedSubscription(subsriptionId, agreementId, lowDeductible, hasStandardColor));
                 }
                 else{
-                    subscriptions.add(new UnlimitedSubscription(abonnement_id, lejeaftale_id, lejeperiode_mdr, lav_selvrisiko, afleveringsforsikring, valgt_farve));
+                    subscriptions.add(new UnlimitedSubscription(subsriptionId, agreementId, lengthInMonths, lowDeductible, deliveryInsurance, hasStandardColor));
                 }
 
             }
@@ -136,14 +136,14 @@ public class SubscriptionRepo implements CRUDInterface<Subscription> {
                 isLimited = true;
             }
 
-            String sql =    "UPDATE abonnementer " +
+            String sql =    "UPDATE subscriptions " +
                     "SET " +
-                    "lav_selvrisiko = '" + subscription.hasLowDeductible() + "', " +
-                    "afleveringsforsikring = '" + subscription.hasDeliveryInsurance() + "', " +
-                    "lejeperiode = '" + subscription.getLengthInMonths() + "', " +
-                    "valgt_farve = '" + subscription.hasStandardColor() + "', " +
+                    "low_deductible = '" + subscription.hasLowDeductible() + "', " +
+                    "delevery_insurance = '" + subscription.hasDeliveryInsurance() + "', " +
+                    "length_in_months = '" + subscription.getLengthInMonths() + "', " +
+                    "has_standard_color = '" + subscription.hasStandardColor() + "', " +
                     "is_limited = '" + isLimited + "'" +
-                    "WHERE abonnement_id = " + subscription.getId() + ";";
+                    "WHERE subscription_id = " + subscription.getId() + ";";
 
             stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
@@ -163,7 +163,7 @@ public class SubscriptionRepo implements CRUDInterface<Subscription> {
 
         try{
             conn = DatabaseConnectionManager.getConnection();
-            String sql = "DELETE FROM abonnementer WHERE abonnement_id = " + id + ";";
+            String sql = "DELETE FROM subscriptions WHERE subscription_id = " + id + ";";
             stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
 

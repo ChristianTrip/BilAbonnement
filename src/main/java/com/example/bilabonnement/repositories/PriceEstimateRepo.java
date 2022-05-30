@@ -20,7 +20,7 @@ public class PriceEstimateRepo implements CRUDInterface<PriceEstimate> {
     public boolean create(PriceEstimate priceEstimate) {
         try{
             conn = DatabaseConnectionManager.getConnection();
-            String sql = "INSERT INTO prisoverslag(`lejeaftale_id`, `total_pris`, `abonnements_længde`) " +
+            String sql = "INSERT INTO price_estimates(`agreement_id`, `total_price`, `subscription_length`) " +
                     "VALUES (" +
                     "'" + priceEstimate.getAgreementId() + "', " +
                     "'" + priceEstimate.getTotalPrice() + "', " +
@@ -38,27 +38,27 @@ public class PriceEstimateRepo implements CRUDInterface<PriceEstimate> {
     }
 
     @Override
-    public PriceEstimate getSingleEntityById(int lejeaftaleId) {
+    public PriceEstimate getSingleEntityById(int id) {
 
         try {
             conn = DatabaseConnectionManager.getConnection();
-            String sql = "SELECT * FROM prisoverslag WHERE lejeaftale_id = '" + lejeaftaleId + "';";
+            String sql = "SELECT * FROM price_estimates WHERE price_estimate_id = '" + id + "';";
             stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
 
             while(rs.next()) {
-                int prisoverslag_id = rs.getInt(1);
-                int lejeaftale_id = rs.getInt(2);
-                int abonnements_længde = rs.getInt(3);
-                int kmPrMdr = rs.getInt(4);
-                int totalpris = rs.getInt(5);
+                int estimateId = rs.getInt(1);
+                int agreementId = rs.getInt(2);
+                int subscriptionLength = rs.getInt(3);
+                int kmPerMonth = rs.getInt(4);
+                int totalPrice = rs.getInt(5);
 
-                return new PriceEstimate(prisoverslag_id, lejeaftale_id, abonnements_længde, kmPrMdr, totalpris);
+                return new PriceEstimate(estimateId, agreementId, subscriptionLength, kmPerMonth, totalPrice);
             }
         }
         catch (SQLException e){
             e.printStackTrace();
-            System.out.println("Kunne ikke finde prisoverslag tilhørende lejeaftale id: " + lejeaftaleId);
+            System.out.println("Kunne ikke finde prisoverslag tilhørende lejeaftale id: " + id);
         }
         return null;
     }
@@ -66,24 +66,24 @@ public class PriceEstimateRepo implements CRUDInterface<PriceEstimate> {
     @Override
     public List<PriceEstimate> getAllEntities() {
 
-        List<PriceEstimate> allePriceEstimate = new ArrayList<>();
+        List<PriceEstimate> priceEstimates = new ArrayList<>();
 
         try {
             conn = DatabaseConnectionManager.getConnection();
-            String sql = "SELECT * FROM prisoverslag;";
+            String sql = "SELECT * FROM price_estimates;";
             stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
 
             while(rs.next()){
-                int prisoverslag_id = rs.getInt(1);
-                int lejeaftale_id = rs.getInt(2);
-                int abonnements_længde = rs.getInt(3);
-                int kmPrMdr = rs.getInt(4);
-                int totalpris = rs.getInt(5);
+                int estimateId = rs.getInt(1);
+                int agreementId = rs.getInt(2);
+                int subscriptionLength = rs.getInt(3);
+                int kmPerMonth = rs.getInt(4);
+                int totalPrice = rs.getInt(5);
 
-                allePriceEstimate.add(new PriceEstimate(prisoverslag_id, lejeaftale_id, abonnements_længde, kmPrMdr, totalpris));
+                priceEstimates.add(new PriceEstimate(estimateId, agreementId, subscriptionLength, kmPerMonth, totalPrice));
             }
-            return allePriceEstimate;
+            return priceEstimates;
 
         }
         catch (SQLException e){
@@ -99,12 +99,12 @@ public class PriceEstimateRepo implements CRUDInterface<PriceEstimate> {
 
         try{
             conn = DatabaseConnectionManager.getConnection();
-            String sql =    "UPDATE prisoverslag " +
+            String sql =    "UPDATE price_estimates " +
                             "SET " +
-                            "abonnements_længde = '" + priceEstimate.getSubscriptionLength() + "', " +
-                            "km_pr_mdr = '" + priceEstimate.getkmPerMonth() + "', " +
-                            "totalpris = '" + priceEstimate.getTotalPrice() + "', " +
-                            "WHERE prisoverslag_id = " + priceEstimate.getId() + ";";
+                            "subscription_length = '" + priceEstimate.getSubscriptionLength() + "', " +
+                            "km_per_month = '" + priceEstimate.getkmPerMonth() + "', " +
+                            "total_price = '" + priceEstimate.getTotalPrice() + "', " +
+                            "WHERE price_estimate_id = " + priceEstimate.getId() + ";";
             stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
 
@@ -122,7 +122,7 @@ public class PriceEstimateRepo implements CRUDInterface<PriceEstimate> {
     public boolean deleteById(int id) {
         try{
             conn = DatabaseConnectionManager.getConnection();
-            String sql = "DELETE FROM prisoverslag WHERE prisoverslag_id = " + id + ";";
+            String sql = "DELETE FROM price_estimates WHERE price_estimate_id = " + id + ";";
             stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
 

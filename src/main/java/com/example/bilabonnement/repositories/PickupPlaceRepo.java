@@ -23,13 +23,13 @@ public class PickupPlaceRepo implements CRUDInterface<PickupPlace> {
 
         try{
             conn = DatabaseConnectionManager.getConnection();
-            String sql = "INSERT INTO afhentningssteder(`lejeaftale_id`, `adresse`, `post_nummer`, `by_navn`, `levering`) " +
+            String sql = "INSERT INTO pickup_places(`agreement_id`, `address`, `postal_code`, `city`, `delivery_cost`) " +
                     "VALUES (" +
                     "'" + pickupPlace.getAgreementId() + "', " +
                     "'" + pickupPlace.getAddress() + "', " +
                     "'" + pickupPlace.getPostalCode() + "', " +
                     "'" + pickupPlace.getCity() + "', " +
-                    "'" + pickupPlace.getDeliveryPrice() + "');";
+                    "'" + pickupPlace.getDeliveryCost() + "');";
 
             stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
@@ -44,28 +44,28 @@ public class PickupPlaceRepo implements CRUDInterface<PickupPlace> {
     }
 
     @Override
-    public PickupPlace getSingleEntityById(int lejeaftaleId) {
+    public PickupPlace getSingleEntityById(int id) {
         try {
             conn = DatabaseConnectionManager.getConnection();
-            String sql = "SELECT * FROM afhentningssteder WHERE lejeaftale_id = '" + lejeaftaleId + "';";
+            String sql = "SELECT * FROM pickup_places WHERE pickup_place_id = '" + id + "';";
 
             stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
 
             while(rs.next()) {
-                int afhentningssted_id = rs.getInt(1);
-                int lejeaftale_id = rs.getInt(2);
-                String adresse = rs.getString(3);
-                String post_nummer = rs.getString(4);
-                String by_navn = rs.getString(5);
-                int levering = rs.getInt(6);
+                int pickupPlaceId = rs.getInt(1);
+                int agreementId = rs.getInt(2);
+                String address = rs.getString(3);
+                String postalCode = rs.getString(4);
+                String city = rs.getString(5);
+                int deliveryCost = rs.getInt(6);
 
-                return new PickupPlace(afhentningssted_id, adresse, post_nummer, by_navn, levering);
+                return new PickupPlace(pickupPlaceId, agreementId, address, postalCode, city, deliveryCost);
             }
         }
         catch (SQLException e){
             e.printStackTrace();
-            System.out.println("Kunne ikke finde afhentningssted tilhørende lejeaftale id: " + lejeaftaleId);
+            System.out.println("Kunne ikke finde afhentningssted tilhørende lejeaftale id: " + id);
         }
         return null;
     }
@@ -73,25 +73,25 @@ public class PickupPlaceRepo implements CRUDInterface<PickupPlace> {
     @Override
     public List<PickupPlace> getAllEntities() {
 
-        List<PickupPlace> afhentningsSteder = new ArrayList<>();
+        List<PickupPlace> pickupPlaces = new ArrayList<>();
 
         try{
             conn = DatabaseConnectionManager.getConnection();
-            String sql = "SELECT * FROM afhentningssteder;";
+            String sql = "SELECT * FROM pickup_places;";
             stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
 
             while(rs.next()){
-                int afhentningssted_id = rs.getInt(1);
-                int lejeaftale_id = rs.getInt(2);
-                String adresse = rs.getString(3);
-                String post_nummer = rs.getString(4);
-                String by_navn = rs.getString(5);
-                int levering = rs.getInt(6);
+                int pickupPlaceId = rs.getInt(1);
+                int agreementId = rs.getInt(2);
+                String address = rs.getString(3);
+                String postalCode = rs.getString(4);
+                String city = rs.getString(5);
+                int deliveryCost = rs.getInt(6);
 
-                afhentningsSteder.add(new PickupPlace(afhentningssted_id, lejeaftale_id, adresse, post_nummer, by_navn, levering));
+                pickupPlaces.add(new PickupPlace(pickupPlaceId, agreementId, address, postalCode, city, deliveryCost));
             }
-            return afhentningsSteder;
+            return pickupPlaces;
 
         }
         catch (SQLException e){
@@ -107,13 +107,13 @@ public class PickupPlaceRepo implements CRUDInterface<PickupPlace> {
 
         try {
             conn = DatabaseConnectionManager.getConnection();
-            String sql = "UPDATE afhentningssteder " +
+            String sql = "UPDATE pickup_places " +
                     "SET " +
-                    "adresse = '" + pickupPlace.getAddress() + "', " +
-                    "post_nummer = '" + pickupPlace.getPostalCode() + "', " +
-                    "by_navn = '" + pickupPlace.getCity() + "', " +
-                    "levering = '" + pickupPlace.getDeliveryPrice() + "'" +
-                    "WHERE afhentningssted_id = " + pickupPlace.getId() + ";";
+                    "address = '" + pickupPlace.getAddress() + "', " +
+                    "postal_code = '" + pickupPlace.getPostalCode() + "', " +
+                    "city = '" + pickupPlace.getCity() + "', " +
+                    "delivery_cost = '" + pickupPlace.getDeliveryCost() + "'" +
+                    "WHERE pickup_place_id = " + pickupPlace.getId() + ";";
             stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
 
@@ -132,7 +132,7 @@ public class PickupPlaceRepo implements CRUDInterface<PickupPlace> {
 
         try{
             conn = DatabaseConnectionManager.getConnection();
-            String sql = "DELETE afhentningssteder WHERE afhentningssted_id = " + id;
+            String sql = "DELETE pickup_places WHERE pickup_place_id = " + id;
             stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
         }

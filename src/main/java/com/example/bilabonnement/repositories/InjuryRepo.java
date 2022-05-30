@@ -21,7 +21,7 @@ public class InjuryRepo implements CRUDInterface<Injury>{
 
         try{
             conn = DatabaseConnectionManager.getConnection();
-            String sql = "INSERT INTO skader(`tilstandsrapport_id`, `skade_navn`, `skade_beskrivelse`, `skade_pris`) " +
+            String sql = "INSERT INTO injuries(`report_id`, `title`, `description`, `price`) " +
                     "VALUES (" +
                     "'" + injury.getSurveyReportId() + "', " +
                     "'" + injury.getTitle() + "', " +
@@ -42,27 +42,28 @@ public class InjuryRepo implements CRUDInterface<Injury>{
     }
 
     @Override
-    public Injury getSingleEntityById(int tilstandsrapportId) {
+    public Injury getSingleEntityById(int id) {
 
         try {
             conn = DatabaseConnectionManager.getConnection();
-            String sql = "SELECT * FROM skader WHERE tilstandsrapport_id = '" + tilstandsrapportId + "';";
+            String sql = "SELECT * FROM injuries WHERE injury_id = '" + id + "';";
             stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
 
             while(rs.next()) {
-                int skade_id = rs.getInt(1);
-                int tilstandsrapport_id = rs.getInt(2);
-                String navn = rs.getString(3);
-                String beskrivelse = rs.getString(4);
-                int pris = rs.getInt(5);
+                int injuryId = rs.getInt(1);
+                int reportId = rs.getInt(2);
+                String title = rs.getString(3);
+                String description = rs.getString(4);
+                int price = rs.getInt(5);
 
-                return new Injury(skade_id, tilstandsrapport_id, navn, beskrivelse, pris);
+
+                return new Injury(injuryId, reportId, title, description, price);
             }
         }
         catch (SQLException e){
             e.printStackTrace();
-            System.out.println("Kunne ikke finde skade tilhørende tilstandsrapport id: " + tilstandsrapportId);
+            System.out.println("Kunne ikke finde skade med id: " + id);
         }
         return null;
     }
@@ -73,18 +74,18 @@ public class InjuryRepo implements CRUDInterface<Injury>{
         List<Injury> injuries = new ArrayList<>();
         try {
             conn = DatabaseConnectionManager.getConnection();
-            String sql = "SELECT * FROM skader;";
+            String sql = "SELECT * FROM injuries;";
             stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
 
             while(rs.next()) {
-                int skade_id = rs.getInt(1);
-                int tilstandsrapport_id = rs.getInt(2);
-                String navn = rs.getString(3);
-                String beskrivelse = rs.getString(4);
-                int pris = rs.getInt(5);
+                int injuryId = rs.getInt(1);
+                int reportId = rs.getInt(2);
+                String title = rs.getString(3);
+                String description = rs.getString(4);
+                int price = rs.getInt(5);
 
-                injuries.add(new Injury(skade_id, tilstandsrapport_id, navn, beskrivelse, pris));
+                injuries.add(new Injury(injuryId, reportId, title, description, price));
             }
             return injuries;
         }
@@ -100,12 +101,12 @@ public class InjuryRepo implements CRUDInterface<Injury>{
 
         try{
             conn = DatabaseConnectionManager.getConnection();
-            String sql =    "UPDATE skader " +
-                    "SET " +
-                    "skade_navn = '" + injury.getTitle() + "', " +
-                    "skade_beskrivelse = '" + injury.getDescription() + "', " +
-                    "skade_pris = '" + injury.getPrice() + "', " +
-                    "WHERE skade_id = " + injury.getId() + ";";
+            String sql =    "UPDATE injuries " +
+                            "SET " +
+                            "title = '" + injury.getTitle() + "', " +
+                            "description = '" + injury.getDescription() + "', " +
+                            "price = '" + injury.getPrice() + "'" +
+                            "WHERE injury_id = " + injury.getId() + ";";
 
             stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
@@ -124,7 +125,7 @@ public class InjuryRepo implements CRUDInterface<Injury>{
 
         try{
             conn = DatabaseConnectionManager.getConnection();
-            String sql = "DELETE FROM skader WHERE skade_id = " + id + ";";
+            String sql = "DELETE FROM injuries WHERE injury_id = " + id + ";";
             stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
 
