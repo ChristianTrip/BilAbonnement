@@ -1,11 +1,6 @@
 package com.example.bilabonnement.controllers;
 
 import com.example.bilabonnement.models.LeaseAgreement;
-import com.example.bilabonnement.models.Deficiency;
-import com.example.bilabonnement.models.Injury;
-import com.example.bilabonnement.models.SurveyReport;
-import com.example.bilabonnement.models.users.User;
-import com.example.bilabonnement.models.users.UserType;
 import com.example.bilabonnement.services.LeaseAgreementService;
 import com.example.bilabonnement.services.BusinessService;
 import com.example.bilabonnement.services.SurveyReportService;
@@ -30,15 +25,15 @@ public class LeaseAgreementController {
     private LeaseAgreementService leaseAgreementService = new LeaseAgreementService();
     private BusinessService businessService = new BusinessService();
     private SurveyReportService surveyReportService = new SurveyReportService();
-    private ArrayList<LeaseAgreement> godkendteLejeaftaler;
-    private ArrayList<LeaseAgreement> ikkeGodkendteLejeaftaler;
+    private ArrayList<LeaseAgreement> agreedLeases;
+    private ArrayList<LeaseAgreement> leases;
 
 
     private HttpSession session;
 
 
-    @GetMapping("/alleLejeaftaler")
-    public String alleLejeaftaler(Model model, HttpServletRequest request){
+    @GetMapping("/allLeaseAgreements")
+    public String getAllLeases(Model model, HttpServletRequest request){
 
         session = request.getSession(false);
 
@@ -46,12 +41,12 @@ public class LeaseAgreementController {
             return "redirect:/";
         }
 
-        model.addAttribute("isGodkendt", false);
-        return "alleLejeaftaler";
+        model.addAttribute("leaseApproved", false);
+        return "leaseAgreements";
     }
 
-    @GetMapping("/ikkeGodkendteLejeaftaler")
-    public String seAlleLejeaftaler(Model model, HttpServletRequest request){
+    @GetMapping("/nonAgreedLeases")
+    public String getNonAgreedLeases(Model model, HttpServletRequest request){
 
         session = request.getSession(false);
 
@@ -59,22 +54,24 @@ public class LeaseAgreementController {
             return "redirect:/";
         }
 
-        ikkeGodkendteLejeaftaler = leaseAgreementService.getNonAgreedleases();
+        leases = leaseAgreementService.getNonAgreedleases();
 
-        model.addAttribute("isGodkendt", false);
-        model.addAttribute("igLejeaftaler", ikkeGodkendteLejeaftaler);
+        model.addAttribute("leaseApproved", false);
+        model.addAttribute("nonAgreedLeases", leases);
+        System.out.println(model.getAttribute("leaseApproved"));
+        System.out.println(model.getAttribute("nonAgreedLeases"));
 
-        return "alleLejeaftaler";
+        return "leaseAgreements";
     }
 
-    @PostMapping("/ikkeGodkendteLejeaftaler/{aftaleNo}")
-    public String lejeaftale(@PathVariable("aftaleNo") String nummer, Model m){
+    @PostMapping("/nonAgreedLeases/{leaseNo}")
+    public String postNonAgreedLease(@PathVariable("leaseNo") String leaseNumber){
 
-        return "redirect:/visLejeaftale?nr=" + nummer;
+        return "redirect:/showNonAgreedLease?index=" + leaseNumber;
     }
 
-    @GetMapping("/visLejeaftale")
-    public String testLeje(@RequestParam int nr, Model m, HttpServletRequest request){
+    @GetMapping("/showNonAgreedLease")
+    public String getNonAgreedLease(@RequestParam int index, Model model, HttpServletRequest request){
 
         session = request.getSession(false);
 
@@ -82,16 +79,16 @@ public class LeaseAgreementController {
             return "redirect:/";
         }
 
-        m.addAttribute("leaseAgreement", ikkeGodkendteLejeaftaler.get(nr));
-        m.addAttribute("isGodkendt", false);
+        model.addAttribute("leaseAgreement", leases.get(index));
+        model.addAttribute("leaseApproved", false);
 
-        session.setAttribute("indexNummer", nr);
+        session.setAttribute("indexNummer", index);
 
-        return "lejeaftale";
+        return "leaseAgreement";
     }
 
-    @PostMapping("/tilfoejDB")
-    public String tilfoejTilDatabase(HttpServletRequest request, HttpSession session){
+    @PostMapping("/addToDatabase")
+    public String addLeaseToDatabase(HttpServletRequest request, HttpSession session){
         Date startDate = java.sql.Date.valueOf(request.getParameter("startDato"));
         int index = (int) session.getAttribute("indexNummer");
 
@@ -99,23 +96,11 @@ public class LeaseAgreementController {
         leaseAgreementService.addLeaseAgreementToDataBase(index, startDate);
 
 
-        return "redirect:/ikkeGodkendteLejeaftaler";
+        return "redirect:/nonAgreedLeases";
     }
 
-    @PostMapping("/sletDB")
-    public String sletFraDatabase(HttpSession session){
-        int index = (int) session.getAttribute("indexNummer");
-
-        System.out.println("Lease agreement was removed: " + index);
-        leaseAgreementService.removeLeaseAgreementFromCsv(index);
-
-
-     return "redirect:/ikkeGodkendteLejeaftaler";
-    }
-
-
-    @GetMapping("/godkendteLejeaftaler")
-    public String godkendteLejeaftaler(Model model, HttpServletRequest request){
+    @GetMapping("/agreedLeases")
+    public String getAgreedLeases(Model model, HttpServletRequest request){
 
         session = request.getSession(false);
 
@@ -124,21 +109,21 @@ public class LeaseAgreementController {
         }
 
         try{
-        godkendteLejeaftaler = leaseAgreementService.getAllLeaseAgreements();
+        agreedLeases = leaseAgreementService.getAllLeaseAgreements();
 
-            int totalpris = businessService.getTotalPrice(godkendteLejeaftaler);
-            int antalUdlejedeBiler = businessService.getNumberOfRentedOutCars(godkendteLejeaftaler);
+            int totalPrice = businessService.getTotalPrice(agreedLeases);
+            int numberOfRentedOutCars = businessService.getNumberOfRentedOutCars(agreedLeases);
 
-            model.addAttribute("isGodkendt", true);
-            model.addAttribute("igangvaerende", leaseAgreementService.getAllActiveAgreements(godkendteLejeaftaler));
-            model.addAttribute("afsluttede", leaseAgreementService.getAllEndedAgreements(godkendteLejeaftaler));
-            model.addAttribute("manglerTilstandsrapport", "Ingen registrerede skader/mangler");
-            model.addAttribute("harTilstandsrapport", "Har skader/mangler");
+            model.addAttribute("leaseApproved", true);
+            model.addAttribute("activeLeases", leaseAgreementService.getAllActiveAgreements(agreedLeases));
+            model.addAttribute("endedLeases", leaseAgreementService.getAllEndedAgreements(agreedLeases));
+            model.addAttribute("hasNoReport", "Ingen registrerede skader/mangler");
+            model.addAttribute("hasReport", "Har skader/mangler");
 
-            model.addAttribute("totalpris", totalpris);
-            model.addAttribute("antalUdlejedeBiler", antalUdlejedeBiler);
+            model.addAttribute("totalPrice", totalPrice);
+            model.addAttribute("numberOfRentedOutCars", numberOfRentedOutCars);
 
-            return "alleLejeaftaler";
+            return "leaseAgreements";
         }
         catch (Exception e){
             e.printStackTrace();
@@ -151,24 +136,25 @@ public class LeaseAgreementController {
         return "error";
     }
 
-    @PostMapping("/godkendteLejeaftaler/{aftaleNo}")
-    public RedirectView godkendteLejeaftaler(@PathVariable("aftaleNo") String number, RedirectAttributes redirectAttributes){
+
+    @PostMapping("/agreedLeases/{leaseNo}")
+    public RedirectView postAgreedLease(@PathVariable("leaseNo") String number, RedirectAttributes redirectAttributes){
 
         int id = parseInt(number);
-        LeaseAgreement leaseAgreement = leaseAgreementService.getLeaseAgreementById(id);
+        LeaseAgreement agreedLease = leaseAgreementService.getLeaseAgreementById(id);
 
 
-        if(leaseAgreement != null) {
-            redirectAttributes.addFlashAttribute("lejeaftale", leaseAgreement);
-            return new RedirectView("/seLejeaftale", true);
+        if(agreedLease != null) {
+            redirectAttributes.addFlashAttribute("agreedLease", agreedLease);
+            return new RedirectView("/showAgreedLease", true);
         } else {
-            return new RedirectView("/godkendteLejeaftaler", true);
+            return new RedirectView("/agreedLeases", true);
         }
 
     }
 
-    @GetMapping("/seLejeaftale")
-    public String godkendteLejeaftaler(HttpServletRequest request, Model m){
+    @GetMapping("/showAgreedLease")
+    public String getAgreedLeases(HttpServletRequest request, Model m){
 
         session = request.getSession(false);
 
@@ -178,15 +164,15 @@ public class LeaseAgreementController {
 
         Map<String, ?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
         if (inputFlashMap != null) {
-            LeaseAgreement leaseAgreement = (LeaseAgreement) inputFlashMap.get("lejeaftale");
+            LeaseAgreement leaseAgreement = (LeaseAgreement) inputFlashMap.get("agreedLease");
 
             m.addAttribute("leaseAgreement", leaseAgreement);
-            m.addAttribute("isGodkendt", true);
+            m.addAttribute("leaseApproved", true);
 
-            return "lejeaftale";
+            return "leaseAgreement";
 
         } else {
-            return "redirect:/godkendteLejeaftaler";
+            return "redirect:/agreedLeases";
         }
     }
 
