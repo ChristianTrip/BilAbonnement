@@ -1,39 +1,42 @@
-package com.example.bilabonnement.models.surveyReports;
+package com.example.bilabonnement.models.surveyReportElements;
 
-public class Injury {
+public class Deficiency {
 
     private int id;
-    private int surveyReportId;
+    private int reportId;
     private String title;
     private String description;
     private int price;
 
-
-    public Injury(int id, int surveyReportId, String title, String description, int price) {
+    public Deficiency(int id, int reportId, String title, String description, int price) {
         this.id = id;
-        this.surveyReportId = surveyReportId;
+        this.reportId = reportId;
         this.title = title;
         this.description = description;
         this.price = price;
     }
 
-    public Injury(String title, String description, int price){
+    public Deficiency(String title, String description, int price) {
         this.title = title;
         this.description = description;
         this.price = price;
     }
 
 
-    public void setSurveyReportId(int surveyReportId) {
-        this.surveyReportId = surveyReportId;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setReportId(int reportId) {
+        this.reportId = reportId;
     }
 
     public int getId() {
         return id;
     }
 
-    public int getSurveyReportId() {
-        return surveyReportId;
+    public int getReportId() {
+        return reportId;
     }
 
     public String getTitle() {
@@ -52,19 +55,11 @@ public class Injury {
         this.title = title;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
     @Override
     public String toString() {
-        return "Injury{" +
+        return "Deficiency{" +
                 "id=" + id +
-                ", surveyReportId=" + surveyReportId +
+                ", agreementId=" + reportId +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", price=" + price +

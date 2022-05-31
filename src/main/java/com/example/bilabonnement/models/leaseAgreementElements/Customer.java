@@ -1,4 +1,4 @@
-package com.example.bilabonnement.models.leaseAgreements;
+package com.example.bilabonnement.models.leaseAgreementElements;
 
 public class Customer {
 
@@ -72,10 +72,6 @@ public class Customer {
 
     public String getCity() {
         return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
     }
 
     public String getEmail() {

@@ -1,4 +1,4 @@
-package com.example.bilabonnement.models.leaseAgreements;
+package com.example.bilabonnement.models.leaseAgreementElements;
 
 public abstract class Subscription {
 

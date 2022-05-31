@@ -1,7 +1,6 @@
-package com.example.bilabonnement.models.leaseAgreements;
+package com.example.bilabonnement.models.leaseAgreementElements;
 
 public class UnlimitedSubscription extends Subscription {
-
 
     public UnlimitedSubscription(int id, int agreementId, int subscriptionLength, boolean lowDeductible, boolean deliveryInsurance, boolean standardColor) {
         super(id,agreementId, lowDeductible, standardColor);
@@ -15,6 +14,7 @@ public class UnlimitedSubscription extends Subscription {
         super.deliveryInsurance = deliveryInsurance;
         super.standardColor = standardColor;
     }
+
 
     @Override
     public String toString() {

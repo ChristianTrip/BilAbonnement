@@ -1,6 +1,7 @@
-package com.example.bilabonnement.models.users;
+package com.example.bilabonnement.models.userElements;
 
 public class User {
+
     private int id;
     private String name;
     private String password;
@@ -13,16 +14,10 @@ public class User {
         this.userType = userType;
     }
 
-    public User(String name, String password, UserType userType) {
-        this.name = name;
-        this.password = password;
-        this.userType = userType;
-    }
 
     public int getId(){
         return this.id;
     }
-
 
     public UserType getUserType(){
         return this.userType;
@@ -35,11 +30,6 @@ public class User {
     public String getPassword() {
         return password;
     }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
 
     @Override
     public String toString() {

@@ -1,6 +1,6 @@
 package com.example.bilabonnement.controllers;
 
-import com.example.bilabonnement.models.leaseAgreements.LeaseAgreement;
+import com.example.bilabonnement.models.leaseAgreementElements.LeaseAgreement;
 import com.example.bilabonnement.services.LeaseAgreementService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,7 +31,7 @@ public class NonAgreedLeasesController {
             return "redirect:/";
         }
 
-        leases = leaseAgreementService.getNonAgreedleases();
+        leases = leaseAgreementService.getNonAgreedLeases();
 
         model.addAttribute("leaseApproved", false);
         model.addAttribute("nonAgreedLeases", leases);
@@ -67,7 +67,7 @@ public class NonAgreedLeasesController {
         Date startDate = java.sql.Date.valueOf(request.getParameter("startDato"));
         int index = (int) session.getAttribute("indexNumber");
 
-        leaseAgreementService.addLeaseAgreementToDataBase(index, startDate);
+        leaseAgreementService.addLeaseAgreementToDatabase(index, startDate);
 
 
         return "redirect:/non-agreed-leases";
@@ -81,4 +81,5 @@ public class NonAgreedLeasesController {
 
         return "redirect:/non-agreed-leases";
     }
+
 }

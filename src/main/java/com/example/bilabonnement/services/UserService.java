@@ -1,7 +1,7 @@
 package com.example.bilabonnement.services;
 
-import com.example.bilabonnement.models.users.User;
-import com.example.bilabonnement.models.users.UserType;
+import com.example.bilabonnement.models.userElements.User;
+import com.example.bilabonnement.models.userElements.UserType;
 import com.example.bilabonnement.repositories.UserRepo;
 
 import java.util.ArrayList;

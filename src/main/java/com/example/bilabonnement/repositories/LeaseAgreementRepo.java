@@ -1,7 +1,7 @@
 package com.example.bilabonnement.repositories;
 
-import com.example.bilabonnement.models.leaseAgreements.*;
-import com.example.bilabonnement.models.surveyReports.SurveyReport;
+import com.example.bilabonnement.models.leaseAgreementElements.*;
+import com.example.bilabonnement.models.surveyReportElements.SurveyReport;
 import com.example.bilabonnement.utility.DatabaseConnectionManager;
 
 import java.sql.Connection;
@@ -160,11 +160,20 @@ public class LeaseAgreementRepo implements CRUDInterface <LeaseAgreement>{
     @Override
     public boolean deleteById(int id) {
 
-        // hvis en kunde har flere lejeaftaler skal den ikke slette kunden..
+        try{
+            conn = DatabaseConnectionManager.getConnection();
+            String sql = "DELETE FROM lease_agreements WHERE agreement_id = " + id + ";";
+            stmt = conn.prepareStatement(sql);
+            stmt.executeUpdate();
 
-        return false;
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            System.out.println("Kunne ikke slette skade med id nummer: " + id);
+            return false;
+        }
+        return true;
     }
-
 
     private int getLastIndex(){
 
@@ -183,6 +192,7 @@ public class LeaseAgreementRepo implements CRUDInterface <LeaseAgreement>{
 
         return -1;
     }
+
 
     // metoder der indsætter elementerne der hører til en lejeaftale
 
@@ -469,7 +479,6 @@ public class LeaseAgreementRepo implements CRUDInterface <LeaseAgreement>{
         }
         return null;
     }
-
 
     private SurveyReport getSurveyReport(int agreementId) {
         try {

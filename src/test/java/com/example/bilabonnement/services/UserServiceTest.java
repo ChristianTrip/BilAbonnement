@@ -1,6 +1,6 @@
 package com.example.bilabonnement.services;
 
-import com.example.bilabonnement.models.users.User;
+import com.example.bilabonnement.models.userElements.User;
 import com.example.bilabonnement.repositories.UserRepo;
 import org.junit.jupiter.api.Test;
 

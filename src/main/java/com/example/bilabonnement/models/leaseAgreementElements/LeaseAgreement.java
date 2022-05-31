@@ -1,6 +1,6 @@
-package com.example.bilabonnement.models.leaseAgreements;
+package com.example.bilabonnement.models.leaseAgreementElements;
 
-import com.example.bilabonnement.models.surveyReports.SurveyReport;
+import com.example.bilabonnement.models.surveyReportElements.SurveyReport;
 
 import java.time.LocalDate;
 
@@ -45,10 +45,10 @@ public class LeaseAgreement {
 
     }
 
+    // isActive() is used in leaseagreement.html to determine if a lease is active or not
     public boolean isActive(){
         return this.endDate.isAfter(LocalDate.now());
     }
-
 
     private void setEndDate(){
         int subscriptionLength = subscription.getLengthInMonths();

@@ -1,12 +1,11 @@
 package com.example.bilabonnement.services;
 
-import com.example.bilabonnement.models.leaseAgreements.LeaseAgreement;
+import com.example.bilabonnement.models.leaseAgreementElements.LeaseAgreement;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class BusinessService {
-
 
     public int getTotalPrice(ArrayList<LeaseAgreement> leaseAgreements){
 

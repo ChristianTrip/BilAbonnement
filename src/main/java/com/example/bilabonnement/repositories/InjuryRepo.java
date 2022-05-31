@@ -1,6 +1,6 @@
 package com.example.bilabonnement.repositories;
 
-import com.example.bilabonnement.models.surveyReports.Injury;
+import com.example.bilabonnement.models.surveyReportElements.Injury;
 import com.example.bilabonnement.utility.DatabaseConnectionManager;
 
 import java.sql.Connection;
@@ -15,6 +15,7 @@ public class InjuryRepo implements CRUDInterface<Injury>{
     private Connection conn;
     private PreparedStatement stmt;
     private ResultSet rs;
+
 
     @Override
     public boolean create(Injury injury) {

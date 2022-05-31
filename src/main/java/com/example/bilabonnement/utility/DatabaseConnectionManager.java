@@ -17,6 +17,7 @@ public class DatabaseConnectionManager {
 
     private DatabaseConnectionManager(){}
 
+
     public static Connection getConnection(){
 
         if(connection != null){
@@ -43,17 +44,4 @@ public class DatabaseConnectionManager {
         }
     }
 
-    public static void closeConnection(){
-
-        try {
-            if(!connection.isClosed()){
-                connection.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Kunne ikke lukke forbindelsen: " + connection.toString());
-        }
-
-        System.out.println("Forbindelsen til " + connection.toString() + " er lukket");
-    }
 }

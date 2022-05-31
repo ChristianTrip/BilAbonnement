@@ -1,8 +1,8 @@
 package com.example.bilabonnement.repositories;
 
-import com.example.bilabonnement.models.surveyReports.Deficiency;
-import com.example.bilabonnement.models.surveyReports.Injury;
-import com.example.bilabonnement.models.surveyReports.SurveyReport;
+import com.example.bilabonnement.models.surveyReportElements.Deficiency;
+import com.example.bilabonnement.models.surveyReportElements.Injury;
+import com.example.bilabonnement.models.surveyReportElements.SurveyReport;
 import com.example.bilabonnement.utility.DatabaseConnectionManager;
 
 import java.sql.Connection;
@@ -17,6 +17,7 @@ public class SurveyReportRepo implements CRUDInterface<SurveyReport>{
     private Connection conn;
     private PreparedStatement stmt;
     private ResultSet rs;
+
 
     @Override
     public boolean create(SurveyReport surveyReport) {
@@ -50,7 +51,6 @@ public class SurveyReportRepo implements CRUDInterface<SurveyReport>{
 
         return false;
     }
-
 
     @Override
     public SurveyReport getSingleEntityById(int id) {
@@ -157,7 +157,6 @@ public class SurveyReportRepo implements CRUDInterface<SurveyReport>{
         return -1;
     }
 
-
     private boolean insertInjury(Injury injury){
 
         try{
@@ -179,7 +178,6 @@ public class SurveyReportRepo implements CRUDInterface<SurveyReport>{
         return false;
     }
 
-
     private boolean insertShortcoming(Deficiency deficiency){
 
         try{
@@ -200,7 +198,6 @@ public class SurveyReportRepo implements CRUDInterface<SurveyReport>{
         }
         return false;
     }
-
 
     private ArrayList<Injury> getInjuries(int surveyReportId) {
 

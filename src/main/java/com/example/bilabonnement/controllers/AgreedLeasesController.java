@@ -1,9 +1,8 @@
 package com.example.bilabonnement.controllers;
 
-import com.example.bilabonnement.models.leaseAgreements.LeaseAgreement;
+import com.example.bilabonnement.models.leaseAgreementElements.LeaseAgreement;
 import com.example.bilabonnement.services.LeaseAgreementService;
 import com.example.bilabonnement.services.BusinessService;
-import com.example.bilabonnement.services.SurveyReportService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +12,6 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -25,7 +23,6 @@ public class AgreedLeasesController {
     private LeaseAgreementService leaseAgreementService = new LeaseAgreementService();
     private BusinessService businessService = new BusinessService();
     private ArrayList<LeaseAgreement> agreedLeases;
-
     private HttpSession session;
 
 
@@ -38,7 +35,7 @@ public class AgreedLeasesController {
             return "redirect:/";
         }
 
-        agreedLeases = leaseAgreementService.getAllLeaseAgreements();
+        agreedLeases = leaseAgreementService.getAllAgreedLeases();
 
         int totalPrice = businessService.getTotalPrice(agreedLeases);
         int numberOfRentedOutCars = businessService.getNumberOfRentedOutCars(agreedLeases);
@@ -94,6 +91,5 @@ public class AgreedLeasesController {
             return "redirect:/agreed-leases";
         }
     }
-
 
 }

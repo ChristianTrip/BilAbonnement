@@ -1,4 +1,4 @@
-package com.example.bilabonnement.models.leaseAgreements;
+package com.example.bilabonnement.models.leaseAgreementElements;
 
 public class Car {
 
@@ -24,6 +24,7 @@ public class Car {
         this.model = model;
     }
 
+
     public void setAgreementId(int agreementId) {
         this.agreementId = agreementId;
     }
@@ -42,10 +43,6 @@ public class Car {
 
     public String getModel() {
         return model;
-    }
-
-    public void setModel(String model) {
-        this.model = model;
     }
 
     @Override

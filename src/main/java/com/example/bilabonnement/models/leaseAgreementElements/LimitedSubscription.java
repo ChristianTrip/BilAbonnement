@@ -1,20 +1,18 @@
-package com.example.bilabonnement.models.leaseAgreements;
+package com.example.bilabonnement.models.leaseAgreementElements;
 
 public class LimitedSubscription extends Subscription {
-
-
 
     public LimitedSubscription(int id, int agreementId, boolean lowDeductible, boolean standardColor) {
         super(id, agreementId, lowDeductible, standardColor);
         super.lengthInMonths = 4;
     }
 
-
     public LimitedSubscription(boolean lowDeductible, boolean standardColor){
         super.lowDeductible = lowDeductible;
         super.standardColor = standardColor;
         super.lengthInMonths = 4;
     }
+
 
     @Override
     public String toString() {

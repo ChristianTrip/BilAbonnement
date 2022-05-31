@@ -1,12 +1,11 @@
 package com.example.bilabonnement.controllers;
 
-import com.example.bilabonnement.models.users.User;
-import com.example.bilabonnement.models.users.UserType;
+import com.example.bilabonnement.models.userElements.User;
+import com.example.bilabonnement.models.userElements.UserType;
 import com.example.bilabonnement.services.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.servlet.view.RedirectView;
@@ -17,7 +16,6 @@ import java.util.Map;
 
 @Controller
 public class IndexController {
-
 
     private HttpSession session;
     private User currentUser;
@@ -32,13 +30,12 @@ public class IndexController {
     @PostMapping("/login-submit")
     public RedirectView submitLogin(HttpServletRequest request, RedirectAttributes redirectAttributes) {
 
-
-
+       // for testing purpose you get logged in without submitting login information
+        /*
         redirectAttributes.addFlashAttribute("user", new User("john", "password", UserType.ADMIN));
         return new RedirectView("/login-success", true);
+        */
 
-
-/*
         UserService userService = new UserService();
 
         String userName = request.getParameter("userName");
@@ -51,10 +48,8 @@ public class IndexController {
         } else {
             System.out.println("Login failed: wrong user information");
             return new RedirectView("/", true);
-        }*/
+        }
     }
-
-
 
     @GetMapping({"/login-success"})
     public String getLoginSuccess(HttpServletRequest request) {

@@ -1,4 +1,4 @@
-package com.example.bilabonnement.models.leaseAgreements;
+package com.example.bilabonnement.models.leaseAgreementElements;
 
 public class PriceEstimate {
 
@@ -7,9 +7,6 @@ public class PriceEstimate {
     private int subscriptionLength;
     private int kmPerMonth;
     private int totalPrice;
-
-    // vi går ud fra at vi får en totalpris fra csv filen, sådan at vi ikke skal udregne den.
-    // så den skal sættes i constructoren
 
     public PriceEstimate(int id, int agreementId, int abonnementslaengde, int kmPerMonth, int totalPrice) {
         this.id = id;
@@ -24,6 +21,7 @@ public class PriceEstimate {
         this.kmPerMonth = kmPerMonth;
         this.totalPrice = totalPrice;
     }
+
 
     public void setSubscriptionLength(int subscriptionLength) {
         this.subscriptionLength = subscriptionLength;

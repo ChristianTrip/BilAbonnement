@@ -1,4 +1,4 @@
-package com.example.bilabonnement.models.leaseAgreements;
+package com.example.bilabonnement.models.leaseAgreementElements;
 
 public class PickupPlace {
 
@@ -19,20 +19,13 @@ public class PickupPlace {
         this.deliveryCost = deliveryCost;
     }
 
-    public PickupPlace(int id, String address, String postalCode, String city, int deliveryCost) {
-        this.id = id;
-        this.address = address;
-        this.postalCode = postalCode;
-        this.city = city;
-        this.deliveryCost = deliveryCost;
-    }
-
     public PickupPlace(String address, String postalCode, String city, int deliveryCost) {
         this.address = address;
         this.postalCode = postalCode;
         this.city = city;
         this.deliveryCost = deliveryCost;
     }
+
 
     public int getId() {
         return id;

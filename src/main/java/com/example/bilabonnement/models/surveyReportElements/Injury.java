@@ -1,42 +1,38 @@
-package com.example.bilabonnement.models.surveyReports;
+package com.example.bilabonnement.models.surveyReportElements;
 
-public class Deficiency {
+public class Injury {
 
     private int id;
-    private int reportId;
+    private int surveyReportId;
     private String title;
     private String description;
     private int price;
 
-    public Deficiency(int id, int reportId, String title, String description, int price) {
+    public Injury(int id, int surveyReportId, String title, String description, int price) {
         this.id = id;
-        this.reportId = reportId;
+        this.surveyReportId = surveyReportId;
         this.title = title;
         this.description = description;
         this.price = price;
     }
 
-    public Deficiency(String title, String description, int price) {
+    public Injury(String title, String description, int price){
         this.title = title;
         this.description = description;
         this.price = price;
     }
 
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setReportId(int reportId) {
-        this.reportId = reportId;
+    public void setSurveyReportId(int surveyReportId) {
+        this.surveyReportId = surveyReportId;
     }
 
     public int getId() {
         return id;
     }
 
-    public int getReportId() {
-        return reportId;
+    public int getSurveyReportId() {
+        return surveyReportId;
     }
 
     public String getTitle() {
@@ -51,24 +47,15 @@ public class Deficiency {
         return price;
     }
 
-
     public void setTitle(String title) {
         this.title = title;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
     @Override
     public String toString() {
-        return "Deficiency{" +
+        return "Injury{" +
                 "id=" + id +
-                ", agreementId=" + reportId +
+                ", surveyReportId=" + surveyReportId +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", price=" + price +

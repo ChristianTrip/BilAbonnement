@@ -1,7 +1,7 @@
 package com.example.bilabonnement.repositories;
 
-import com.example.bilabonnement.models.users.User;
-import com.example.bilabonnement.models.users.UserType;
+import com.example.bilabonnement.models.userElements.User;
+import com.example.bilabonnement.models.userElements.UserType;
 import com.example.bilabonnement.utility.DatabaseConnectionManager;
 
 import java.sql.Connection;
@@ -15,7 +15,7 @@ public class UserRepo implements CRUDInterface<User>{
 
     private Connection conn;
     private PreparedStatement stmt;
-    private ResultSet rs;
+
 
     @Override
     public boolean create(User user) {

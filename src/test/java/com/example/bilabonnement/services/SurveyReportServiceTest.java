@@ -1,6 +1,6 @@
 package com.example.bilabonnement.services;
 
-import com.example.bilabonnement.models.leaseAgreements.LeaseAgreement;
+import com.example.bilabonnement.models.leaseAgreementElements.LeaseAgreement;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

@@ -1,4 +1,4 @@
-package com.example.bilabonnement.models.surveyReports;
+package com.example.bilabonnement.models.surveyReportElements;
 
 import java.util.ArrayList;
 
@@ -31,12 +31,6 @@ public class SurveyReport {
         this.injuries = new ArrayList<>();
     }
 
-    public SurveyReport(ArrayList<Deficiency> deficiencies, ArrayList<Injury> injuries){
-        this.deficiencies = deficiencies;
-        this.injuries = injuries;
-        calculateTotalPrice();
-    }
-
     private void calculateTotalPrice(){
         totalPrice = 0;
         for (Deficiency deficiency : deficiencies) {
@@ -55,36 +49,12 @@ public class SurveyReport {
         this.agreementId = agreementId;
     }
 
-    public void tilfoejMangel(Deficiency deficiency){
-        deficiencies.add(deficiency);
-    }
-
-    public void tilfoejSkade(Injury injury){
-        injuries.add(injury);
-    }
-
-    public void removeMangel(int index){
-        this.deficiencies.remove(index - 1);
-    }
-
-    public void removeSkade(Injury injury){
-        this.injuries.remove(injury);
-    }
-
     public int getId() {
         return id;
     }
 
     public int getAgreementId() {
         return agreementId;
-    }
-
-    public void setDeficiencies(ArrayList<Deficiency> deficiencies) {
-        this.deficiencies = deficiencies;
-    }
-
-    public void setInjuries(ArrayList<Injury> injuries) {
-        this.injuries = injuries;
     }
 
     public ArrayList<Deficiency> getDeficiencies() {
@@ -105,4 +75,5 @@ public class SurveyReport {
                 "\ninjuries = " + injuries + "\n" +
                 "\n";
     }
+
 }

@@ -1,9 +1,11 @@
-package com.example.bilabonnement.models.users;
+package com.example.bilabonnement.models.userElements;
 
 public enum UserType {
+
     ADMIN,
     LEASEAPPROVER,
     BUSINESS,
     SURVEYREPORTER,
     NONUSER;
+
 }

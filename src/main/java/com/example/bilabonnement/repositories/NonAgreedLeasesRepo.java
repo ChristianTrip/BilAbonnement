@@ -1,12 +1,12 @@
 package com.example.bilabonnement.repositories;
 
-import com.example.bilabonnement.models.leaseAgreements.Car;
-import com.example.bilabonnement.models.leaseAgreements.Customer;
-import com.example.bilabonnement.models.leaseAgreements.PickupPlace;
-import com.example.bilabonnement.models.leaseAgreements.PriceEstimate;
-import com.example.bilabonnement.models.leaseAgreements.LimitedSubscription;
-import com.example.bilabonnement.models.leaseAgreements.Subscription;
-import com.example.bilabonnement.models.leaseAgreements.UnlimitedSubscription;
+import com.example.bilabonnement.models.leaseAgreementElements.Car;
+import com.example.bilabonnement.models.leaseAgreementElements.Customer;
+import com.example.bilabonnement.models.leaseAgreementElements.PickupPlace;
+import com.example.bilabonnement.models.leaseAgreementElements.PriceEstimate;
+import com.example.bilabonnement.models.leaseAgreementElements.LimitedSubscription;
+import com.example.bilabonnement.models.leaseAgreementElements.Subscription;
+import com.example.bilabonnement.models.leaseAgreementElements.UnlimitedSubscription;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -15,6 +15,7 @@ import java.util.Scanner;
 import static java.lang.Integer.parseInt;
 
 public class NonAgreedLeasesRepo {
+
     /*
     Vi antager at hver linje i vores csv-filer repræsenterer hvad der svarer til en unik Lejeaftale.
     Vi antager yderligere at den måde vi får dataen fra hjemmesiden(bilabonnement.dk) som kunden har indtastet
@@ -240,9 +241,6 @@ public class NonAgreedLeasesRepo {
         return priceEstimates;
     }
 
-
-
-    // Metode der skal bruges til CSVWriter - måske bruge modulus? BINGO!
     public ArrayList<String> getAllLinesFromFile(File file){
 
         ArrayList<String> list = new ArrayList<>();
@@ -260,6 +258,5 @@ public class NonAgreedLeasesRepo {
 
         return list;
     }
-
 
 }

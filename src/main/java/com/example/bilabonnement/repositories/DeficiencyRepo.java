@@ -1,6 +1,6 @@
 package com.example.bilabonnement.repositories;
 
-import com.example.bilabonnement.models.surveyReports.Deficiency;
+import com.example.bilabonnement.models.surveyReportElements.Deficiency;
 import com.example.bilabonnement.utility.DatabaseConnectionManager;
 
 import java.sql.Connection;
@@ -15,6 +15,7 @@ public class DeficiencyRepo implements CRUDInterface<Deficiency>{
     private Connection conn;
     private PreparedStatement stmt;
     private ResultSet rs;
+
 
     @Override
     public boolean create(Deficiency deficiency) {

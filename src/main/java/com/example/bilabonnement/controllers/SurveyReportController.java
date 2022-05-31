@@ -1,9 +1,9 @@
 package com.example.bilabonnement.controllers;
 
-import com.example.bilabonnement.models.surveyReports.Deficiency;
-import com.example.bilabonnement.models.surveyReports.Injury;
-import com.example.bilabonnement.models.leaseAgreements.LeaseAgreement;
-import com.example.bilabonnement.models.surveyReports.SurveyReport;
+import com.example.bilabonnement.models.surveyReportElements.Deficiency;
+import com.example.bilabonnement.models.surveyReportElements.Injury;
+import com.example.bilabonnement.models.leaseAgreementElements.LeaseAgreement;
+import com.example.bilabonnement.models.surveyReportElements.SurveyReport;
 import com.example.bilabonnement.services.LeaseAgreementService;
 import com.example.bilabonnement.services.SurveyReportService;
 import org.springframework.stereotype.Controller;

@@ -61,6 +61,7 @@
                         <tr>
                             <th>Oprettelsesdato</th>
                             <th>Startdato</th>
+                            <th>Slutdato</th>
                             <th>Kunde cpr</th>
                             <th>Bil stelnummer</th>
                         </tr>
@@ -69,6 +70,7 @@
                             <form method="POST" th:action="@{/agreed-leases/{leaseNo}(leaseNo = ${leaseAgreement.getId()})}">
                                 <td th:text="${leaseAgreement.getApprovalDate()}"></td>
                                 <td th:text="${leaseAgreement.getStartDate()}"></td>
+                                <td th:text="${leaseAgreement.getEndDate()}"></td>
                                 <td th:text="${leaseAgreement.getCustomer().getCpr()}"></td>
                                 <td th:text="${leaseAgreement.getCar().getChassisNumber()}"></td>
                                 <td><button type="submit">GO</button></td>
@@ -81,6 +83,7 @@
                         <tr>
                             <th>Oprettelsesdato</th>
                             <th>Startdato</th>
+                            <th>Slutdato</th>
                             <th>Kunde cpr</th>
                             <th>Bil stelnummer</th>
                             <th>Tilstandsrapport status</th>
@@ -90,6 +93,7 @@
                             <form method="POST" th:action="@{/agreed-leases/{leaseNo}(leaseNo = ${leaseAgreement.getId()})}">
                                 <td th:text="${leaseAgreement.getApprovalDate()}"></td>
                                 <td th:text="${leaseAgreement.getStartDate()}"></td>
+                                <td th:text="${leaseAgreement.getEndDate()}"></td>
                                 <td th:text="${leaseAgreement.getCustomer().getCpr()}"></td>
                                 <td th:text="${leaseAgreement.getCar().getChassisNumber()}"></td>
                                 <td th:if="${leaseAgreement.isSurveyReportEmpty() == true}" th:text="${hasNoReport}"></td>
