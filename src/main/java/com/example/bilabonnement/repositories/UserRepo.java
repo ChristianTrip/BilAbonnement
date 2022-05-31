@@ -75,7 +75,7 @@ public class UserRepo implements CRUDInterface<User>{
         ArrayList<User> users = new ArrayList<>();
         try {
             conn = DatabaseConnectionManager.getConnection();
-            String sql = "SELECT * FROM brugere;";
+            String sql = "SELECT * FROM users;";
             stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
 

@@ -90,6 +90,17 @@ public class LeaseAgreementService {
         return false;
     }
 
+    public boolean removeLeaseAgreementFromCsv(int index){
+        try{
+            new CSVWriter().removeLineFromAllFiles(index + 1);
+            return true;
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
     public ArrayList<LeaseAgreement> getNonAgreedleases(){
         ArrayList<LeaseAgreement> nonAgreedLeases = new ArrayList<>();
         CSVReader reader = CSVReader.getInstance();

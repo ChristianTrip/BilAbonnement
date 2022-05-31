@@ -102,6 +102,18 @@ public class LeaseAgreementController {
         return "redirect:/ikkeGodkendteLejeaftaler";
     }
 
+    @PostMapping("/sletDB")
+    public String sletFraDatabase(HttpSession session){
+        int index = (int) session.getAttribute("indexNummer");
+
+        System.out.println("Lease agreement was removed: " + index);
+        leaseAgreementService.removeLeaseAgreementFromCsv(index);
+
+
+     return "redirect:/ikkeGodkendteLejeaftaler";
+    }
+
+
     @GetMapping("/godkendteLejeaftaler")
     public String godkendteLejeaftaler(Model model, HttpServletRequest request){
 

@@ -176,6 +176,9 @@
                         <input name="startDato" type="date" placeholder="Start Dato" required>
                         <button type="submit">Godkend</button>
                     </form>
+                    <form class="buttonFormatting" th:if="${!isGodkendt}" method="POST" action="/tilfoejDB">
+                        <button type="submit">Slet</button>
+                    </form>
                 </span>
 
                 <span th:unless="${!isGodkendt}">
