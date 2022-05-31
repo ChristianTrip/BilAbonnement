@@ -168,10 +168,10 @@
 
             <div>
                 <span th:if="${!leaseApproved}">
-                    <form class="buttonFormatting" method="GET" action="/nonAgreedLeases">
+                    <form class="buttonFormatting" method="GET" action="/non-agreed-leases">
                         <button type="submit">Tilbage</button>
                     </form>
-                    <form class="buttonFormatting" th:if="${!leaseApproved}" method="POST" action="/addToDatabase">
+                    <form class="buttonFormatting" th:if="${!leaseApproved}" method="POST" action="/add-to-database">
                         <input name="startDato" type="date" placeholder="Start Dato" required>
                         <button type="submit">Godkend</button>
                     </form>
@@ -181,11 +181,11 @@
                 </span>
 
                 <span th:unless="${!leaseApproved}">
-                    <form class="buttonFormatting" method="GET" action="/agreedLeases">
+                    <form class="buttonFormatting" method="GET" action="/agreed-leases">
                         <button type="submit">Tilbage</button>
                     </form>
 
-                    <form class="buttonFormatting" method="POST" th:if="${!leaseAgreement.isActive()}" th:action="@{/surveyReport/{id}(id = ${leaseAgreement.getId()})}">
+                    <form class="buttonFormatting" method="POST" th:if="${!leaseAgreement.isActive()}" th:action="@{/survey-report/{id}(id = ${leaseAgreement.getId()})}">
                         <button type="submit">Rediger surveyReport</button>
                     </form>
 

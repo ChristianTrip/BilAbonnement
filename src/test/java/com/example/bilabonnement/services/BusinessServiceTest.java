@@ -1,6 +1,6 @@
 package com.example.bilabonnement.services;
 
-import com.example.bilabonnement.models.*;
+import com.example.bilabonnement.models.leaseAgreements.LeaseAgreement;
 import com.example.bilabonnement.repositories.LeaseAgreementRepo;
 import org.junit.jupiter.api.Test;
 

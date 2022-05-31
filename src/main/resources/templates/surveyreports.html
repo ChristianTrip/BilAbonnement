@@ -27,9 +27,9 @@
             </tr>
             <tr>
                 <form method="POST" th:action="@{/add-injury}">
-                    <input name="title" type="text" placeholder="Titel">
-                    <input name="description" type="text" placeholder="Beskrivelse">
-                    <input name="price" type="number" min="1" max="2147483647" placeholder="Pris">
+                    <input name="title" type="text" placeholder="Titel" required>
+                    <input name="description" type="text" placeholder="Beskrivelse" required>
+                    <input name="price" type="number" min="1" max="2147483647" placeholder="Pris" required>
                     <button type="submit">Tilføj</button>
                 </form>
             </tr>
@@ -54,16 +54,16 @@
             </tr>
             <tr>
                 <form method="POST" th:action="@{/add-deficiency}">
-                    <input name="title" type="text" placeholder="Titel">
-                    <input name="description" type="text" placeholder="Beskrivelse">
-                    <input name="price" type="number" min="1" max="2147483647" placeholder="Pris">
+                    <input name="title" type="text" placeholder="Titel" required>
+                    <input name="description" type="text" placeholder="Beskrivelse" required>
+                    <input name="price" type="number" min="1" max="2147483647" placeholder="Pris" required>
                     <button type="submit">Tilføj</button>
                 </form>
             </tr>
         </table>
 
     </section>
-    <form class="buttonFormatting" method="POST" th:action="@{/agreedLeases/{leaseNo} (leaseNo = ${leaseAgreement.getId()})}">
+    <form class="buttonFormatting" method="POST" th:action="@{/agreed-leases/{leaseNo} (leaseNo = ${leaseAgreement.getId()})}">
         <button type="submit">Tilbage</button>
     </form>
 

@@ -1,10 +1,7 @@
 package com.example.bilabonnement.repositories;
 
-import com.example.bilabonnement.models.*;
-import com.example.bilabonnement.models.priceEstimates.PriceEstimate;
-import com.example.bilabonnement.models.subscriptions.Subscription;
-import com.example.bilabonnement.models.subscriptions.LimitedSubscription;
-import com.example.bilabonnement.models.subscriptions.UnlimitedSubscription;
+import com.example.bilabonnement.models.leaseAgreements.*;
+import com.example.bilabonnement.models.surveyReports.SurveyReport;
 import com.example.bilabonnement.utility.DatabaseConnectionManager;
 
 import java.sql.Connection;

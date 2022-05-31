@@ -33,8 +33,10 @@ public class IndexController {
     public RedirectView submitLogin(HttpServletRequest request, RedirectAttributes redirectAttributes) {
 
 
+
         redirectAttributes.addFlashAttribute("user", new User("john", "password", UserType.ADMIN));
         return new RedirectView("/login-success", true);
+
 
 /*
         UserService userService = new UserService();
@@ -79,39 +81,14 @@ public class IndexController {
     public String logOut(){
 
         session.invalidate();
-        System.out.println(currentUser.getName() + " er nu logget ud");
+        System.out.println(currentUser.getName() + " is  now logged out");
         currentUser = null;
         return "redirect:/";
     }
 
-
-    @PostMapping("/login")
-    public String login(HttpSession session, WebRequest request){
-
-        UserService bs = new UserService();
-
-        String brugernavn = request.getParameter("brugernavn");
-        String adgangskode = request.getParameter("adgangskode");
-
-       UserType userType = bs.determineBrugertype(brugernavn, adgangskode);
-
-            if(userType.equals(UserType.ADMIN)) {
-                session.setAttribute("admin", userType);
-                return "redirect:/home";
-            }
-            else if(userType.equals(UserType.LEASEAPPROVER)) {
-                System.out.println("datareg");
-                return "redirect:/dataRegBruger";
-            }
-            else if(userType.equals(UserType.BUSINESS)) {
-                System.out.println("forretningsreg");
-                return "redirect:/forretningBruger";
-            }
-            else if(userType.equals(UserType.SURVEYREPORTER)) {
-                System.out.println("skadereg");
-                return "redirect:/skadeRegBruger";
-            }
-
-        return "redirect:/";
+    @GetMapping("/error")
+    public String getErrorPage(){
+        return "error";
     }
+
 }

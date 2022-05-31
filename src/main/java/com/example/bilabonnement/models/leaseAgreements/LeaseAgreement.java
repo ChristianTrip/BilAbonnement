@@ -1,7 +1,6 @@
-package com.example.bilabonnement.models;
+package com.example.bilabonnement.models.leaseAgreements;
 
-import com.example.bilabonnement.models.priceEstimates.PriceEstimate;
-import com.example.bilabonnement.models.subscriptions.Subscription;
+import com.example.bilabonnement.models.surveyReports.SurveyReport;
 
 import java.time.LocalDate;
 
@@ -96,7 +95,7 @@ public class LeaseAgreement {
         return endDate;
     }
 
-    //Used in leaseAgreements.html(th:if)
+    //Used in leaseagreements.html(th:if)
     public boolean isSurveyReportEmpty() {
         return this.surveyReport.getInjuries().isEmpty() && this.surveyReport.getDeficiencies().isEmpty();
     }

@@ -1,6 +1,6 @@
 package com.example.bilabonnement.services;
 
-import com.example.bilabonnement.models.LeaseAgreement;
+import com.example.bilabonnement.models.leaseAgreements.LeaseAgreement;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

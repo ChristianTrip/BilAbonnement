@@ -1,4 +1,4 @@
-package com.example.bilabonnement.models.subscriptions;
+package com.example.bilabonnement.models.leaseAgreements;
 
 public class UnlimitedSubscription extends Subscription {
 

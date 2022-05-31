@@ -1,4 +1,4 @@
-package com.example.bilabonnement.models.priceEstimates;
+package com.example.bilabonnement.models.leaseAgreements;
 
 public class PriceEstimate {
 

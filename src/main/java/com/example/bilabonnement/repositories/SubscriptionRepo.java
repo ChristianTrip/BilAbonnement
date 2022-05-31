@@ -1,8 +1,8 @@
 package com.example.bilabonnement.repositories;
 
-import com.example.bilabonnement.models.subscriptions.LimitedSubscription;
-import com.example.bilabonnement.models.subscriptions.Subscription;
-import com.example.bilabonnement.models.subscriptions.UnlimitedSubscription;
+import com.example.bilabonnement.models.leaseAgreements.LimitedSubscription;
+import com.example.bilabonnement.models.leaseAgreements.Subscription;
+import com.example.bilabonnement.models.leaseAgreements.UnlimitedSubscription;
 import com.example.bilabonnement.utility.DatabaseConnectionManager;
 
 import java.sql.Connection;

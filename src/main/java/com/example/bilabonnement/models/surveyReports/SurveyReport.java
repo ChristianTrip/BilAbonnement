@@ -1,4 +1,4 @@
-package com.example.bilabonnement.models;
+package com.example.bilabonnement.models.surveyReports;
 
 import java.util.ArrayList;
 

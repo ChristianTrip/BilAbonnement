@@ -1,6 +1,6 @@
 package com.example.bilabonnement.repositories;
 
-import com.example.bilabonnement.models.Injury;
+import com.example.bilabonnement.models.surveyReports.Injury;
 import com.example.bilabonnement.utility.DatabaseConnectionManager;
 
 import java.sql.Connection;

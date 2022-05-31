@@ -1,9 +1,9 @@
 package com.example.bilabonnement.controllers;
 
-import com.example.bilabonnement.models.Deficiency;
-import com.example.bilabonnement.models.Injury;
-import com.example.bilabonnement.models.LeaseAgreement;
-import com.example.bilabonnement.models.SurveyReport;
+import com.example.bilabonnement.models.surveyReports.Deficiency;
+import com.example.bilabonnement.models.surveyReports.Injury;
+import com.example.bilabonnement.models.leaseAgreements.LeaseAgreement;
+import com.example.bilabonnement.models.surveyReports.SurveyReport;
 import com.example.bilabonnement.services.LeaseAgreementService;
 import com.example.bilabonnement.services.SurveyReportService;
 import org.springframework.stereotype.Controller;
@@ -27,23 +27,22 @@ public class SurveyReportController {
     private HttpSession session;
 
 
-    @PostMapping("/surveyReport/{id}")
-    public RedirectView seTilstandsrapport(@PathVariable int id, RedirectAttributes redirectAttributes){
+    @PostMapping("/survey-report/{id}")
+    public RedirectView postSurveyReport(@PathVariable int id, RedirectAttributes redirectAttributes){
+
         LeaseAgreement leaseAgreement = leaseAgreementService.getLeaseAgreementById(id);
-        SurveyReport surveyReport = leaseAgreement.getSurveyReport();
 
         if(leaseAgreement != null){
             redirectAttributes.addFlashAttribute("leaseAgreement", leaseAgreement);
-            //redirectAttributes.addFlashAttribute("surveyReport", surveyReport);
             return new RedirectView("/edit-survey-report", true);
         }
         else{
-            return new RedirectView("/showAgreedLease", true);
+            return new RedirectView("/show-agreed-lease", true);
         }
     }
 
     @GetMapping("/edit-survey-report")
-    public String redigerTilstandsrapport(HttpServletRequest request, Model m){
+    public String editSurveyReport(HttpServletRequest request, Model m){
         session = request.getSession(false);
 
         if (session == null){
@@ -56,26 +55,23 @@ public class SurveyReportController {
             SurveyReport surveyReport = leaseAgreement.getSurveyReport();
             surveyReportService.setSurveyReport(surveyReport);
 
-
             m.addAttribute("leaseAgreement", leaseAgreement);
             m.addAttribute("surveyReport", surveyReport);
             m.addAttribute("approvedLease", true);
 
-            System.out.println(leaseAgreement);
-
-            return "surveyReports";
+            return "surveyreports";
 
         } else {
-            return "redirect:/agreedLeases";
+            return "redirect:/agreed-leases";
         }
     }
 
     @PostMapping("/add-injury")
-    public RedirectView tilføjSkade(HttpServletRequest request, RedirectAttributes redirectAttributes){
+    public RedirectView postInjury(HttpServletRequest request, RedirectAttributes redirectAttributes){
+
         String title = request.getParameter("title");
         String description = request.getParameter("description");
         String price = request.getParameter("price");
-
 
         SurveyReport surveyReport = surveyReportService.getSurveyReport();
 
@@ -88,11 +84,11 @@ public class SurveyReportController {
     }
 
     @PostMapping("/add-deficiency")
-    public RedirectView tilføjMangel(HttpServletRequest request, RedirectAttributes redirectAttributes){
+    public RedirectView postDeficiency(HttpServletRequest request, RedirectAttributes redirectAttributes){
+
         String title = request.getParameter("title");
         String description = request.getParameter("description");
         String price = request.getParameter("price");
-
 
         SurveyReport surveyReport = surveyReportService.getSurveyReport();
 
@@ -107,29 +103,22 @@ public class SurveyReportController {
     }
 
     @PostMapping("/remove-injury/{injuryIndex}")
-    public RedirectView fjernSkade(@PathVariable int injuryIndex, RedirectAttributes redirectAttributes){
-
+    public RedirectView removeInjury(@PathVariable int injuryIndex, RedirectAttributes redirectAttributes){
 
         SurveyReport surveyReport = surveyReportService.getSurveyReport();
-        System.out.println(surveyReport);
-
         Injury injury = surveyReport.getInjuries().get(injuryIndex);
-        System.out.println(injury);
 
         surveyReportService.removeInjury(injury);
 
-
         LeaseAgreement leaseAgreement = leaseAgreementService.getLeaseAgreementById(surveyReport.getAgreementId());
         redirectAttributes.addFlashAttribute("leaseAgreement", leaseAgreement);
-
-
 
         return new RedirectView("/edit-survey-report", true);
 
     }
 
     @PostMapping("/remove-deficiency/{deficiencyIndex}")
-    public RedirectView fjernMangel(@PathVariable int deficiencyIndex, RedirectAttributes redirectAttributes){
+    public RedirectView removeDeficiency(@PathVariable int deficiencyIndex, RedirectAttributes redirectAttributes){
         SurveyReport surveyReport = surveyReportService.getSurveyReport();
 
         Deficiency deficiency = surveyReport.getDeficiencies().get(deficiencyIndex);

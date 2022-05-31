@@ -1,6 +1,6 @@
 package com.example.bilabonnement.repositories;
 
-import com.example.bilabonnement.models.Customer;
+import com.example.bilabonnement.models.leaseAgreements.Customer;
 import com.example.bilabonnement.utility.DatabaseConnectionManager;
 
 import java.sql.Connection;

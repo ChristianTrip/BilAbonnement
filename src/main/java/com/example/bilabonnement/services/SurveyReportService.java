@@ -1,8 +1,8 @@
 package com.example.bilabonnement.services;
 
-import com.example.bilabonnement.models.Deficiency;
-import com.example.bilabonnement.models.Injury;
-import com.example.bilabonnement.models.SurveyReport;
+import com.example.bilabonnement.models.surveyReports.Deficiency;
+import com.example.bilabonnement.models.surveyReports.Injury;
+import com.example.bilabonnement.models.surveyReports.SurveyReport;
 import com.example.bilabonnement.repositories.DeficiencyRepo;
 import com.example.bilabonnement.repositories.InjuryRepo;
 

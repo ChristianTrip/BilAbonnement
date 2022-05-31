@@ -20,9 +20,9 @@ public class UserService {
         return null;
     }
 
-    public UserType determineBrugertype(String brugernavn, String password) {
+    public UserType determineUsertype(String userName, String password) {
 
-        User user = validateUserinfo(brugernavn, password);
+        User user = validateUserinfo(userName, password);
 
         if(user == null) {
             return UserType.NONUSER;

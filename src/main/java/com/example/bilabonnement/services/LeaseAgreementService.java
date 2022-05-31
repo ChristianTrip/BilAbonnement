@@ -1,13 +1,11 @@
 package com.example.bilabonnement.services;
 
-import com.example.bilabonnement.models.*;
-import com.example.bilabonnement.models.priceEstimates.PriceEstimate;
-import com.example.bilabonnement.models.subscriptions.Subscription;
+import com.example.bilabonnement.models.leaseAgreements.*;
+import com.example.bilabonnement.models.surveyReports.SurveyReport;
 import com.example.bilabonnement.repositories.*;
-import com.example.bilabonnement.utility.CSVReader;
-import com.example.bilabonnement.utility.CSVWriter;
+import com.example.bilabonnement.repositories.NonAgreedLeasesRepo;
+import com.example.bilabonnement.repositories.CSVWriter;
 
-import java.lang.reflect.Field;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -16,16 +14,7 @@ public class LeaseAgreementService {
 
 
     private LeaseAgreementRepo leaseAgreementRepo = new LeaseAgreementRepo();
-    private CustomerRepo customerRepo = new CustomerRepo();
-    private CarRepo carRepo = new CarRepo();
-    private SubscriptionRepo subscriptionRepo = new SubscriptionRepo();
-    private PickupPlaceRepo pickupPlaceRepo = new PickupPlaceRepo();
-    private PriceEstimateRepo priceEstimateRepo = new PriceEstimateRepo();
     private SurveyReportRepo surveyReportRepo = new SurveyReportRepo();
-    private InjuryRepo injuryRepo = new InjuryRepo();
-    private DeficiencyRepo deficiencyRepo = new DeficiencyRepo();
-
-
     private ArrayList<LeaseAgreement> nonAgreedLeases = new ArrayList<>();
 
 
@@ -81,10 +70,9 @@ public class LeaseAgreementService {
     public boolean addLeaseAgreementToDataBase(int index, Date startDate){
         LeaseAgreement leaseAgreement = getNonAgreedleases().get(index);
         leaseAgreement.setStartDate(startDate.toLocalDate());
-            System.out.println("index number: " + index);
 
         if(leaseAgreementRepo.create(leaseAgreement)){
-            new CSVWriter().removeLineFromAllFiles(index + 1);
+            NonAgreedLeasesRepo.getInstance().removeLineFromAllFiles(index + 1);
             return true;
         }
         return false;
@@ -92,7 +80,7 @@ public class LeaseAgreementService {
 
     public boolean removeLeaseAgreementFromCsv(int index){
         try{
-            new CSVWriter().removeLineFromAllFiles(index + 1);
+            NonAgreedLeasesRepo.getInstance().removeLineFromAllFiles(index + 1);
             return true;
         }catch(Exception e){
             e.printStackTrace();
@@ -103,7 +91,7 @@ public class LeaseAgreementService {
 
     public ArrayList<LeaseAgreement> getNonAgreedleases(){
         ArrayList<LeaseAgreement> nonAgreedLeases = new ArrayList<>();
-        CSVReader reader = CSVReader.getInstance();
+        NonAgreedLeasesRepo reader = NonAgreedLeasesRepo.getInstance();
 
         ArrayList<Customer> customers = reader.getCustomers();
         ArrayList<Car> cars = reader.getCars();
@@ -124,23 +112,6 @@ public class LeaseAgreementService {
             nonAgreedLeases.add(agreement);
         }
         return nonAgreedLeases;
-    }
-
-
-    public boolean testValidate(Object o){
-        try {
-            for (Field f : o.getClass().getDeclaredFields()) {
-                f.setAccessible(true);
-                if (f.get(o) == null) {
-                    System.out.println(o.getClass() + " contains a null field");
-                    return false;
-                }
-            }
-        }
-        catch(IllegalAccessException | IllegalArgumentException e){
-            e.printStackTrace();
-        }
-        return true;
     }
 
 
