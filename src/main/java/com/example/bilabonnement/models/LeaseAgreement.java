@@ -96,7 +96,7 @@ public class LeaseAgreement {
         return endDate;
     }
 
-    //Used in alleLejeaftaler.html(th:if)
+    //Used in leaseAgreements.html(th:if)
     public boolean isSurveyReportEmpty() {
         return this.surveyReport.getInjuries().isEmpty() && this.surveyReport.getDeficiencies().isEmpty();
     }

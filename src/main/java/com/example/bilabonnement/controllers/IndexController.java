@@ -30,39 +30,36 @@ public class IndexController {
     }
 
     @PostMapping("/login-submit")
-    public RedirectView submitPost(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public RedirectView submitLogin(HttpServletRequest request, RedirectAttributes redirectAttributes) {
 
 
         redirectAttributes.addFlashAttribute("user", new User("john", "password", UserType.ADMIN));
         return new RedirectView("/login-success", true);
 
-      /*
-
+/*
         UserService userService = new UserService();
 
-        String userName = request.getParameter("brugernavn");
-        String password = request.getParameter("adgangskode");
+        String userName = request.getParameter("userName");
+        String password = request.getParameter("password");
         User user = userService.validateUserinfo(userName, password);
 
         if (user != null) {
             redirectAttributes.addFlashAttribute("user", user);
             return new RedirectView("/login-success", true);
         } else {
-            System.out.println("Login failed: Forkerte user information");
+            System.out.println("Login failed: wrong user information");
             return new RedirectView("/", true);
         }*/
     }
 
 
 
-
-
     @GetMapping({"/login-success"})
-    public String getSuccess(HttpServletRequest request) {
+    public String getLoginSuccess(HttpServletRequest request) {
 
         if (currentUser != null){
             session = request.getSession(false);
-            return "admin";
+            return "home";
         }
         Map<String, ?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
 
@@ -70,23 +67,22 @@ public class IndexController {
             currentUser = (User) inputFlashMap.get("user");
             userType = currentUser.getUserType();
             session = request.getSession();
-            System.out.println(currentUser.getName() + " er nu logget ind som " + userType + " user");
-            return "admin";
+            System.out.println(currentUser.getName() + " is now logged in " + userType + " user");
+            return "home";
         }
         else {
             return "redirect:/login-submit";
         }
     }
 
-    @PostMapping("/logUd")
-    public String logUd(){
+    @PostMapping("/log-out")
+    public String logOut(){
+
         session.invalidate();
         System.out.println(currentUser.getName() + " er nu logget ud");
         currentUser = null;
         return "redirect:/";
     }
-
-
 
 
     @PostMapping("/login")
@@ -101,7 +97,7 @@ public class IndexController {
 
             if(userType.equals(UserType.ADMIN)) {
                 session.setAttribute("admin", userType);
-                return "redirect:/admin";
+                return "redirect:/home";
             }
             else if(userType.equals(UserType.LEASEAPPROVER)) {
                 System.out.println("datareg");

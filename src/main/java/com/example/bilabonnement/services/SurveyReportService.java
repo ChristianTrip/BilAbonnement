@@ -25,7 +25,7 @@ public class SurveyReportService {
         return false;
     }
 
-    public boolean addShortcoming(String titel, String beskrivelse, String pris){
+    public boolean addDeficiency(String titel, String beskrivelse, String pris){
 
         if(!titel.equals("") || !beskrivelse.equals("") || !pris.equals("")) {
             Deficiency deficiency = new Deficiency(titel, beskrivelse, parseInt(pris));
@@ -45,7 +45,7 @@ public class SurveyReportService {
         return false;
     }
 
-    public boolean removeShortcoming(Deficiency deficiency){
+    public boolean removeDeficiency(Deficiency deficiency){
 
         if (deficiencyRepo.deleteById(deficiency.getId())){
             return true;
