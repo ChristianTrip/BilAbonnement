@@ -33,16 +33,16 @@ public class SurveyReportController {
         SurveyReport surveyReport = leaseAgreement.getSurveyReport();
 
         if(leaseAgreement != null){
-            redirectAttributes.addFlashAttribute("lejeaftale", leaseAgreement);
-            //redirectAttributes.addFlashAttribute("tilstandsrapport", tilstandsrapport);
-            return new RedirectView("/rediger-tilstandsrapport", true);
+            redirectAttributes.addFlashAttribute("leaseAgreement", leaseAgreement);
+            //redirectAttributes.addFlashAttribute("surveyReport", surveyReport);
+            return new RedirectView("/edit-survey-report", true);
         }
         else{
-            return new RedirectView("/seLejeaftale", true);
+            return new RedirectView("/showAgreedLease", true);
         }
     }
 
-    @GetMapping("/rediger-tilstandsrapport")
+    @GetMapping("/edit-survey-report")
     public String redigerTilstandsrapport(HttpServletRequest request, Model m){
         session = request.getSession(false);
 
@@ -52,94 +52,94 @@ public class SurveyReportController {
 
         Map<String, ?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
         if (inputFlashMap != null) {
-            LeaseAgreement leaseAgreement = (LeaseAgreement) inputFlashMap.get("lejeaftale");
+            LeaseAgreement leaseAgreement = (LeaseAgreement) inputFlashMap.get("leaseAgreement");
             SurveyReport surveyReport = leaseAgreement.getSurveyReport();
             surveyReportService.setSurveyReport(surveyReport);
 
 
             m.addAttribute("leaseAgreement", leaseAgreement);
             m.addAttribute("surveyReport", surveyReport);
-            m.addAttribute("isGodkendt", true);
+            m.addAttribute("approvedLease", true);
 
             System.out.println(leaseAgreement);
 
-            return "tilstandsrapport";
+            return "surveyReports";
 
         } else {
-            return "redirect:/godkendteLejeaftaler";
+            return "redirect:/agreedLeases";
         }
     }
 
-    @PostMapping("/tilføj-injury")
+    @PostMapping("/add-injury")
     public RedirectView tilføjSkade(HttpServletRequest request, RedirectAttributes redirectAttributes){
-        String titel = request.getParameter("titel");
-        String beskrivelse = request.getParameter("beskrivelse");
-        String pris = request.getParameter("pris");
+        String title = request.getParameter("title");
+        String description = request.getParameter("description");
+        String price = request.getParameter("price");
 
 
         SurveyReport surveyReport = surveyReportService.getSurveyReport();
 
-        if(surveyReportService.addInjury(titel, beskrivelse, pris)){
+        if(surveyReportService.addInjury(title, description, price)){
 
             LeaseAgreement leaseAgreement = leaseAgreementService.getLeaseAgreementById(surveyReport.getAgreementId());
-            redirectAttributes.addFlashAttribute("lejeaftale", leaseAgreement);
+            redirectAttributes.addFlashAttribute("leaseAgreement", leaseAgreement);
         }
-        return new RedirectView("/rediger-tilstandsrapport", true);
+        return new RedirectView("/edit-survey-report", true);
     }
 
-    @PostMapping("/tilføj-deficiency")
+    @PostMapping("/add-deficiency")
     public RedirectView tilføjMangel(HttpServletRequest request, RedirectAttributes redirectAttributes){
-        String titel = request.getParameter("titel");
-        String beskrivelse = request.getParameter("beskrivelse");
-        String pris = request.getParameter("pris");
+        String title = request.getParameter("title");
+        String description = request.getParameter("description");
+        String price = request.getParameter("price");
 
 
         SurveyReport surveyReport = surveyReportService.getSurveyReport();
 
-        if(surveyReportService.addShortcoming(titel, beskrivelse, pris)){
+        if(surveyReportService.addDeficiency(title, description, price)){
 
             LeaseAgreement leaseAgreement = leaseAgreementService.getLeaseAgreementById(surveyReport.getAgreementId());
-            redirectAttributes.addFlashAttribute("lejeaftale", leaseAgreement);
+            redirectAttributes.addFlashAttribute("leaseAgreement", leaseAgreement);
         }
 
-        return new RedirectView("/rediger-tilstandsrapport", true);
+        return new RedirectView("/edit-survey-report", true);
 
     }
 
-    @PostMapping("/fjern-injury/{skadeIdx}")
-    public RedirectView fjernSkade(@PathVariable int skadeIdx, RedirectAttributes redirectAttributes){
+    @PostMapping("/remove-injury/{injuryIndex}")
+    public RedirectView fjernSkade(@PathVariable int injuryIndex, RedirectAttributes redirectAttributes){
 
 
         SurveyReport surveyReport = surveyReportService.getSurveyReport();
         System.out.println(surveyReport);
 
-        Injury injury = surveyReport.getInjuries().get(skadeIdx);
+        Injury injury = surveyReport.getInjuries().get(injuryIndex);
         System.out.println(injury);
 
         surveyReportService.removeInjury(injury);
 
 
         LeaseAgreement leaseAgreement = leaseAgreementService.getLeaseAgreementById(surveyReport.getAgreementId());
-        redirectAttributes.addFlashAttribute("lejeaftale", leaseAgreement);
+        redirectAttributes.addFlashAttribute("leaseAgreement", leaseAgreement);
 
 
 
-        return new RedirectView("/rediger-tilstandsrapport", true);
+        return new RedirectView("/edit-survey-report", true);
 
     }
 
-    @PostMapping("/fjern-deficiency/{mangelIdx}")
-    public RedirectView fjernMangel(@PathVariable int mangelIdx, RedirectAttributes redirectAttributes){
+    @PostMapping("/remove-deficiency/{deficiencyIndex}")
+    public RedirectView fjernMangel(@PathVariable int deficiencyIndex, RedirectAttributes redirectAttributes){
         SurveyReport surveyReport = surveyReportService.getSurveyReport();
 
-        Deficiency deficiency = surveyReport.getDeficiencies().get(mangelIdx);
+        Deficiency deficiency = surveyReport.getDeficiencies().get(deficiencyIndex);
 
-        surveyReportService.removeShortcoming(deficiency);
+        surveyReportService.removeDeficiency(deficiency);
 
         LeaseAgreement leaseAgreement = leaseAgreementService.getLeaseAgreementById(surveyReport.getAgreementId());
-        redirectAttributes.addFlashAttribute("lejeaftale", leaseAgreement);
+        redirectAttributes.addFlashAttribute("leaseAgreement", leaseAgreement);
 
-        return new RedirectView("/rediger-tilstandsrapport", true);
+        return new RedirectView("/edit-survey-report", true);
     }
 
 }

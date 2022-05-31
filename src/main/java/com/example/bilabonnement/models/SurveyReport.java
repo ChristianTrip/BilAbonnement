@@ -79,7 +79,7 @@ public class SurveyReport {
         return agreementId;
     }
 
-    public void setShortcomings(ArrayList<Deficiency> deficiencies) {
+    public void setDeficiencies(ArrayList<Deficiency> deficiencies) {
         this.deficiencies = deficiencies;
     }
 

@@ -144,42 +144,41 @@
                         </tr>
                     </thead>
 
-                    <tbody th:each="afhentningssted : ${leaseAgreement.getPickupPlace()}">
+                    <tbody th:each="pickupPlace : ${leaseAgreement.getPickupPlace()}">
                         <tr>
                             <td>Adresse</td>
-                            <td th:text="${afhentningssted.getAddress()}"></td>
+                            <td th:text="${pickupPlace.getAddress()}"></td>
                         </tr>
                         <tr>
                             <td>Postnummer</td>
-                            <td th:text="${afhentningssted.getPostalCode()}"></td>
+                            <td th:text="${pickupPlace.getPostalCode()}"></td>
                         </tr>
                         <tr>
                             <td>By</td>
-                            <td th:text="${afhentningssted.getCity()}"></td>
+                            <td th:text="${pickupPlace.getCity()}"></td>
                         </tr>
                         <tr>
                             <td>Leveringspris</td>
-                            <td th:text="${afhentningssted.getDeliveryCost()}"></td>
+                            <td th:text="${pickupPlace.getDeliveryCost()}"></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
 
-
             <div>
-                <span th:if="${!isGodkendt}">
-                    <form class="buttonFormatting" method="GET" action="/ikkeGodkendteLejeaftaler">
+                <span th:if="${!leaseApproved}">
+                    <form class="buttonFormatting" method="GET" action="/nonAgreedLeases">
                         <button type="submit">Tilbage</button>
                     </form>
-                    <form class="buttonFormatting" th:if="${!isGodkendt}" method="POST" action="/tilfoejDB">
+                    <form class="buttonFormatting" th:if="${!leaseApproved}" method="POST" action="/addToDatabase">
                         <input name="startDato" type="date" placeholder="Start Dato" required>
                         <button type="submit">Godkend</button>
                     </form>
                 </span>
 
-                <span th:unless="${!isGodkendt}">
-                    <form class="buttonFormatting" method="GET" action="/godkendteLejeaftaler">
+                <span th:unless="${!leaseApproved}">
+                    <form class="buttonFormatting" method="GET" action="/agreedLeases">
                         <button type="submit">Tilbage</button>
                     </form>
 
