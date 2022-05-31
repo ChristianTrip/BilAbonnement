@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bilabonnement</title>
+    <link rel="stylesheet" th:href="@{style.css}" href="style.css">
+</head>
+<body>
+    <div class="container1">
+        <h2>Alle lejeaftaler</h2>
+
+        <section class="section2">
+                <span th:if="${!leaseApproved}">
+                    <table class="centerDiv">
+                        <tr>
+                            <th>oprettelsesdato</th>
+                            <th>Kunde cpr</th>
+                            <th>Bil stelnummer</th>
+                        </tr>
+
+                        <form class="buttonFormatting" method="GET" action="/login-success">
+                            <button type="submit">Tilbage</button>
+                        </form>
+
+                        <tr th:each="leaseAgreement,iter : ${nonAgreedLeases}">
+                            <form method="POST" th:action="@{/nonAgreedLeases/{leaseNo} (leaseNo = ${iter.index})}">
+                                <td th:text="${leaseAgreement.getApprovalDate()}"></td>
+                                <td th:text="${leaseAgreement.getCustomer().getCpr()}"></td>
+                                <td th:text="${leaseAgreement.getCar().getChassisNumber()}"></td>
+                                <td><button type="submit">GO</button></td>
+                            </form>
+                        </tr>
+                    </table>
+
+                </span>
+
+                <span th:unless="${!leaseApproved}">
+                    <div class="lejeaftaleInfo">
+                        <div class="buttonFormatting">
+                            <div class="firstDiv">
+                                <h3>Samlet udlejningspris: </h3>
+                                <a th:text="${totalPrice}"></a>
+                            </div>
+                        </div>
+
+                        <div class="buttonFormatting">
+                            <div class="secondDiv">
+                                <h3>Nuværende antal udlejede biler: </h3>
+                                <a th:text="${numberOfRentedOutCars}"></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form class="buttonFormatting" method="GET" action="/login-success">
+                        <button type="submit">Tilbage</button>
+                    </form>
+
+                    <table class="centerDiv">
+                        <h2>Igangværende</h2>
+                        <tr>
+                            <th>Oprettelsesdato</th>
+                            <th>Startdato</th>
+                            <th>Kunde cpr</th>
+                            <th>Bil stelnummer</th>
+                        </tr>
+
+                        <tr th:each="leaseAgreement : ${activeLeases}">
+                            <form method="POST" th:action="@{/agreedLeases/{leaseNo}(leaseNo = ${leaseAgreement.getId()})}">
+                                <td th:text="${leaseAgreement.getApprovalDate()}"></td>
+                                <td th:text="${leaseAgreement.getStartDate()}"></td>
+                                <td th:text="${leaseAgreement.getCustomer().getCpr()}"></td>
+                                <td th:text="${leaseAgreement.getCar().getChassisNumber()}"></td>
+                                <td><button type="submit">GO</button></td>
+                            </form>
+                        </tr>
+                    </table>
+
+                    <table class="centerDiv">
+                        <h2>Afsluttede</h2>
+                        <tr>
+                            <th>Oprettelsesdato</th>
+                            <th>Startdato</th>
+                            <th>Kunde cpr</th>
+                            <th>Bil stelnummer</th>
+                            <th>Tilstandsrapport status</th>
+                        </tr>
+
+                        <tr th:each="leaseAgreement : ${endedLeases}">
+                            <form method="POST" th:action="@{/agreedLeases/{leaseNo}(leaseNo = ${leaseAgreement.getId()})}">
+                                <td th:text="${leaseAgreement.getApprovalDate()}"></td>
+                                <td th:text="${leaseAgreement.getStartDate()}"></td>
+                                <td th:text="${leaseAgreement.getCustomer().getCpr()}"></td>
+                                <td th:text="${leaseAgreement.getCar().getChassisNumber()}"></td>
+                                <td th:if="${leaseAgreement.isSurveyReportEmpty() == true}" th:text="${hasNoReport}"></td>
+                                <td th:unless="${leaseAgreement.isSurveyReportEmpty() == true}" th:text="${hasReport}"></td>
+                                <td><button type="submit">GO</button></td>
+                            </form>
+                        </tr>
+                    </table>
+                </span>
+        </section>
+    </div>
+</body>
+</html>
