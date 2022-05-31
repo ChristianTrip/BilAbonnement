@@ -82,7 +82,7 @@ public class LeaseAgreementController {
         model.addAttribute("leaseAgreement", leases.get(index));
         model.addAttribute("leaseApproved", false);
 
-        session.setAttribute("indexNummer", index);
+        session.setAttribute("indexNumber", index);
 
         return "leaseAgreement";
     }
@@ -90,11 +90,21 @@ public class LeaseAgreementController {
     @PostMapping("/addToDatabase")
     public String addLeaseToDatabase(HttpServletRequest request, HttpSession session){
         Date startDate = java.sql.Date.valueOf(request.getParameter("startDato"));
-        int index = (int) session.getAttribute("indexNummer");
+        int index = (int) session.getAttribute("indexNumber");
 
         System.out.println("index number inside tilføj db" + index);
         leaseAgreementService.addLeaseAgreementToDataBase(index, startDate);
 
+
+        return "redirect:/nonAgreedLeases";
+    }
+
+    @PostMapping("/remove-from-csv")
+    public String removeFromCsv(HttpSession session){
+        int index = (int) session.getAttribute("indexNumber");
+
+        System.out.println("Lease agreement was removed: " + index);
+        leaseAgreementService.removeLeaseAgreementFromCsv(index);
 
         return "redirect:/nonAgreedLeases";
     }
