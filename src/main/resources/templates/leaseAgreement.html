@@ -168,15 +168,16 @@
 
             <div>
                 <span th:if="${!leaseApproved}">
-                    <form class="buttonFormatting" method="GET" action="/nonAgreedLeases">
-                        <button type="submit">Tilbage</button>
-                    </form>
+                    <p>Husk at indsætte start dato</p>
                     <form class="buttonFormatting" th:if="${!leaseApproved}" method="POST" action="/addToDatabase">
                         <input name="startDato" type="date" placeholder="Start Dato" required>
                         <button type="submit">Godkend</button>
                     </form>
-                    <form class="buttonFormatting" th:if="${!leaseApproved}" method="POST" action="/remove-from-csv">
+                    <form th:if="${!leaseApproved}" method="POST" action="/remove-from-csv">
                         <button type="submit">Fjern</button>
+                    </form>
+                    <form method="GET" action="/nonAgreedLeases">
+                        <button type="submit">Tilbage</button>
                     </form>
                 </span>
 
